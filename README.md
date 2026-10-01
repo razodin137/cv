@@ -1,7 +1,10 @@
 # CV
 
-51 YAML entries (one per directory, plus logos/images) rendered into a single
-self-contained `index.html` viewer.
+Live: **<https://razodin137.github.io/cv/>**
+
+Curriculum vitae as data: 51 YAML entries (one per directory, plus
+logos/images) rendered by `build.py` into a single self-contained
+`index.html` viewer.
 
 ## Usage
 
