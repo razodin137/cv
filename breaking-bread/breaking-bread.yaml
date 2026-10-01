@@ -1,0 +1,24 @@
+entry_type: job
+company: Breaking Bread Bakery
+role: Dishwasher
+employment_type: full-time
+industry:
+start: "2014-10"
+end: "2015-05"
+location: San Luis Obispo, CA
+country: United States of America
+location_type: onsite
+accomplishments:
+ -
+ -
+ -
+skills:
+ -
+ -
+ -
+logo: breaking-bread-bakery.svg
+images:
+ - screenshot-2026-10-01_16-52-35.png
+ - screenshot-2026-10-01_16-52-26.png
+ - screenshot-2026-10-01_16-52-02.png
+ - screenshot-2026-10-01_16-51-52.png

@@ -1,0 +1,22 @@
+entry_type: job
+company: Amazon Fulfillment Central KY
+role: Fulfillment Associate
+employment_type: full-time
+industry:
+start: "2013-11"
+end: "2013-12"
+location: Lexington, KY
+country: United States of America
+location_type: onsite
+accomplishments:
+ - Picked, packed, and stowed [X] units/hour against a [Y]-unit target during peak season
+ - Maintained [99.X]% scan and inventory accuracy across [N] stations
+ - Cross-trained on pick, pack, and stow, covering short-staffed shifts through peak-season [10]-hour shifts
+skills:
+ -
+ -
+ -
+logo: amazon-fulfillment.svg
+images:
+ - 01bb5b57-9f87-4149-8e06-ba292031045c.webp
+ - images.jpeg

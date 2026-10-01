@@ -1,0 +1,20 @@
+entry_type: job
+company: Outlier
+role: Language Quality Evaluator
+employment_type: part-time
+industry:
+start: "2024-05"
+end: "2024-12"
+location:
+country:
+location_type: remote
+accomplishments:
+ - Language Quality Evaluation is essentially manual review of an AI chatbot by a human. This process is essential in the building of LLMs (large language models). Outlier is a B2B resource for companies like Microsoft, Google, and OpenAI to send their models for human review and refinement. My job is to see the outputs and review them for accuracy, language quality, and safety in both English and Thai.
+ -
+ -
+skills:
+ -
+ -
+ -
+logo: outlier.svg
+images:
