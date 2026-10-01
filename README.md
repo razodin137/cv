@@ -1,0 +1,47 @@
+# CV
+
+51 YAML entries (one per directory, plus logos/images) rendered into a single
+self-contained `index.html` viewer.
+
+## Usage
+
+```sh
+python3 build.py     # regenerate index.html from all */*.yaml files
+```
+
+Then open `index.html` in any browser — double-click works; no server or
+internet needed (all data is embedded; logos/images load from this folder).
+
+### Adding an entry
+
+```sh
+mkdir my-new-entry-dir
+cp template.yaml my-new-entry-dir/my-new-entry.yaml   # then fill it in
+python3 build.py
+```
+
+`template.yaml` (project root) documents every field inline. It sits outside
+the `*/*.yaml` scan pattern, so the build ignores it.
+
+## Viewer features
+
+- Timeline grouped by year, newest first, undated entries at the end
+- Filter by entry type (chips), live full-text search
+- Logos, image thumbnails with click-to-zoom lightbox
+- Print-friendly (`Ctrl+P` hides the controls)
+
+## YAML schema
+
+Every `*/*.yaml` follows the same 14 fields:
+
+| Field | Notes |
+|---|---|
+| `entry_type` | `job`, `volunteer`, `education`, `events`, `ministry`, `creative`, `career_break` |
+| `company`, `role`, `employment_type`, `industry` | plain text, any may be blank |
+| `start`, `end` | `YYYY-MM` strings, blank end = "Present" |
+| `location`, `country`, `location_type` | plain text |
+| `accomplishments`, `skills` | string lists (blank items are dropped) |
+| `logo` | filename; resolved from `logos/` first, then the entry's directory |
+| `images` | filenames resolved from the entry's directory, then `logos/` |
+
+Re-run `python3 build.py` after editing any YAML to refresh the viewer.
