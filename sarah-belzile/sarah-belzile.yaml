@@ -1,0 +1,27 @@
+entry_type: online_presence
+milestone: false
+featured: false
+parent: kaojaicam
+company: Sarah Belzile
+role: Website Design & Development
+employment_type: contract
+industry: wellness
+url: https://sarahbelzile.com
+start: "2021-08"
+end: "2023-08"
+location:
+country:
+location_type: remote
+accomplishments:
+ - A beautiful, vibrant blend of minimalist UI combined with Sarah's rich and maximalist soul. This website is the gateway to her world of events, retreats, and her premium membership platform.
+ - The Practices section mixes free content with member-only practices behind a free sign-up.
+skills:
+ - Web Design
+ - Web Development
+ - Membership Platforms
+logo: favicon.png
+images:
+ - homepage-2026-10-02.jpg
+ -
+ -
+ -

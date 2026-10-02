@@ -1,12 +1,12 @@
 entry_type: volunteer
-milestone: false
+milestone: true
 featured: false
 parent: blessing-stream
 company: Christmas Ministry Events in Thai Public Schools
 role: "Translator, Logistics, Host"
 employment_type:
 industry: ministry
-start:
+start: "2023-12"
 end:
 location:
 country: Thailand

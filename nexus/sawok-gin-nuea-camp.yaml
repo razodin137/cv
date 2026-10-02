@@ -1,18 +1,18 @@
 entry_type: events
 milestone: true
 featured: false
-parent: blessing-stream
-company: Survivor Camp
+parent: nexus
+company: "Sawok Gin Nuea Camp (สวกกินเนื้อ)"
 role:
 employment_type:
 industry: ministry
-start: "2023-11-09"
-end: "2023-11-12"
+start:
+end:
 location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
- - Church teaching and Bible study event in Chiang Rai, Thailand.
+ - Ministry camp event in Chiang Rai, Thailand.
  -
  -
 skills:

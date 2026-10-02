@@ -2,7 +2,7 @@
 
 Live: **<https://razodin137.github.io/cv/>**
 
-Curriculum vitae as data: 69 YAML entries across category directories
+Curriculum vitae as data: 88 YAML entries across category directories
 (plus logos/images) rendered by `build.py` into a single self-contained
 `index.html` viewer.
 
@@ -66,16 +66,23 @@ one-line headline under it.
   build-time thumbnails, so full photos load only on open
 - Parent entities: `parent: <slug>` — the parent's directory (e.g.
   `mae-fah-luang-university`) or, for an umbrella entry like a club or team,
-  its YAML file name (e.g. `mfu-christian-club`) — links an entry to its
-  parent both ways: milestone lines get an "under …" link, the parent card
-  gets a collapsible `Events (n)` strip with jump links to every child, and
-  a child without its own `logo:` inherits the parent's logo. Jumps clear any
-  active chip/search filter so the target is rendered; children may live in
-  any directory (their category badge comes from it). Recurring events use
+  its YAML file name (e.g. `mfu-christian-club`); a list of slugs gives an
+  entry multiple parents. Links to it both ways: milestone lines get an
+  "under …" link, each parent card gets a collapsible `Entries (n)` strip
+  with jump links to every child, and a child without its own `logo:`
+  inherits the first parent's logo that has one. Jumps clear any active
+  chip/search filter so the target is rendered; children may live in any
+  directory (their category badge comes from it). Recurring events use
   this shape: one umbrella entry spanning the years plus a milestone per
   instance (e.g. `play-ashram/`)
 - Featured entries (`featured: true`) get a gold highlight with a star in the
   top-right corner (collapsed milestone lines show the star at the far right)
+- Career break photo view: `career_break` cards with `images:` get a
+  `Photos (n)` strip — expand it and the whole card frame fills edge to edge
+  with the pictures (a square-ish collage; tiles crop rather than letterbox,
+  so any image count scales to fill the frame), with the title, dates and
+  place sitting on top under a faint dark highlight so they stay readable;
+  click a picture to zoom. Print always shows the standard card.
 - Filter by entry type (single-select chips; milestones auto-expand while a
   type filter is active), live full-text search
 - Mobile-friendly: on narrow screens the filter chips become a swipeable
@@ -88,15 +95,16 @@ one-line headline under it.
 
 ## YAML schema
 
-Every `*/*.yaml` follows the same 17 fields:
+Every `*/*.yaml` follows the same 18 fields:
 
 | Field | Notes |
 |---|---|
-| `entry_type` | `job`, `volunteer`, `education`, `events`, `ministry`, `creative`, `career_break`, `organization` |
+| `entry_type` | `job`, `volunteer`, `education`, `events`, `ministry`, `creative`, `career_break`, `online_presence`, `organization` |
 | `milestone` | `true` = one-off point event → compact line headlined by the entry's own title (`company`); role/organization secondary; `false` = standard card |
-| `parent` | slug of the parent entity — its directory (e.g. `mae-fah-luang-university`) or its YAML file name (e.g. `mfu-christian-club`); cross-links + logo inheritance |
+| `parent` | slug of the parent entity — its directory (e.g. `mae-fah-luang-university`) or its YAML file name (e.g. `mfu-christian-club`); a list gives multiple parents; cross-links + logo inheritance |
 | `featured` | `true` = gold highlight + star in the top-right corner (milestones: star at the far right); `false` = standard |
 | `company`, `role`, `employment_type`, `industry` | plain text, any may be blank |
+| `url` | external link for the entry (e.g. a client's website) — rendered as a link on cards and milestone circles; print spells it out |
 | `start`, `end` | `YYYY-MM` strings (full `YYYY-MM-DD` also works), blank end = "Present" |
 | `location`, `country`, `location_type` | plain text |
 | `accomplishments`, `skills` | string lists (blank items are dropped) |

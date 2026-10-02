@@ -73,6 +73,13 @@ def pip_srcs(images):
     return out
 
 
+def parent_slugs(raw):
+    """`parent` accepts one slug or a list; normalize to a clean slug list."""
+    if isinstance(raw, (list, tuple)):
+        return [str(s).strip().strip("/") for s in raw if str(s).strip()]
+    return [raw.strip().strip("/")] if raw and raw.strip() else []
+
+
 def load_entries():
     entries = []
     for category in sorted(os.listdir(ROOT)):
@@ -102,13 +109,14 @@ def load_entries():
                 "entryType": (raw.get("entry_type") or "").strip(),
                 "milestone": ms,
                 "featured": str(raw.get("featured")).strip().lower() in ("true", "yes", "1"),
-                "parent": (raw.get("parent") or "").strip().strip("/"),
-                "parentId": "",
-                "parentName": "",
+                "parentSlugs": parent_slugs(raw.get("parent")),
+                "parentIds": [],
+                "parentNames": [],
                 "company": (raw.get("company") or "").strip(),
                 "role": (raw.get("role") or "").strip(),
                 "employmentType": (raw.get("employment_type") or "").strip(),
                 "industry": (raw.get("industry") or "").strip(),
+                "url": (raw.get("url") or "").strip(),
                 "start": str(raw.get("start") or "").strip().strip('"'),
                 "end": str(raw.get("end") or "").strip().strip('"'),
                 "location": (raw.get("location") or "").strip(),
@@ -142,53 +150,53 @@ def load_contact():
 
 
 def link_parents(entries):
-    """Resolve each entry's `parent` slug to the parent entity: the YAML in
-    that directory named like the directory (or the directory's only other
-    YAML), or — for parents that share a directory with their children, like
-    a club or team — the unique entry whose YAML file is named <slug>.yaml.
-    Fills parentId/parentName, inherits logos down parent chains when the
-    entry has none, and warns + renders the entry standalone when the slug
-    can't be resolved."""
+    """Resolve each entry's `parent` slug — a single slug or a list — to its
+    parent entity: the YAML in that directory named like the directory (or
+    the directory's only other YAML), or — for parents that share a
+    directory with their children, like a club or team — the unique entry
+    whose YAML file is named <slug>.yaml. Fills parentIds/parentNames
+    (multiple parents allowed), inherits a logo from the first parent that
+    has one, and warns + renders the entry standalone when a slug can't be
+    resolved."""
     by_dir, by_file, by_id = {}, {}, {}
     for e in entries:
         by_dir.setdefault(e["category"], []).append(e)
         by_file.setdefault(e["file"].rsplit("/", 1)[-1][:-5], []).append(e)
         by_id[e["id"]] = e
     for e in entries:
-        slug = e["parent"]
-        if not slug:
-            continue
-        cands = [p for p in by_dir.get(slug, ()) if p["file"] != e["file"]]
-        parent = next((p for p in cands if p["file"] == f"{slug}/{slug}.yaml"), None)
-        if parent is None and len(cands) == 1:
-            parent = cands[0]
-        if parent is None:
-            files = [p for p in by_file.get(slug, ()) if p["file"] != e["file"]]
-            if len(files) == 1:
-                parent = files[0]
-        if parent is None:
-            print(f"WARNING: {e['file']}: parent '{slug}' not resolved "
-                  f"(need {slug}/{slug}.yaml, exactly one YAML in {slug}/, "
-                  f"or a unique {slug}.yaml entry); rendering standalone",
-                  file=sys.stderr)
-            e["parent"] = ""
-            continue
-        e["parentId"] = parent["id"]
-        e["parentName"] = parent["company"] or parent["role"] or parent["categoryDisplay"]
+        for slug in e.pop("parentSlugs"):
+            cands = [p for p in by_dir.get(slug, ()) if p["file"] != e["file"]]
+            parent = next((p for p in cands if p["file"] == f"{slug}/{slug}.yaml"), None)
+            if parent is None and len(cands) == 1:
+                parent = cands[0]
+            if parent is None:
+                files = [p for p in by_file.get(slug, ()) if p["file"] != e["file"]]
+                if len(files) == 1:
+                    parent = files[0]
+            if parent is None:
+                print(f"WARNING: {e['file']}: parent '{slug}' not resolved "
+                      f"(need {slug}/{slug}.yaml, exactly one YAML in {slug}/, "
+                      f"or a unique {slug}.yaml entry); rendering standalone",
+                      file=sys.stderr)
+                continue
+            if parent["id"] in e["parentIds"]:
+                continue
+            e["parentIds"].append(parent["id"])
+            e["parentNames"].append(parent["company"] or parent["role"] or parent["categoryDisplay"])
     # Logo inheritance can chain (event → organization → university), so
-    # repeat until nothing changes.
+    # repeat until nothing changes. A logo comes from the first parent that
+    # has one.
     for _ in range(len(entries)):
         changed = False
         for e in entries:
-            if e["logo"] or not e["parentId"]:
+            if e["logo"]:
                 continue
-            p = by_id.get(e["parentId"])
-            if p and p["logo"]:
+            p = next((by_id[i] for i in e["parentIds"] if by_id.get(i, {}).get("logo")), None)
+            if p:
                 e["logo"] = p["logo"]
                 changed = True
         if not changed:
             break
-
 
 HTML_TEMPLATE = r"""<!DOCTYPE html>
 <html lang="en">
@@ -248,6 +256,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .meta { display: flex; flex-wrap: wrap; gap: .35rem .9rem; margin-top: .5rem;
     font-family: system-ui, sans-serif; font-size: .78rem; color: var(--muted); }
   .meta svg { width: 12px; height: 12px; vertical-align: -1px; margin-right: 3px; }
+  .meta .elink { color: var(--accent); text-decoration: none; }
+  .meta .elink:hover { text-decoration: underline; }
   .badges { margin-left: auto; display: flex; flex-direction: column; gap: .25rem; align-items: flex-end; flex: none; }
   .badge { font-family: system-ui, sans-serif; font-size: .68rem; font-weight: 600; letter-spacing: .04em;
     text-transform: uppercase; padding: .18rem .55rem; border-radius: 999px; background: #eef1f7; color: var(--muted); }
@@ -259,6 +269,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .badge.type-creative { background: #ffe3ee; color: #c22a74; }
   .badge.type-career_break { background: #eceff3; color: #566074; }
   .badge.type-organization { background: #e4e1ff; color: #4338ca; }
+  .badge.type-online_presence { background: #e0f2fe; color: #0369a1; }
   ul.acc { margin: .6rem 0 0; padding-left: 1.15rem; }
   ul.acc li { font-size: .92rem; line-height: 1.5; margin-bottom: .3rem; }
   .skills { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .7rem; }
@@ -267,6 +278,48 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .thumbs { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .8rem; }
   .thumbs img { width: 74px; height: 74px; object-fit: cover; border-radius: 8px;
     border: 1px solid var(--line); cursor: zoom-in; }
+  /* Career break photo view: expanding fills the whole card frame with the
+     entry's pictures — tiles crop to fit so any image count fills the frame
+     edge to edge — with the text overlaid on a faint dark highlight. */
+  .card.cb { position: relative; }
+  .cb-frame { display: none; }
+  .card.cb.photo { height: clamp(300px, 58vw, 430px); overflow: hidden; }
+  .card.photo .cb-body { display: none; }
+  .card.photo .cb-frame { position: absolute; inset: 0; display: block; }
+  .cb-collage { position: absolute; inset: 0; display: flex; flex-direction: column; }
+  .cb-row { flex: 1 1 0; min-height: 0; display: flex; }
+  .cb-row img { flex: 1 1 0; min-width: 0; width: 100%; height: 100%;
+    object-fit: cover; cursor: zoom-in; display: block; }
+  .cb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column;
+    justify-content: space-between; align-items: flex-start; padding: .95rem 1.05rem;
+    pointer-events: none; overflow: hidden; }
+  .cb-head, .cb-foot { display: flex; flex-direction: column; align-items: flex-start;
+    gap: .4rem; max-width: 100%; }
+  .cb-head > *, .cb-foot > * { width: fit-content; max-width: 100%; }
+  .cb-frame h2, .cb-frame .role, .cb-frame .meta, .cb-frame ul.acc, .cb-frame .skills {
+    background: rgba(13,18,28,.36); backdrop-filter: blur(3px); border-radius: 9px;
+    padding: .32rem .65rem; margin: 0; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+  .cb-frame ul.acc { padding-left: 1.2rem; }
+  .cb-frame .skill { background: rgba(13,18,28,.36); color: #fff; backdrop-filter: blur(2px); }
+  .cb-frame .badge { background: rgba(13,18,28,.4); color: #fff; backdrop-filter: blur(2px); }
+  .cb-frame .badges { margin: 0; flex-direction: row; flex-wrap: wrap; align-items: center; gap: .3rem; }
+  .cb-frame .elink { color: #cfe0ff; }
+  .cb-overlay a, .cb-overlay .badge.jump { pointer-events: auto; }
+  .cb-strip { display: flex; align-items: center; gap: .55rem; width: 100%;
+    margin-top: .9rem; padding: .4rem 0 .15rem; background: none; border: 0;
+    border-top: 1px solid var(--line); cursor: pointer; font: inherit; text-align: left; color: var(--ink); }
+  .cb-strip:hover .cb-label { color: var(--accent); }
+  .cb-label { font-family: system-ui, sans-serif; font-size: .7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .05em; color: var(--muted); flex: none; }
+  .cb-rule { height: 1px; background: var(--line); flex: 1 1 auto; }
+  .cb-tw { flex: none; color: var(--muted); display: inline-flex; transition: transform .2s; }
+  .cb-tw svg { width: 11px; height: 11px; }
+  .card.photo .cb-strip { position: absolute; top: .7rem; right: .7rem; z-index: 2; width: auto;
+    margin: 0; padding: .28rem .65rem; border: 0; border-radius: 999px;
+    background: rgba(13,18,28,.45); backdrop-filter: blur(3px); }
+  .card.photo .cb-strip .cb-label, .card.photo .cb-strip .cb-tw { color: #fff; }
+  .card.photo .cb-strip .cb-rule { display: none; }
+  .card.photo .cb-strip .cb-tw { transform: rotate(45deg); }
   /* Milestone one-line entries (milestone: true) */
   .ms { margin: .1rem 0; }
   .ms-row { display: flex; align-items: center; gap: .55rem; width: 100%;
@@ -382,6 +435,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     .ms-tail { display: none; }
     .ms-label { flex: 1 1 auto; flex-wrap: wrap; }
     .ms-date { margin-left: auto; }
+    .card.cb.photo { height: clamp(250px, 80vw, 340px); }
+    .cb-overlay { padding: .8rem .9rem; }
     .ms-circle { width: 100%; aspect-ratio: auto; border-radius: 12px; padding: 1rem 1.1rem;
       overflow: visible; align-items: flex-start; text-align: left; }
     .ms-circle .cmeta, .ms-circle .cbadges, .ms-circle .cskills, .ms-circle .cimgs {
@@ -400,8 +455,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     header .pname:not(:empty) { color: #000; }
     .pfp { width: 56px; height: 56px; border-color: var(--line); }
     header .tagline:not(:empty) { color: #444; }
-    header .links a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .85em;
-      overflow-wrap: anywhere; }
+    header .links a[href^="http"]::after, .meta .elink[href^="http"]::after {
+      content: " (" attr(href) ")"; font-size: .85em; overflow-wrap: anywhere; }
     main { padding: .8rem 0 0; }
     .year { margin: 1.2rem 0 .35rem; }
     .card.featured, .ms.featured .ms-circle { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -414,6 +469,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     .ms-detail { display: flex !important; animation: none; padding: 0; }
     .ms-circle { width: 100%; aspect-ratio: auto; border-radius: 12px; padding: 1rem 1.25rem;
       overflow: visible; align-items: flex-start; text-align: left; }
+    .card.cb { position: static; height: auto !important; overflow: visible; }
+    .card.cb .cb-frame { display: none !important; }
+    .card.cb .cb-body { display: block !important; }
+    .card.cb .cb-strip { display: none !important; }
   }
 </style>
 </head>
@@ -485,7 +544,9 @@ function milestone(e) {
   const d = msDate(e);
   const auto = !!activeType; // a type filter is on: milestones start expanded
   let rowSub = '';
-  if (e.parentId) rowSub = '<span class="ms-sub">under <span class="plink" onclick="event.stopPropagation();jumpTo(\'' + e.parentId + '\')">' + esc(e.parentName) + '</span></span>';
+  if (e.parentIds.length) rowSub = '<span class="ms-sub">under ' +
+    e.parentIds.map((id, i) => '<span class="plink" onclick="event.stopPropagation();jumpTo(\'' + id + '\')">' +
+      esc(e.parentNames[i]) + '</span>').join(' · ') + '</span>';
   else if (sub) rowSub = '<span class="ms-sub">' + esc(sub) + '</span>';
   let row = '<button class="ms-row" aria-expanded="' + auto + '" aria-controls="' + uid + '">' +
     '<span class="ms-dot"></span><span class="ms-rule"></span><span class="ms-label">' +
@@ -500,7 +561,7 @@ function milestone(e) {
   let c = '<div class="ms-detail" id="' + uid + '"><div class="ms-circle">';
   if (e.logo) c += '<img class="clogo" src="' + esc(e.logo) + '" alt="" loading="lazy" onerror="this.remove()">';
   c += '<h3>' + esc(title) + '</h3>';
-  const csub = sub || e.parentName;
+  const csub = sub || e.parentNames.join(' · ');
   if (csub) c += '<p class="csub">' + esc(csub) + '</p>';
   const meta = [];
   if (d) meta.push('<span>' + ICONS.date + esc(d) + '</span>');
@@ -508,6 +569,8 @@ function milestone(e) {
   if (pl) meta.push('<span>' + ICONS.place + esc(pl) + '</span>');
   if (e.employmentType) meta.push('<span>' + esc(e.employmentType) + '</span>');
   if (e.industry) meta.push('<span>' + esc(e.industry) + '</span>');
+  if (e.url) meta.push('<span><a class="elink" href="' + esc(e.url) + '" target="_blank" rel="noopener">' +
+    esc(hostLabel(e.url)) + ' ↗</a></span>');
   if (meta.length) c += '<div class="cmeta">' + meta.join('') + '</div>';
   c += '<div class="cbadges"><span class="badge type-' + esc(e.entryType) + '">' +
     esc(e.entryType.replace(/_/g, ' ')) + '</span><span class="badge">' + esc(e.categoryDisplay) + '</span></div>';
@@ -553,13 +616,65 @@ function stripRow(c) {
 function eventsStrip(children) {
   return '<div class="events-strip">' +
     '<button class="es-head" aria-expanded="false" onclick="toggleStrip(this)">' +
-    '<span class="es-label">Events (' + children.length + ')</span><span class="es-rule"></span>' +
+    '<span class="es-label">Entries (' + children.length + ')</span><span class="es-rule"></span>' +
     '<span class="es-tw">' + ICONS.plus + '</span></button>' +
     '<div class="es-lines">' + children.map(stripRow).join('') + '</div></div>';
 }
+// Career break photo view: entries of type career_break with pictures get a
+// "Photos (n)" strip. Expanding fills the whole card frame with the
+// pictures — a square-ish collage whose tiles crop (never letterbox) so any
+// image count tiles the frame edge to edge — with the text overlaid on a
+// faint dark highlight so it stays readable on top of the photos.
+function cbCollage(e) {
+  const cols = Math.ceil(Math.sqrt(e.images.length));
+  let html = '';
+  for (let i = 0; i < e.images.length; i += cols) {
+    html += '<div class="cb-row">' + e.images.slice(i, i + cols).map(img =>
+      '<img src="' + esc(img) + '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">').join('') + '</div>';
+  }
+  return html;
+}
+function cbFrame(e) {
+  let head = '<h2>' + esc(e.company || e.role || e.categoryDisplay) + '</h2>';
+  if (e.role && e.company) head += '<p class="role">' + esc(e.role) + '</p>';
+  const meta = [];
+  const range = fmtRange(e);
+  if (range) meta.push('<span>' + ICONS.date + esc(range) + '</span>');
+  const pl = placeStr(e);
+  if (pl) meta.push('<span>' + ICONS.place + esc(pl) + '</span>');
+  if (e.employmentType) meta.push('<span>' + esc(e.employmentType) + '</span>');
+  if (e.industry) meta.push('<span>' + esc(e.industry) + '</span>');
+  if (e.url) meta.push('<span><a class="elink" href="' + esc(e.url) + '" target="_blank" rel="noopener">' +
+    esc(hostLabel(e.url)) + ' ↗</a></span>');
+  if (meta.length) head += '<div class="meta">' + meta.join('') + '</div>';
+  let foot = '';
+  if (e.accomplishments.length) foot += '<ul class="acc">' +
+    e.accomplishments.map(a => '<li>' + esc(a) + '</li>').join('') + '</ul>';
+  if (e.skills.length) foot += '<div class="skills">' +
+    e.skills.map(s => '<span class="skill">' + esc(s) + '</span>').join('') + '</div>';
+  foot += '<div class="badges"><span class="badge type-' + esc(e.entryType) + '">' +
+    esc(e.entryType.replace(/_/g, ' ')) + '</span><span class="badge">' + esc(e.categoryDisplay) + '</span>' +
+    e.parentIds.map((id, i) => '<span class="badge parent jump" title="Jump to ' + esc(e.parentNames[i]) +
+      '" onclick="jumpTo(\'' + id + '\')">↗ ' + esc(e.parentNames[i]) + '</span>').join('') + '</div>';
+  return '<div class="cb-frame"><div class="cb-collage">' + cbCollage(e) + '</div>' +
+    '<div class="cb-overlay"><div class="cb-head">' + head + '</div>' +
+    '<div class="cb-foot">' + foot + '</div></div></div>';
+}
+function cbStrip(e) {
+  return '<button class="cb-strip" aria-expanded="false" onclick="togglePhotos(this)">' +
+    '<span class="cb-label">Photos (' + e.images.length + ')</span><span class="cb-rule"></span>' +
+    '<span class="cb-tw">' + ICONS.plus + '</span></button>';
+}
+function togglePhotos(btn) {
+  const card = btn.closest('.card');
+  const open = card.classList.toggle('photo');
+  btn.setAttribute('aria-expanded', open);
+}
 function card(e) {
-  const children = DATA.entries.filter(x => x.parentId === e.id);
-  const parts = ['<article class="card' + (e.featured ? ' featured' : '') + '" id="' + e.id + '"><div class="card-top">'];
+  const children = DATA.entries.filter(x => x.parentIds.includes(e.id));
+  const cb = e.entryType === 'career_break' && e.images.length; // photo view
+  const parts = ['<article class="card' + (cb ? ' cb' : '') + (e.featured ? ' featured' : '') +
+    '" id="' + e.id + '">' + (cb ? '<div class="cb-body">' : '') + '<div class="card-top">'];
   if (e.logo) parts.push('<img class="logo" src="' + esc(e.logo) + '" alt="" loading="lazy" onerror="this.remove()">');
   parts.push('<div style="min-width:0"><h2>' + esc(e.company || e.role || e.categoryDisplay) + '</h2>');
   if (e.role && e.company) parts.push('<p class="role">' + esc(e.role) + '</p>');
@@ -570,6 +685,8 @@ function card(e) {
   if (pl) meta.push('<span>' + ICONS.place + esc(pl) + '</span>');
   if (e.employmentType) meta.push('<span>' + esc(e.employmentType) + '</span>');
   if (e.industry) meta.push('<span>' + esc(e.industry) + '</span>');
+  if (e.url) meta.push('<span><a class="elink" href="' + esc(e.url) + '" target="_blank" rel="noopener">' +
+    esc(hostLabel(e.url)) + ' ↗</a></span>');
   if (meta.length) parts.push('<div class="meta">' + meta.join('') + '</div>');
   if (e.accomplishments.length) {
     parts.push('<ul class="acc">' + e.accomplishments.map(a => '<li>' + esc(a) + '</li>').join('') + '</ul>');
@@ -577,7 +694,7 @@ function card(e) {
   if (e.skills.length) {
     parts.push('<div class="skills">' + e.skills.map(s => '<span class="skill">' + esc(s) + '</span>').join('') + '</div>');
   }
-  if (e.images.length) {
+  if (e.images.length && !cb) {
     parts.push('<div class="thumbs">' + e.images.map(i =>
       '<img src="' + esc(i) + '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">').join('') + '</div>');
   }
@@ -585,13 +702,14 @@ function card(e) {
   parts.push('<div class="badges">' + (e.featured ? '<span class="feat-star" title="Featured">' + ICONS.star + '</span>' : '') +
     '<span class="badge type-' + esc(e.entryType) + '">' + esc(e.entryType.replace(/_/g, ' ')) + '</span>');
   parts.push('<span class="badge">' + esc(e.categoryDisplay) + '</span>');
-  if (e.parentId) parts.push('<span class="badge parent jump" title="Jump to ' + esc(e.parentName) +
-    '" onclick="jumpTo(\'' + e.parentId + '\')">↗ ' + esc(e.parentName) + '</span>');
+  e.parentIds.forEach((id, i) => parts.push('<span class="badge parent jump" title="Jump to ' +
+    esc(e.parentNames[i]) + '" onclick="jumpTo(\'' + id + '\')">↗ ' + esc(e.parentNames[i]) + '</span>'));
   if (children.length) parts.push('<span class="badge parent">' + children.length +
-    (children.length === 1 ? ' event' : ' events') + '</span>');
+    (children.length === 1 ? ' entry' : ' entries') + '</span>');
   parts.push('</div>');
   parts.push('</div>');
   if (children.length) parts.push(eventsStrip(children));
+  if (cb) { parts.push('</div>'); parts.push(cbFrame(e)); parts.push(cbStrip(e)); }
   parts.push('</article>');
   return parts.join('');
 }
@@ -602,7 +720,7 @@ function render() {
     if (activeType && e.entryType !== activeType) return false;
     if (!q) return true;
     return [e.company, e.role, e.country, e.location, e.industry, e.employmentType,
-            e.categoryDisplay, e.entryType,
+            e.categoryDisplay, e.entryType, e.url,
             e.accomplishments.join(' '), e.skills.join(' ')].join(' ').toLowerCase().includes(q);
   });
   const box = document.getElementById('timeline');
