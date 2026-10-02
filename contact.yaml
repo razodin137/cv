@@ -1,0 +1,17 @@
+# Contact block — the single place for your contact info; build.py renders it
+# into the page header. This file lives at the root, outside the */*.yaml
+# entry scan, so it never appears as a timeline entry. Blank fields simply
+# drop out of the header. social media: takes plain URLs — the viewer labels
+# them (github.com|github.io → "GitHub", linkedin.com → "LinkedIn", …;
+# anything else shows its hostname), and printing expands every external
+# link to spell out its full URL. A filled name: becomes a header line and
+# the browser tab title.
+
+website:
+social media:
+  - https://razodin137.github.io/
+  - https://www.linkedin.com/in/kaojaicam/
+name:
+location: Chiang Rai, Thailand
+phone:
+email: jcamnorman@gmail.com

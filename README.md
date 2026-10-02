@@ -2,7 +2,7 @@
 
 Live: **<https://razodin137.github.io/cv/>**
 
-Curriculum vitae as data: 67 YAML entries across category directories
+Curriculum vitae as data: 68 YAML entries across category directories
 (plus logos/images) rendered by `build.py` into a single self-contained
 `index.html` viewer.
 
@@ -26,6 +26,27 @@ python3 build.py
 `template.yaml` (project root) is a blank, copy-ready skeleton — all 17 keys,
 no comments. Field-by-field documentation lives in `explainer-template.yaml`.
 Both sit outside the `*/*.yaml` scan pattern, so the build ignores them.
+
+## Contact block
+
+`contact.yaml` (project root) is the one place for your contact info — the
+header contact line renders from it on every build, and blank fields drop
+out of the line.
+
+```yaml
+website:
+social media:
+  - https://github.com/you
+name:
+location: Chiang Rai, Thailand
+phone:
+email: you@example.com
+```
+
+`social media:` takes plain URLs — the viewer labels them by brand or
+hostname (github.com|github.io → "GitHub", linkedin.com → "LinkedIn", …),
+and printing spells out every external link's full URL. A filled `name:`
+becomes a header line and the browser tab title.
 
 ## Viewer features
 
@@ -57,7 +78,8 @@ Both sit outside the `*/*.yaml` scan pattern, so the build ignores them.
   of truncating, and an expanded milestone opens as a full-width card rather
   than the desktop circle
 - Logos, image thumbnails with click-to-zoom lightbox
-- Print-friendly (`Ctrl+P` hides the controls; milestone details print expanded)
+- Print-friendly (`Ctrl+P` hides the controls; milestone details print
+  expanded, and external header links print with the full URL spelled out)
 
 ## YAML schema
 

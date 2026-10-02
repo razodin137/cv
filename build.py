@@ -123,6 +123,23 @@ def load_entries():
     return entries
 
 
+def load_contact():
+    """contact.yaml (project root) is the single source for the header
+    contact line — the root location keeps it outside the */*.yaml entry
+    scan. Returns {} (empty contact line) if missing or unparseable."""
+    path = os.path.join(ROOT, "contact.yaml")
+    if not os.path.exists(path):
+        print("WARNING: contact.yaml not found — the header contact line is empty", file=sys.stderr)
+        return {}
+    try:
+        with open(path, encoding="utf-8") as f:
+            raw = yaml.safe_load(f) or {}
+    except yaml.YAMLError as e:
+        print(f"WARNING: ignoring unparseable contact.yaml: {e}", file=sys.stderr)
+        return {}
+    return raw if isinstance(raw, dict) else {}
+
+
 def link_parents(entries):
     """Resolve each entry's `parent` slug to the parent entity: the YAML in
     that directory named like the directory (or the directory's only other
@@ -188,6 +205,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   header { background: var(--ink); color: #fff; padding: 2.2rem 2rem 1.6rem; }
   header h1 { margin: 0; font-size: 2rem; font-weight: normal; letter-spacing: .02em; }
   header p { margin: .4rem 0 0; color: #b8c0d4; font-size: .95rem; }
+  .pname { display: none; }
+  .pname:not(:empty) { display: block; margin: .45rem 0 0; font-size: 1.25rem;
+    color: #fff; letter-spacing: .01em; }
   header .links { margin: .7rem 0 0; font-family: system-ui, sans-serif; font-size: .85rem; color: #b8c0d4; }
   header .links a { color: #b8c0d4; text-decoration: none; border-bottom: 1px solid rgba(184,192,212,.45); }
   header .links a:hover { color: #fff; border-color: #fff; }
@@ -362,10 +382,16 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   @media print {
     .controls, #lightbox { display: none !important; }
     body { background: #fff; }
-    header { background: #fff; color: #000; }
+    header { background: #fff; color: #000; padding: 0 0 .8rem; }
     header p { color: #444; }
     header .links a { color: #444; }
-    .card { break-inside: avoid; box-shadow: none; }
+    .card { break-inside: avoid; box-shadow: none; padding: .75rem .9rem; margin: .4rem 0; }
+    header h1 { font-size: 1.6rem; }
+    header .pname:not(:empty) { color: #000; }
+    header .links a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .85em;
+      overflow-wrap: anywhere; }
+    main { padding: .8rem 0 0; }
+    .year { margin: 1.2rem 0 .35rem; }
     .card.featured, .ms.featured .ms-circle { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .ms { break-inside: avoid; }
     .ms-row { display: none; }
@@ -382,8 +408,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <body>
 <header>
   <h1>Curriculum Vitae</h1>
+  <p class="pname" id="pname"></p>
   <p id="sub"></p>
-  <p class="links"><a href="https://razodin137.github.io/">GitHub</a> &middot; <a href="https://www.linkedin.com/in/kaojaicam/">LinkedIn</a> &middot; <a href="mailto:jcamnorman@gmail.com">jcamnorman@gmail.com</a> &middot; <span>Chiang Rai, Thailand</span></p>
+  <p class="links" id="contact"></p>
 </header>
 <main>
   <div class="controls">
@@ -633,6 +660,33 @@ function jumpTo(id, expand) {
   flash(el.classList.contains('ms') ? el.querySelector('.ms-row') : el);
 }
 
+// Contact line, rendered from DATA.contact (contact.yaml at the repo root).
+// Social URLs are labeled by brand/host; printing spells out the full URL.
+const SOCIAL_LABELS = { 'github.com': 'GitHub', 'github.io': 'GitHub', 'linkedin.com': 'LinkedIn',
+  'instagram.com': 'Instagram', 'twitter.com': 'Twitter', 'x.com': 'X', 'facebook.com': 'Facebook',
+  'youtube.com': 'YouTube' };
+function hostLabel(u) {
+  try {
+    const h = new URL(u).hostname.replace(/^www\./, '');
+    const base = h.match(/([^.]+\.[^.]+)$/);
+    return (base && SOCIAL_LABELS[base[1]]) || h;
+  } catch { return u; }
+}
+(function () {
+  const C = DATA.contact || {};
+  if (C.name) {
+    document.getElementById('pname').textContent = C.name;
+    document.title = C.name + ' — CV';
+  }
+  const parts = [];
+  if (C.website) parts.push('<a href="' + esc(C.website) + '">' + esc(hostLabel(C.website)) + '</a>');
+  (C.social || []).forEach(u => parts.push('<a href="' + esc(u) + '">' + esc(hostLabel(u)) + '</a>'));
+  if (C.email) parts.push('<a href="mailto:' + esc(C.email) + '">' + esc(C.email) + '</a>');
+  if (C.phone) parts.push('<a href="tel:' + esc(C.phone.replace(/[^\d+]/g, '')) + '">' + esc(C.phone) + '</a>');
+  if (C.location) parts.push('<span>' + esc(C.location) + '</span>');
+  document.getElementById('contact').innerHTML = parts.join(' &middot; ');
+})();
+
 document.getElementById('q').addEventListener('input', render);
 document.getElementById('sub').textContent =
   DATA.entries.length + ' entries · ' + DATA.categories + ' categories · ' +
@@ -658,9 +712,18 @@ def main():
 
     entries.sort(key=sort_key)
 
+    c = load_contact()
     data = {
         "entries": entries,
         "categories": len({e["category"] for e in entries}),
+        "contact": {
+            "name": str(c.get("name") or "").strip(),
+            "location": str(c.get("location") or "").strip(),
+            "phone": str(c.get("phone") or "").strip(),
+            "email": str(c.get("email") or "").strip(),
+            "website": str(c.get("website") or "").strip(),
+            "social": [str(s).strip() for s in (c.get("social media") or []) if str(s).strip()],
+        },
     }
     out = HTML_TEMPLATE.replace("__DATA__", json.dumps(data, ensure_ascii=False))
     dest = os.path.join(ROOT, "index.html")
