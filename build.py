@@ -181,6 +181,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .ms-detail { display: none; }
   .ms.open .ms-detail { display: flex; justify-content: center; padding: .8rem 0 1rem;
     animation: msbloom .45s ease-out; }
+  .ms.open.auto .ms-detail { animation: none; } /* filter-expanded: shown instantly */
   @keyframes msbloom { from { clip-path: circle(0 at 21px 0); } to { clip-path: circle(200% at 21px 0); } }
   .ms-circle { width: clamp(260px, 72vw, 440px); aspect-ratio: 1; border-radius: 50%;
     background: var(--card); border: 1px solid var(--line); padding: 2.1rem 2.4rem;
@@ -248,7 +249,7 @@ const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',
 
 const byId = {};
 DATA.entries.forEach(e => byId[e.entryType] = (byId[e.entryType] || 0) + 1);
-const active = new Set(); // empty set = show all entry types
+let activeType = ''; // '' = show all entry types (chips are single-select)
 
 function fmtRange(e) {
   const s = e.start ? monthName(e.start) : '';
@@ -277,7 +278,8 @@ function milestone(e) {
   const uid = 'msd-' + e.file.replace(/[^a-z0-9]/g, '');
   const [title, sub] = msTitle(e);
   const d = msDate(e);
-  let row = '<button class="ms-row" aria-expanded="false" aria-controls="' + uid + '">' +
+  const auto = !!activeType; // a type filter is on: milestones start expanded
+  let row = '<button class="ms-row" aria-expanded="' + auto + '" aria-controls="' + uid + '">' +
     '<span class="ms-dot"></span><span class="ms-rule"></span><span class="ms-label">' +
     '<span class="ms-title">' + esc(title) + '</span>';
   if (sub) row += '<span class="ms-sub">' + esc(sub) + '</span>';
@@ -304,7 +306,7 @@ function milestone(e) {
   if (e.images.length) c += '<div class="cimgs">' + e.images.map(i =>
     '<img src="' + esc(i) + '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">').join('') + '</div>';
   c += '</div></div>';
-  return '<article class="ms">' + row + c + '</article>';
+  return '<article class="ms' + (auto ? ' open auto' : '') + '">' + row + c + '</article>';
 }
 function entryHtml(e) { return e.milestone ? milestone(e) : card(e); }
 
@@ -312,15 +314,15 @@ function renderChips() {
   const box = document.getElementById('chips');
   box.innerHTML = '';
   const all = document.createElement('span');
-  all.className = 'chip' + (active.size === 0 ? ' on' : '');
+  all.className = 'chip' + (activeType ? '' : ' on');
   all.textContent = 'All (' + DATA.entries.length + ')';
-  all.onclick = () => { active.clear(); renderChips(); render(); };
+  all.onclick = () => { activeType = ''; renderChips(); render(); };
   box.appendChild(all);
   Object.keys(byId).sort().forEach(k => {
     const c = document.createElement('span');
-    c.className = 'chip' + (active.has(k) ? ' on' : '');
+    c.className = 'chip' + (activeType === k ? ' on' : '');
     c.innerHTML = esc(k.replace(/_/g, ' ')) + ' <span class="n">' + byId[k] + '</span>';
-    c.onclick = () => { active.has(k) ? active.delete(k) : active.add(k); renderChips(); render(); };
+    c.onclick = () => { activeType = (activeType === k) ? '' : k; renderChips(); render(); };
     box.appendChild(c);
   });
 }
@@ -358,7 +360,7 @@ function card(e) {
 function render() {
   const q = document.getElementById('q').value.trim().toLowerCase();
   const shown = DATA.entries.filter(e => {
-    if (active.size && !active.has(e.entryType)) return false;
+    if (activeType && e.entryType !== activeType) return false;
     if (!q) return true;
     return [e.company, e.role, e.country, e.location, e.industry, e.employmentType,
             e.categoryDisplay, e.entryType,
@@ -389,7 +391,9 @@ function render() {
 document.getElementById('timeline').addEventListener('click', ev => {
   const row = ev.target.closest('.ms-row');
   if (!row) return;
-  const open = row.closest('.ms').classList.toggle('open');
+  const art = row.closest('.ms');
+  art.classList.remove('auto'); // manual toggle: restore bloom animation
+  const open = art.classList.toggle('open');
   row.setAttribute('aria-expanded', open);
 });
 

@@ -33,7 +33,8 @@ the `*/*.yaml` scan pattern, so the build ignores it.
   thin-line circle with the title and date; click/tap expands a circular
   detail view (logo, tags, location, description). Give sub-events their own
   YAML in the parent entity's directory to share its category badge.
-- Filter by entry type (chips), live full-text search
+- Filter by entry type (single-select chips; milestones auto-expand while a
+  type filter is active), live full-text search
 - Logos, image thumbnails with click-to-zoom lightbox
 - Print-friendly (`Ctrl+P` hides the controls; milestone details print expanded)
 
