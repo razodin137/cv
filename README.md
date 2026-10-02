@@ -33,6 +33,8 @@ the `*/*.yaml` scan pattern, so the build ignores it.
   thin-line circle with the title and date; click/tap expands a circular
   detail view (logo, tags, location, description). Give sub-events their own
   YAML in the parent entity's directory to share its category badge.
+- Featured entries (`featured: true`) get a gold highlight with a star in the
+  top-right corner (collapsed milestone lines show the star at the far right)
 - Filter by entry type (single-select chips; milestones auto-expand while a
   type filter is active), live full-text search
 - Logos, image thumbnails with click-to-zoom lightbox
@@ -40,12 +42,13 @@ the `*/*.yaml` scan pattern, so the build ignores it.
 
 ## YAML schema
 
-Every `*/*.yaml` follows the same 15 fields:
+Every `*/*.yaml` follows the same 16 fields:
 
 | Field | Notes |
 |---|---|
 | `entry_type` | `job`, `volunteer`, `education`, `events`, `ministry`, `creative`, `career_break` |
 | `milestone` | `true` = one-off point event → compact timeline line; `false` = standard card |
+| `featured` | `true` = gold highlight + star in the top-right corner (milestones: star at the far right); `false` = standard |
 | `company`, `role`, `employment_type`, `industry` | plain text, any may be blank |
 | `start`, `end` | `YYYY-MM` strings, blank end = "Present" |
 | `location`, `country`, `location_type` | plain text |

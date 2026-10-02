@@ -76,6 +76,7 @@ def load_entries():
                 "file": f"{category}/{fname}",
                 "entryType": (raw.get("entry_type") or "").strip(),
                 "milestone": str(raw.get("milestone")).strip().lower() in ("true", "yes", "1"),
+                "featured": str(raw.get("featured")).strip().lower() in ("true", "yes", "1"),
                 "company": (raw.get("company") or "").strip(),
                 "role": (raw.get("role") or "").strip(),
                 "employmentType": (raw.get("employment_type") or "").strip(),
@@ -103,7 +104,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <style>
   :root {
     --bg: #f6f7f9; --card: #ffffff; --ink: #1a2233; --muted: #5c677d;
-    --line: #e3e7ee; --accent: #2456d6;
+    --line: #e3e7ee; --accent: #2456d6; --gold: #d4af37; --gold-deep: #8a6d1e;
   }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: var(--bg); color: var(--ink); }
@@ -130,6 +131,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .year .n { font-size: .78rem; color: var(--muted); font-weight: normal; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px;
     padding: 1.1rem 1.25rem; margin: .55rem 0; break-inside: avoid; }
+  .card.featured { border-color: var(--gold); background: #fffbea; box-shadow: 0 1px 9px rgba(212,175,55,.2); }
+  .feat-star { color: var(--gold); display: inline-flex; flex: none; }
+  .feat-star svg { width: 17px; height: 17px; }
+  .badges .feat-star { margin-bottom: .35rem; }
   .card-top { display: flex; gap: 1rem; align-items: flex-start; }
   .card img.logo { width: 52px; height: 52px; object-fit: contain; border-radius: 8px;
     background: #fff; border: 1px solid var(--line); padding: 4px; flex: none; }
@@ -178,6 +183,12 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .ms-tw { flex: none; color: var(--muted); display: inline-flex; transition: transform .2s; }
   .ms-tw svg { width: 11px; height: 11px; }
   .ms.open .ms-tw { transform: rotate(45deg); }
+  /* Featured entries (featured: true): gold highlight + star */
+  .ms.featured .ms-dot { border-color: var(--gold); background: var(--gold); }
+  .ms.featured .ms-title { color: var(--gold-deep); }
+  .ms.featured .ms-row:hover .ms-title { color: var(--accent); }
+  .ms-row .feat-star svg { width: 14px; height: 14px; }
+  .ms.featured .ms-circle { border-color: var(--gold); background: #fffbea; }
   .ms-detail { display: none; }
   .ms.open .ms-detail { display: flex; justify-content: center; padding: .8rem 0 1rem;
     animation: msbloom .45s ease-out; }
@@ -215,6 +226,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     header p { color: #444; }
     header .links a { color: #444; }
     .card { break-inside: avoid; box-shadow: none; }
+    .card.featured, .ms.featured .ms-circle { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .ms { break-inside: avoid; }
     .ms-row { display: none; }
     .ms-detail { display: flex !important; animation: none; padding: 0; }
@@ -243,7 +255,8 @@ const DATA = __DATA__;
 const ICONS = {
   date: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3"/></svg>',
   place: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 15s5.5-5.6 5.5-9.4A5.5 5.5 0 0 0 2.5 5.6C2.5 9.4 8 15 8 15z"/><circle cx="8" cy="5.6" r="1.8"/></svg>',
-  plus: '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 1.2v9.6M1.2 6h9.6"/></svg>'
+  plus: '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 1.2v9.6M1.2 6h9.6"/></svg>',
+  star: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>'
 };
 const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -284,7 +297,8 @@ function milestone(e) {
     '<span class="ms-title">' + esc(title) + '</span>';
   if (sub) row += '<span class="ms-sub">' + esc(sub) + '</span>';
   if (d) row += '<span class="ms-date">' + esc(d) + '</span>';
-  row += '</span><span class="ms-rule ms-tail"></span><span class="ms-tw">' + ICONS.plus + '</span></button>';
+  row += '</span><span class="ms-rule ms-tail"></span><span class="ms-tw">' + ICONS.plus + '</span>' +
+    (e.featured ? '<span class="feat-star" title="Featured">' + ICONS.star + '</span>' : '') + '</button>';
   let c = '<div class="ms-detail" id="' + uid + '"><div class="ms-circle">';
   if (e.logo) c += '<img class="clogo" src="' + esc(e.logo) + '" alt="" loading="lazy" onerror="this.remove()">';
   c += '<h3>' + esc(title) + '</h3>';
@@ -306,7 +320,7 @@ function milestone(e) {
   if (e.images.length) c += '<div class="cimgs">' + e.images.map(i =>
     '<img src="' + esc(i) + '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">').join('') + '</div>';
   c += '</div></div>';
-  return '<article class="ms' + (auto ? ' open auto' : '') + '">' + row + c + '</article>';
+  return '<article class="ms' + (auto ? ' open auto' : '') + (e.featured ? ' featured' : '') + '">' + row + c + '</article>';
 }
 function entryHtml(e) { return e.milestone ? milestone(e) : card(e); }
 
@@ -328,7 +342,7 @@ function renderChips() {
 }
 
 function card(e) {
-  const parts = ['<article class="card"><div class="card-top">'];
+  const parts = ['<article class="card' + (e.featured ? ' featured' : '') + '"><div class="card-top">'];
   if (e.logo) parts.push('<img class="logo" src="' + esc(e.logo) + '" alt="" loading="lazy" onerror="this.remove()">');
   parts.push('<div style="min-width:0"><h2>' + esc(e.company || e.role || e.categoryDisplay) + '</h2>');
   if (e.role && e.company) parts.push('<p class="role">' + esc(e.role) + '</p>');
@@ -351,7 +365,8 @@ function card(e) {
       '<img src="' + esc(i) + '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">').join('') + '</div>');
   }
   parts.push('</div>');
-  parts.push('<div class="badges"><span class="badge type-' + esc(e.entryType) + '">' + esc(e.entryType.replace(/_/g, ' ')) + '</span>');
+  parts.push('<div class="badges">' + (e.featured ? '<span class="feat-star" title="Featured">' + ICONS.star + '</span>' : '') +
+    '<span class="badge type-' + esc(e.entryType) + '">' + esc(e.entryType.replace(/_/g, ' ')) + '</span>');
   parts.push('<span class="badge">' + esc(e.categoryDisplay) + '</span></div>');
   parts.push('</div></article>');
   return parts.join('');
