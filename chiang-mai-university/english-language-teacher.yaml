@@ -1,0 +1,21 @@
+entry_type: job
+milestone: false
+featured: false
+parent: chiang-mai-university
+company: Chiang Mai University
+role: English Language Teacher
+employment_type: part-time
+industry:
+start: "2018-06"
+end: "2018-11"
+location: Chiang Mai
+country: Thailand
+location_type: onsite
+accomplishments:
+ - "Educator within one of Thailand's top public universities, featuring a rich language program."
+ - Served as Agent Educator for the entirety of Chiang Mai Province.
+skills:
+logo:
+images:
+ - agro.jpg
+ - images (4).jpeg

@@ -1,0 +1,18 @@
+entry_type: job
+milestone: false
+featured: false
+parent:
+company: Historic Home Renovation
+role: Renovation and Maintenance
+employment_type: freelance
+industry:
+start: "2015"
+end: "2017"
+location: Lexington, KY
+country: United States of America
+location_type: onsite
+accomplishments:
+ - Performed maintenance and renewed old features on the oldest home in Lexington, KY.
+skills:
+logo:
+images:

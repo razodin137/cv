@@ -2,8 +2,8 @@
 
 Live: **<https://razodin137.github.io/cv/>**
 
-Curriculum vitae as data: 51 YAML entries (one per directory, plus
-logos/images) rendered by `build.py` into a single self-contained
+Curriculum vitae as data: 61 YAML entries across category directories
+(plus logos/images) rendered by `build.py` into a single self-contained
 `index.html` viewer.
 
 ## Usage
@@ -63,7 +63,7 @@ Every `*/*.yaml` follows the same 17 fields:
 | `parent` | slug of the parent entity — its directory (e.g. `mae-fah-luang-university`) or its YAML file name (e.g. `mfu-christian-club`); cross-links + logo inheritance |
 | `featured` | `true` = gold highlight + star in the top-right corner (milestones: star at the far right); `false` = standard |
 | `company`, `role`, `employment_type`, `industry` | plain text, any may be blank |
-| `start`, `end` | `YYYY-MM` strings, blank end = "Present" |
+| `start`, `end` | `YYYY-MM` strings (full `YYYY-MM-DD` also works), blank end = "Present" |
 | `location`, `country`, `location_type` | plain text |
 | `accomplishments`, `skills` | string lists (blank items are dropped) |
 | `logo` | filename; resolved from `logos/` first, then the entry's directory |

@@ -25,7 +25,7 @@ company:                  # Organization name; for a milestone, the event title 
 role:                     # Job title / role / activity
 employment_type:           # full-time | part-time | contract | seasonal | intern (free text)
 industry:                  # e.g. hospitality, ministry, food service, education
-start: "YYYY-MM"           # e.g. "2024-05" — always quote it
+start: "YYYY-MM"           # e.g. "2024-05" — always quote it; full "YYYY-MM-DD" dates work too
 end: "YYYY-MM"             # e.g. "2024-12"; leave blank for "Present"
 location:                  # City
 country:                   # Country name

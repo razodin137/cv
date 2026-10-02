@@ -14,7 +14,6 @@ import json
 import os
 import re
 import sys
-from datetime import date
 
 import yaml
 
@@ -42,16 +41,6 @@ def resolve(category: str, filename: str, prefer_logos: bool) -> str | None:
         if os.path.isfile(os.path.join(ROOT, c)):
             return c
     return None
-
-
-def month_label(ym: str) -> str:
-    if not ym:
-        return ""
-    try:
-        d = date.fromisoformat(ym + "-01")
-        return d.strftime("%b %Y")
-    except ValueError:
-        return str(ym)
 
 
 def pip_srcs(images):
@@ -403,7 +392,8 @@ function placeStr(e) {
 }
 function monthName(ym) {
   if (!ym.includes('-')) return ym;
-  const d = new Date(ym + '-01T00:00:00');
+  const iso = ym.length > 7 ? ym : ym + '-01'; // "YYYY-MM" or full "YYYY-MM-DD"
+  const d = new Date(iso + 'T00:00:00');
   return isNaN(d) ? ym : d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 
