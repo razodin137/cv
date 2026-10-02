@@ -1,19 +1,20 @@
 entry_type: creative
 milestone: true
-featured: false
+featured: true
 parent: debate-team
-company: "Grand Champion - University-wide Debate Tournament"
-role: "Additionally, awarded Best Speaker"
+company: "Grand Champion Team - University-wide Debate Tournament"
+role: "Team tournament first place"
 employment_type:
 industry:
 start: "2023-02"
 end:
-location:
-country:
+location: Chiang Rai
+country: Thailand
 location_type:
 accomplishments:
- - I was awarded Best Speaker at Mae Fah Luang University's annual debate tournament. My team was awarded with first prize, in which we also were greeted with a generous cash sum. I was awarded an additional cash prize for winning Best Speaker in the finals. This competition was formed as a tournament which lasted for several months and concluded with a substantial final event.
- -
+ - My team took first place at Mae Fah Luang University's annual debate tournament, winning the grand championship and a generous cash prize.
+ - The competition ran as a tournament lasting several months and concluded with a substantial final event.
+ - Also named Best Speaker of the tournament, awarded its own featured milestone and cash prize.
  -
 skills:
  -
@@ -21,4 +22,4 @@ skills:
  -
 logo: mae-fah-luang.svg
 images:
- - mfu-debate.jpeg
+ - mfu-debate.jpegl
