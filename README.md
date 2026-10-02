@@ -29,17 +29,22 @@ the `*/*.yaml` scan pattern, so the build ignores it.
 ## Viewer features
 
 - Timeline grouped by year, newest first, undated entries at the end
+- One-off events (`milestone: true`) collapse to a single timeline line — a
+  thin-line circle with the title and date; click/tap expands a circular
+  detail view (logo, tags, location, description). Give sub-events their own
+  YAML in the parent entity's directory to share its category badge.
 - Filter by entry type (chips), live full-text search
 - Logos, image thumbnails with click-to-zoom lightbox
-- Print-friendly (`Ctrl+P` hides the controls)
+- Print-friendly (`Ctrl+P` hides the controls; milestone details print expanded)
 
 ## YAML schema
 
-Every `*/*.yaml` follows the same 14 fields:
+Every `*/*.yaml` follows the same 15 fields:
 
 | Field | Notes |
 |---|---|
 | `entry_type` | `job`, `volunteer`, `education`, `events`, `ministry`, `creative`, `career_break` |
+| `milestone` | `true` = one-off point event → compact timeline line; `false` = standard card |
 | `company`, `role`, `employment_type`, `industry` | plain text, any may be blank |
 | `start`, `end` | `YYYY-MM` strings, blank end = "Present" |
 | `location`, `country`, `location_type` | plain text |
