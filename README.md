@@ -2,7 +2,7 @@
 
 Live: **<https://razodin137.github.io/cv/>**
 
-Curriculum vitae as data: 61 YAML entries across category directories
+Curriculum vitae as data: 67 YAML entries across category directories
 (plus logos/images) rendered by `build.py` into a single self-contained
 `index.html` viewer.
 
@@ -45,11 +45,17 @@ Both sit outside the `*/*.yaml` scan pattern, so the build ignores them.
   gets a collapsible `Events (n)` strip with jump links to every child, and
   a child without its own `logo:` inherits the parent's logo. Jumps clear any
   active chip/search filter so the target is rendered; children may live in
-  any directory (their category badge comes from it)
+  any directory (their category badge comes from it). Recurring events use
+  this shape: one umbrella entry spanning the years plus a milestone per
+  instance (e.g. `play-ashram/`)
 - Featured entries (`featured: true`) get a gold highlight with a star in the
   top-right corner (collapsed milestone lines show the star at the far right)
 - Filter by entry type (single-select chips; milestones auto-expand while a
   type filter is active), live full-text search
+- Mobile-friendly: on narrow screens the filter chips become a swipeable
+  single row, card badges stack under the text, milestone lines wrap instead
+  of truncating, and an expanded milestone opens as a full-width card rather
+  than the desktop circle
 - Logos, image thumbnails with click-to-zoom lightbox
 - Print-friendly (`Ctrl+P` hides the controls; milestone details print expanded)
 

@@ -331,7 +331,34 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   #lightbox { position: fixed; inset: 0; background: rgba(10,14,22,.88); display: none;
     align-items: center; justify-content: center; cursor: zoom-out; z-index: 100; }
   #lightbox img { max-width: 92vw; max-height: 90vh; border-radius: 6px; }
-  footer { text-align: center; color: var(--muted); font-size: .8rem; padding-bottom: 2rem; }
+  /* Mobile phones: compact header, swipeable filter chips, badges stacked
+     under card text, wrapping milestone lines, and the milestone circle
+     opening as a full-width card (same shape as the print layout). */
+  @media (max-width: 640px) {
+    header { padding: 1.4rem 1rem 1rem; }
+    header h1 { font-size: 1.45rem; }
+    main { padding: 1rem .7rem 3rem; }
+    .controls { padding: .6rem 0; }
+    input[type=search] { font-size: 16px; } /* >=16px stops iOS auto-zoom on focus */
+    .chips { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { flex: none; padding: .38rem .75rem; }
+    .year { margin: 1.5rem 0 .4rem; }
+    .card { padding: .9rem .95rem; }
+    .card-top { flex-wrap: wrap; }
+    .card-top > div { flex: 1 1 auto; }
+    .badges { width: 100%; margin-left: 0; flex-direction: row; flex-wrap: wrap;
+      align-items: center; gap: .3rem; }
+    .badges .feat-star { margin-bottom: 0; }
+    .ms-row { padding: .55rem 0; }
+    .ms-tail { display: none; }
+    .ms-label { flex: 1 1 auto; flex-wrap: wrap; }
+    .ms-date { margin-left: auto; }
+    .ms-circle { width: 100%; aspect-ratio: auto; border-radius: 12px; padding: 1rem 1.1rem;
+      overflow: visible; align-items: flex-start; text-align: left; }
+    .ms-circle .cmeta, .ms-circle .cbadges, .ms-circle .cskills, .ms-circle .cimgs {
+      justify-content: flex-start; }
+  }
   @media print {
     .controls, #lightbox { display: none !important; }
     body { background: #fff; }
@@ -364,7 +391,6 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     <div class="chips" id="chips"></div>
   </div>
   <div id="timeline"></div>
-  <footer>Source: YAML entries in this repository &middot; regenerate with <code>python3 build.py</code></footer>
 </main>
 <div id="lightbox"><img alt=""></div>
 <script>
