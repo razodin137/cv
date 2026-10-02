@@ -83,6 +83,8 @@ one-line headline under it.
   so any image count scales to fill the frame), with the title, dates and
   place sitting on top under a faint dark highlight so they stay readable;
   click a picture to zoom. Print always shows the standard card.
+  Each career break lives in its own root directory labeled by location and
+  year (e.g. `chiang-mai-2018/`), its photos dropped in next to its YAML.
 - Filter by entry type (single-select chips; milestones auto-expand while a
   type filter is active), live full-text search
 - Mobile-friendly: on narrow screens the filter chips become a swipeable
