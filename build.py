@@ -19,8 +19,9 @@ import yaml
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
-# Directories that hold CV entry YAML files (everything except asset dirs).
-ASSET_DIRS = {"logos"}
+# Root directories scanned for CV entry YAML files; these are excluded
+# (logos/ holds images, contact/ holds the header contact block).
+ASSET_DIRS = {"logos", "contact"}
 
 
 def slug_display(name: str) -> str:
@@ -124,18 +125,18 @@ def load_entries():
 
 
 def load_contact():
-    """contact.yaml (project root) is the single source for the header
-    contact line — the root location keeps it outside the */*.yaml entry
-    scan. Returns {} (empty contact line) if missing or unparseable."""
-    path = os.path.join(ROOT, "contact.yaml")
+    """contact/contact.yaml is the single source for the header contact
+    block — ASSET_DIRS keeps the directory out of the */*.yaml entry scan.
+    Returns {} (empty contact block) if missing or unparseable."""
+    path = os.path.join(ROOT, "contact", "contact.yaml")
     if not os.path.exists(path):
-        print("WARNING: contact.yaml not found — the header contact line is empty", file=sys.stderr)
+        print("WARNING: contact/contact.yaml not found — the header contact line is empty", file=sys.stderr)
         return {}
     try:
         with open(path, encoding="utf-8") as f:
             raw = yaml.safe_load(f) or {}
     except yaml.YAMLError as e:
-        print(f"WARNING: ignoring unparseable contact.yaml: {e}", file=sys.stderr)
+        print(f"WARNING: ignoring unparseable contact/contact.yaml: {e}", file=sys.stderr)
         return {}
     return raw if isinstance(raw, dict) else {}
 
@@ -208,6 +209,13 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .pname { display: none; }
   .pname:not(:empty) { display: block; margin: .45rem 0 0; font-size: 1.25rem;
     color: #fff; letter-spacing: .01em; }
+  .head-row { display: flex; align-items: center; gap: 1.1rem; }
+  .pfp { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; flex: none;
+    border: 2px solid rgba(255,255,255,.28); }
+  .pfp[hidden] { display: none; }
+  .tagline { display: none; }
+  .tagline:not(:empty) { display: block; margin: .35rem 0 0; font-size: 1rem;
+    font-style: italic; color: #cdd5e8; }
   header .links { margin: .7rem 0 0; font-family: system-ui, sans-serif; font-size: .85rem; color: #b8c0d4; }
   header .links a { color: #b8c0d4; text-decoration: none; border-bottom: 1px solid rgba(184,192,212,.45); }
   header .links a:hover { color: #fff; border-color: #fff; }
@@ -378,6 +386,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       overflow: visible; align-items: flex-start; text-align: left; }
     .ms-circle .cmeta, .ms-circle .cbadges, .ms-circle .cskills, .ms-circle .cimgs {
       justify-content: flex-start; }
+    .pfp { width: 64px; height: 64px; }
+    .head-row { gap: .9rem; }
   }
   @media print {
     .controls, #lightbox { display: none !important; }
@@ -388,6 +398,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     .card { break-inside: avoid; box-shadow: none; padding: .75rem .9rem; margin: .4rem 0; }
     header h1 { font-size: 1.6rem; }
     header .pname:not(:empty) { color: #000; }
+    .pfp { width: 56px; height: 56px; border-color: var(--line); }
+    header .tagline:not(:empty) { color: #444; }
     header .links a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .85em;
       overflow-wrap: anywhere; }
     main { padding: .8rem 0 0; }
@@ -407,8 +419,14 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 </head>
 <body>
 <header>
-  <h1>Curriculum Vitae</h1>
-  <p class="pname" id="pname"></p>
+  <div class="head-row">
+    <img class="pfp" id="pfp" hidden alt="Profile photo">
+    <div>
+      <h1>Curriculum Vitae</h1>
+      <p class="pname" id="pname"></p>
+    </div>
+  </div>
+  <p class="tagline" id="tagline"></p>
   <p id="sub"></p>
   <p class="links" id="contact"></p>
 </header>
@@ -660,8 +678,8 @@ function jumpTo(id, expand) {
   flash(el.classList.contains('ms') ? el.querySelector('.ms-row') : el);
 }
 
-// Contact line, rendered from DATA.contact (contact.yaml at the repo root).
-// Social URLs are labeled by brand/host; printing spells out the full URL.
+// Contact header, rendered from DATA.contact (contact/contact.yaml at the
+// repo root). Social URLs are labeled by brand/host; print spells out URLs.
 const SOCIAL_LABELS = { 'github.com': 'GitHub', 'github.io': 'GitHub', 'linkedin.com': 'LinkedIn',
   'instagram.com': 'Instagram', 'twitter.com': 'Twitter', 'x.com': 'X', 'facebook.com': 'Facebook',
   'youtube.com': 'YouTube' };
@@ -677,6 +695,13 @@ function hostLabel(u) {
   if (C.name) {
     document.getElementById('pname').textContent = C.name;
     document.title = C.name + ' — CV';
+  }
+  if (C.tagline) document.getElementById('tagline').textContent = C.tagline;
+  if (C.photo) {
+    const pfp = document.getElementById('pfp');
+    pfp.onerror = () => { pfp.hidden = true; };
+    pfp.src = C.photo;
+    pfp.hidden = false;
   }
   const parts = [];
   if (C.website) parts.push('<a href="' + esc(C.website) + '">' + esc(hostLabel(C.website)) + '</a>');
@@ -718,6 +743,8 @@ def main():
         "categories": len({e["category"] for e in entries}),
         "contact": {
             "name": str(c.get("name") or "").strip(),
+            "tagline": str(c.get("tagline") or "").strip(),
+            "photo": resolve("contact", str(c.get("photo") or "").strip(), prefer_logos=False) or "",
             "location": str(c.get("location") or "").strip(),
             "phone": str(c.get("phone") or "").strip(),
             "email": str(c.get("email") or "").strip(),

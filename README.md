@@ -2,7 +2,7 @@
 
 Live: **<https://razodin137.github.io/cv/>**
 
-Curriculum vitae as data: 68 YAML entries across category directories
+Curriculum vitae as data: 69 YAML entries across category directories
 (plus logos/images) rendered by `build.py` into a single self-contained
 `index.html` viewer.
 
@@ -29,24 +29,29 @@ Both sit outside the `*/*.yaml` scan pattern, so the build ignores them.
 
 ## Contact block
 
-`contact.yaml` (project root) is the one place for your contact info — the
-header contact line renders from it on every build, and blank fields drop
-out of the line.
+`contact/contact.yaml` is the one place for your contact info — the header
+renders from it on every build, and blank fields drop out. Drop your profile
+picture in `contact/` as well; `photo:` takes its filename (resolved from
+`contact/`, then `logos/`) and renders as a little circle at the top of the
+page — print included.
 
 ```yaml
-website:
-social media:
-  - https://github.com/you
 name:
+tagline:
+photo: profile.jpg
 location: Chiang Rai, Thailand
 phone:
 email: you@example.com
+website:
+social media:
+  - https://github.com/you
 ```
 
 `social media:` takes plain URLs — the viewer labels them by brand or
 hostname (github.com|github.io → "GitHub", linkedin.com → "LinkedIn", …),
 and printing spells out every external link's full URL. A filled `name:`
-becomes a header line and the browser tab title.
+becomes a header line and the browser tab title; a filled `tagline:` is a
+one-line headline under it.
 
 ## Viewer features
 

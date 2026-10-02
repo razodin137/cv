@@ -1,4 +1,4 @@
-entry_type: event
+entry_type: events
 milestone: true
 featured: true
 parent: merit360
@@ -8,7 +8,7 @@ employment_type:
 industry:
 start: 2017-08-17
 end:
-location: Parliment
+location: Parliament
 country: 'United Kingdom'
 location_type: onsite
 accomplishments:
