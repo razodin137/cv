@@ -1,7 +1,7 @@
 entry_type: volunteer
-milestone: false
+milestone: true
 featured: false
-parent:
+parent: xenos
 company: Oyate Oglala Sioux Reservation
 role: Construction Volunteer
 employment_type: volunteer

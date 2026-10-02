@@ -23,8 +23,9 @@ cp template.yaml my-new-entry-dir/my-new-entry.yaml   # then fill it in
 python3 build.py
 ```
 
-`template.yaml` (project root) documents every field inline. It sits outside
-the `*/*.yaml` scan pattern, so the build ignores it.
+`template.yaml` (project root) is a blank, copy-ready skeleton — all 17 keys,
+no comments. Field-by-field documentation lives in `explainer-template.yaml`.
+Both sit outside the `*/*.yaml` scan pattern, so the build ignores them.
 
 ## Viewer features
 
