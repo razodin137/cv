@@ -1,6 +1,7 @@
 entry_type: job
 milestone: false
 featured: false
+parent:
 company: Alta's Rustler Lodge
 role: Rustler Staff
 employment_type:

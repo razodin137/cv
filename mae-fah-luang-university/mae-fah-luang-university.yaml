@@ -1,6 +1,7 @@
 entry_type: education
 milestone: false
 featured: true
+parent:
 company: Mae Fah Luang University
 role: Student
 employment_type: full-time

@@ -1,12 +1,13 @@
-entry_type: creative
+entry_type: organization
 milestone: false
 featured: false
+parent: mae-fah-luang-university
 company: MFU Debate Team
 role: Debater
 employment_type:
 industry:
-start:
-end:
+start: "2023"
+end: "2024"
 location: Chiang Rai
 country: Thailand
 location_type:

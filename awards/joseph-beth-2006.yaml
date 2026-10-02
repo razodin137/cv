@@ -1,8 +1,9 @@
 entry_type: creative
 milestone: true
 featured: false
-company: Joseph Beth Booksellers
-role: "Grand Prize - Joseph Beth Graphic Novel Competition"
+parent:
+company: "Grand Prize - Joseph Beth Graphic Novel Competition"
+role:
 employment_type:
 industry:
 start: "2006-08"

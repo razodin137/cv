@@ -1,11 +1,12 @@
 entry_type: volunteer
-milestone: false
+milestone: true
 featured: false
+parent: mfu-christian-club
 company: MFU Christian Club Christmas Festival
 role: "Volunteer Staff"
 employment_type:
 industry: ministry
-start:
+start: "2024-12"
 end:
 location: Chiang Rai
 country: Thailand

@@ -1,6 +1,7 @@
 entry_type: volunteer
 milestone: false
 featured: false
+parent:
 company: Red River Gorgeous
 role: Live-In Volunteer
 employment_type: volunteer

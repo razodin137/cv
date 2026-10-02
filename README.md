@@ -31,8 +31,20 @@ the `*/*.yaml` scan pattern, so the build ignores it.
 - Timeline grouped by year, newest first, undated entries at the end
 - One-off events (`milestone: true`) collapse to a single timeline line — a
   thin-line circle with the title and date; click/tap expands a circular
-  detail view (logo, tags, location, description). Give sub-events their own
-  YAML in the parent entity's directory to share its category badge.
+  detail view (logo, tags, location, description). The event's own title
+  (`company`) headlines the line, with organization and role kept secondary
+  (italic sub, "under …" parent link) — unlike cards, which lead with
+  organization + role. Milestones with pictures show tiny bubbles of each
+  picture under the collapsed line (click one to zoom); bubbles are
+  build-time thumbnails, so full photos load only on open
+- Parent entities: `parent: <slug>` — the parent's directory (e.g.
+  `mae-fah-luang-university`) or, for an umbrella entry like a club or team,
+  its YAML file name (e.g. `mfu-christian-club`) — links an entry to its
+  parent both ways: milestone lines get an "under …" link, the parent card
+  gets a collapsible `Events (n)` strip with jump links to every child, and
+  a child without its own `logo:` inherits the parent's logo. Jumps clear any
+  active chip/search filter so the target is rendered; children may live in
+  any directory (their category badge comes from it)
 - Featured entries (`featured: true`) get a gold highlight with a star in the
   top-right corner (collapsed milestone lines show the star at the far right)
 - Filter by entry type (single-select chips; milestones auto-expand while a
@@ -42,12 +54,13 @@ the `*/*.yaml` scan pattern, so the build ignores it.
 
 ## YAML schema
 
-Every `*/*.yaml` follows the same 16 fields:
+Every `*/*.yaml` follows the same 17 fields:
 
 | Field | Notes |
 |---|---|
-| `entry_type` | `job`, `volunteer`, `education`, `events`, `ministry`, `creative`, `career_break` |
-| `milestone` | `true` = one-off point event → compact timeline line; `false` = standard card |
+| `entry_type` | `job`, `volunteer`, `education`, `events`, `ministry`, `creative`, `career_break`, `organization` |
+| `milestone` | `true` = one-off point event → compact line headlined by the entry's own title (`company`); role/organization secondary; `false` = standard card |
+| `parent` | slug of the parent entity — its directory (e.g. `mae-fah-luang-university`) or its YAML file name (e.g. `mfu-christian-club`); cross-links + logo inheritance |
 | `featured` | `true` = gold highlight + star in the top-right corner (milestones: star at the far right); `false` = standard |
 | `company`, `role`, `employment_type`, `industry` | plain text, any may be blank |
 | `start`, `end` | `YYYY-MM` strings, blank end = "Present" |

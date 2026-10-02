@@ -1,6 +1,7 @@
 entry_type: volunteer
 milestone: false
 featured: false
+parent:
 company: Clos Saron
 role: Vineyard Hand
 employment_type: volunteer

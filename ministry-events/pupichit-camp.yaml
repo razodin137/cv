@@ -1,12 +1,13 @@
 entry_type: events
 milestone: false
 featured: false
+parent: blessing-stream
 company: "Pupichit (Conquerer) Camp"
 role: Participant
 employment_type:
 industry: ministry
-start:
-end:
+start: "2023"
+end: "2023"
 location: Pattaya
 country: Thailand
 location_type:

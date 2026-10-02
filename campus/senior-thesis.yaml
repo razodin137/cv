@@ -1,12 +1,13 @@
 entry_type: creative
 milestone: false
 featured: false
+parent: mae-fah-luang-university
 company: Mae Fah Luang University
 role: "Senior Thesis - Thai Language and Culture"
 employment_type:
 industry:
-start:
-end:
+start: "2024"
+end: "2025"
 location: Chiang Rai
 country: Thailand
 location_type:

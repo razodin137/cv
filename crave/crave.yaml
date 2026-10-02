@@ -1,6 +1,7 @@
 entry_type: events
 milestone: false
 featured: false
+parent:
 company: Crave Food Festival
 role:
 employment_type:

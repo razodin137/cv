@@ -1,6 +1,7 @@
 entry_type: education
 milestone: false
 featured: false
+parent:
 company: Eastern Kentucky University
 role: Student
 employment_type: full-time

@@ -1,6 +1,7 @@
 entry_type: career_break
 milestone: false
 featured: false
+parent:
 company:
 role: Travel
 employment_type:

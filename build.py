@@ -8,6 +8,8 @@ in a browser (works from file://, no server or internet needed).
 Re-run after editing YAML files.
 """
 
+import base64
+import io
 import json
 import os
 import re
@@ -52,6 +54,35 @@ def month_label(ym: str) -> str:
         return str(ym)
 
 
+def pip_srcs(images):
+    """Tiny bubbles for a milestone's pictures: 32px WebP data URIs so a
+    collapsed line never loads a full-size photo. Falls back to the raw
+    path (lazy-loaded by the viewer) if Pillow is missing or the file
+    can't be decoded."""
+    if not images:
+        return []
+    try:
+        from PIL import Image, ImageOps
+    except ImportError:
+        return list(images)
+    out = []
+    for rel in images:
+        uri = None
+        try:
+            with Image.open(os.path.join(ROOT, rel)) as im:
+                im = ImageOps.exif_transpose(im)
+                im.thumbnail((32, 32))
+                if im.mode not in ("RGB", "RGBA"):
+                    im = im.convert("RGB")
+                buf = io.BytesIO()
+                im.save(buf, "WEBP", quality=70)
+            uri = "data:image/webp;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
+        except Exception:
+            uri = None
+        out.append(uri or rel)
+    return out
+
+
 def load_entries():
     entries = []
     for category in sorted(os.listdir(ROOT)):
@@ -70,13 +101,20 @@ def load_entries():
                 continue
             if not isinstance(raw, dict):
                 continue
+            ms = str(raw.get("milestone")).strip().lower() in ("true", "yes", "1")
+            images = [p for p in (resolve(category, str(i).strip(), prefer_logos=False)
+                                  for i in (raw.get("images") or []) if i) if p]
             e = {
                 "category": category,
                 "categoryDisplay": slug_display(category),
                 "file": f"{category}/{fname}",
+                "id": "ent-" + re.sub(r"[^a-z0-9]+", "-", f"{category}/{fname[:-5]}".lower()).strip("-"),
                 "entryType": (raw.get("entry_type") or "").strip(),
-                "milestone": str(raw.get("milestone")).strip().lower() in ("true", "yes", "1"),
+                "milestone": ms,
                 "featured": str(raw.get("featured")).strip().lower() in ("true", "yes", "1"),
+                "parent": (raw.get("parent") or "").strip().strip("/"),
+                "parentId": "",
+                "parentName": "",
                 "company": (raw.get("company") or "").strip(),
                 "role": (raw.get("role") or "").strip(),
                 "employmentType": (raw.get("employment_type") or "").strip(),
@@ -89,10 +127,60 @@ def load_entries():
                 "accomplishments": [a.strip() for a in (raw.get("accomplishments") or []) if a and a.strip()],
                 "skills": [s.strip() for s in (raw.get("skills") or []) if s and s.strip()],
                 "logo": resolve(category, str(raw.get("logo") or "").strip(), prefer_logos=True),
-                "images": [p for p in (resolve(category, str(i).strip(), prefer_logos=False) for i in (raw.get("images") or []) if i) if p],
+                "images": images,
+                "pips": pip_srcs(images) if ms else [],
             }
             entries.append(e)
     return entries
+
+
+def link_parents(entries):
+    """Resolve each entry's `parent` slug to the parent entity: the YAML in
+    that directory named like the directory (or the directory's only other
+    YAML), or — for parents that share a directory with their children, like
+    a club or team — the unique entry whose YAML file is named <slug>.yaml.
+    Fills parentId/parentName, inherits logos down parent chains when the
+    entry has none, and warns + renders the entry standalone when the slug
+    can't be resolved."""
+    by_dir, by_file, by_id = {}, {}, {}
+    for e in entries:
+        by_dir.setdefault(e["category"], []).append(e)
+        by_file.setdefault(e["file"].rsplit("/", 1)[-1][:-5], []).append(e)
+        by_id[e["id"]] = e
+    for e in entries:
+        slug = e["parent"]
+        if not slug:
+            continue
+        cands = [p for p in by_dir.get(slug, ()) if p["file"] != e["file"]]
+        parent = next((p for p in cands if p["file"] == f"{slug}/{slug}.yaml"), None)
+        if parent is None and len(cands) == 1:
+            parent = cands[0]
+        if parent is None:
+            files = [p for p in by_file.get(slug, ()) if p["file"] != e["file"]]
+            if len(files) == 1:
+                parent = files[0]
+        if parent is None:
+            print(f"WARNING: {e['file']}: parent '{slug}' not resolved "
+                  f"(need {slug}/{slug}.yaml, exactly one YAML in {slug}/, "
+                  f"or a unique {slug}.yaml entry); rendering standalone",
+                  file=sys.stderr)
+            e["parent"] = ""
+            continue
+        e["parentId"] = parent["id"]
+        e["parentName"] = parent["company"] or parent["role"] or parent["categoryDisplay"]
+    # Logo inheritance can chain (event → organization → university), so
+    # repeat until nothing changes.
+    for _ in range(len(entries)):
+        changed = False
+        for e in entries:
+            if e["logo"] or not e["parentId"]:
+                continue
+            p = by_id.get(e["parentId"])
+            if p and p["logo"]:
+                e["logo"] = p["logo"]
+                changed = True
+        if not changed:
+            break
 
 
 HTML_TEMPLATE = r"""<!DOCTYPE html>
@@ -153,6 +241,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .badge.type-ministry { background: #dff7f4; color: #0d7a6c; }
   .badge.type-creative { background: #ffe3ee; color: #c22a74; }
   .badge.type-career_break { background: #eceff3; color: #566074; }
+  .badge.type-organization { background: #e4e1ff; color: #4338ca; }
   ul.acc { margin: .6rem 0 0; padding-left: 1.15rem; }
   ul.acc li { font-size: .92rem; line-height: 1.5; margin-bottom: .3rem; }
   .skills { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .7rem; }
@@ -213,6 +302,41 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .ms-circle .cimgs { display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem; margin-top: .8rem; }
   .ms-circle .cimgs img { width: 52px; height: 52px; object-fit: cover; border-radius: 50%;
     border: 1px solid var(--line); cursor: zoom-in; }
+  /* Parent links + collapsible Events strip on parent cards */
+  .plink { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(36,86,214,.4);
+    text-underline-offset: 3px; font-style: normal; cursor: pointer; }
+  .plink:hover { text-decoration-color: var(--accent); }
+  .badge.parent { background: #e1ecff; color: #1d4fd8; }
+  .badge.jump { cursor: pointer; max-width: 210px; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; }
+  .badge.jump:hover { text-decoration: underline; }
+  .events-strip { border-top: 1px solid var(--line); margin-top: .9rem; padding-top: .45rem; }
+  .es-head { display: flex; align-items: center; gap: .55rem; width: 100%; padding: .35rem 0;
+    background: none; border: 0; cursor: pointer; font: inherit; text-align: left; color: var(--ink); }
+  .es-head:hover .es-label { color: var(--accent); }
+  .es-label { font-family: system-ui, sans-serif; font-size: .7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .05em; color: var(--muted); flex: none; }
+  .es-rule { height: 1px; background: var(--line); flex: 1 1 auto; }
+  .es-tw { flex: none; color: var(--muted); display: inline-flex; transition: transform .2s; }
+  .es-tw svg { width: 11px; height: 11px; }
+  .es-head[aria-expanded="true"] .es-tw { transform: rotate(45deg); }
+  .es-lines { display: none; padding-top: .2rem; }
+  .events-strip.open .es-lines { display: block; }
+  .es-lines .ms-row { padding: .3rem 0; cursor: default; }
+  .es-lines .ms-row:hover .ms-title { color: var(--ink); }
+  .es-jump { flex: none; color: var(--muted); font-family: system-ui, sans-serif; font-size: .78rem; }
+  .plink:hover + .es-jump, .es-jump:hover { color: var(--accent); }
+  /* picture bubbles under a collapsed milestone line (aligned with its title) */
+  .ms-pips { display: flex; align-items: center; gap: 5px; padding: 0 0 .45rem 58px; }
+  .pip { width: 14px; height: 14px; border-radius: 50%; object-fit: cover;
+    border: 1px solid var(--line); background: var(--card); cursor: zoom-in; }
+  .pip:hover { border-color: var(--accent); }
+  .ms.open .ms-pips { display: none; } /* expanded circle shows the real photos */
+  /* flash highlight for jump targets */
+  @keyframes flashbg { 0% { outline: 3px solid rgba(36,86,214,.55); background: #eef3ff; }
+    70% { background: #eef3ff; } 100% { outline: 3px solid transparent; background: transparent; } }
+  .flash { animation: flashbg 1.6s ease-out; border-radius: 10px; }
+  .card.flash { border-radius: 12px; }
   @media (prefers-reduced-motion: reduce) { .ms.open .ms-detail { animation: none; } }
   .empty { text-align: center; color: var(--muted); font-style: italic; margin-top: 3rem; }
   #lightbox { position: fixed; inset: 0; background: rgba(10,14,22,.88); display: none;
@@ -229,6 +353,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     .card.featured, .ms.featured .ms-circle { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .ms { break-inside: avoid; }
     .ms-row { display: none; }
+    .es-lines .ms-row { display: flex; }
+    .es-head { display: none; }
+    .es-lines { display: block !important; }
+    .ms-pips { display: none !important; }
     .ms-detail { display: flex !important; animation: none; padding: 0; }
     .ms-circle { width: 100%; aspect-ratio: auto; border-radius: 12px; padding: 1rem 1.25rem;
       overflow: visible; align-items: flex-start; text-align: left; }
@@ -267,14 +395,14 @@ let activeType = ''; // '' = show all entry types (chips are single-select)
 function fmtRange(e) {
   const s = e.start ? monthName(e.start) : '';
   const en = e.end ? monthName(e.end) : (e.start ? 'Present' : '');
-  if (!s && !en) return '';
+  if (s && s === en) return s;
   return (s && en) ? s + ' – ' + en : (s || en);
 }
 function placeStr(e) {
   return [e.location, e.country, e.locationType].filter(Boolean).join(' · ');
 }
 function monthName(ym) {
-  if (!ym) return '';
+  if (!ym.includes('-')) return ym;
   const d = new Date(ym + '-01T00:00:00');
   return isNaN(d) ? ym : d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
@@ -283,8 +411,11 @@ function msDate(e) {
   if (e.start && e.end && e.start !== e.end) return fmtRange(e);
   return monthName(e.start || e.end);
 }
+// Milestones headline the event's own title (`company`); role + organization
+// stay secondary (italic sub / "under …" link). Cards, in contrast, lead
+// with organization + role.
 function msTitle(e) {
-  if (e.role && e.company) return [e.role, e.company];
+  if (e.role && e.company) return [e.company, e.role];
   return [e.company || e.role || e.categoryDisplay, ''];
 }
 function milestone(e) {
@@ -292,17 +423,24 @@ function milestone(e) {
   const [title, sub] = msTitle(e);
   const d = msDate(e);
   const auto = !!activeType; // a type filter is on: milestones start expanded
+  let rowSub = '';
+  if (e.parentId) rowSub = '<span class="ms-sub">under <span class="plink" onclick="event.stopPropagation();jumpTo(\'' + e.parentId + '\')">' + esc(e.parentName) + '</span></span>';
+  else if (sub) rowSub = '<span class="ms-sub">' + esc(sub) + '</span>';
   let row = '<button class="ms-row" aria-expanded="' + auto + '" aria-controls="' + uid + '">' +
     '<span class="ms-dot"></span><span class="ms-rule"></span><span class="ms-label">' +
-    '<span class="ms-title">' + esc(title) + '</span>';
-  if (sub) row += '<span class="ms-sub">' + esc(sub) + '</span>';
+    '<span class="ms-title">' + esc(title) + '</span>' + rowSub;
   if (d) row += '<span class="ms-date">' + esc(d) + '</span>';
   row += '</span><span class="ms-rule ms-tail"></span><span class="ms-tw">' + ICONS.plus + '</span>' +
     (e.featured ? '<span class="feat-star" title="Featured">' + ICONS.star + '</span>' : '') + '</button>';
+  let pips = '';
+  if (e.pips.length) pips = '<div class="ms-pips">' + e.pips.map((p, i) =>
+    '<img class="pip" loading="lazy" src="' + esc(p) + '" data-full="' + esc(e.images[i]) + '" alt="" ' +
+    'onclick="lb(this.dataset.full)" onerror="this.remove()">').join('') + '</div>';
   let c = '<div class="ms-detail" id="' + uid + '"><div class="ms-circle">';
   if (e.logo) c += '<img class="clogo" src="' + esc(e.logo) + '" alt="" loading="lazy" onerror="this.remove()">';
   c += '<h3>' + esc(title) + '</h3>';
-  if (sub) c += '<p class="csub">' + esc(sub) + '</p>';
+  const csub = sub || e.parentName;
+  if (csub) c += '<p class="csub">' + esc(csub) + '</p>';
   const meta = [];
   if (d) meta.push('<span>' + ICONS.date + esc(d) + '</span>');
   const pl = placeStr(e);
@@ -320,7 +458,8 @@ function milestone(e) {
   if (e.images.length) c += '<div class="cimgs">' + e.images.map(i =>
     '<img src="' + esc(i) + '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">').join('') + '</div>';
   c += '</div></div>';
-  return '<article class="ms' + (auto ? ' open auto' : '') + (e.featured ? ' featured' : '') + '">' + row + c + '</article>';
+  return '<article class="ms' + (auto ? ' open auto' : '') + (e.featured ? ' featured' : '') +
+    '" id="' + e.id + '">' + row + pips + c + '</article>';
 }
 function entryHtml(e) { return e.milestone ? milestone(e) : card(e); }
 
@@ -341,8 +480,25 @@ function renderChips() {
   });
 }
 
+function stripRow(c) {
+  const title = c.milestone ? msTitle(c)[0] : (c.company || c.role || c.categoryDisplay);
+  const d = msDate(c);
+  return '<div class="ms-row"><span class="ms-dot"></span><span class="ms-rule"></span>' +
+    '<span class="ms-label"><span class="ms-title"><span class="plink" onclick="jumpTo(\'' + c.id + '\', true)">' +
+    esc(title) + '</span></span>' +
+    (d ? '<span class="ms-date">' + esc(d) + '</span>' : '') +
+    '</span><span class="ms-rule ms-tail"></span><span class="es-jump">↗</span></div>';
+}
+function eventsStrip(children) {
+  return '<div class="events-strip">' +
+    '<button class="es-head" aria-expanded="false" onclick="toggleStrip(this)">' +
+    '<span class="es-label">Events (' + children.length + ')</span><span class="es-rule"></span>' +
+    '<span class="es-tw">' + ICONS.plus + '</span></button>' +
+    '<div class="es-lines">' + children.map(stripRow).join('') + '</div></div>';
+}
 function card(e) {
-  const parts = ['<article class="card' + (e.featured ? ' featured' : '') + '"><div class="card-top">'];
+  const children = DATA.entries.filter(x => x.parentId === e.id);
+  const parts = ['<article class="card' + (e.featured ? ' featured' : '') + '" id="' + e.id + '"><div class="card-top">'];
   if (e.logo) parts.push('<img class="logo" src="' + esc(e.logo) + '" alt="" loading="lazy" onerror="this.remove()">');
   parts.push('<div style="min-width:0"><h2>' + esc(e.company || e.role || e.categoryDisplay) + '</h2>');
   if (e.role && e.company) parts.push('<p class="role">' + esc(e.role) + '</p>');
@@ -367,8 +523,15 @@ function card(e) {
   parts.push('</div>');
   parts.push('<div class="badges">' + (e.featured ? '<span class="feat-star" title="Featured">' + ICONS.star + '</span>' : '') +
     '<span class="badge type-' + esc(e.entryType) + '">' + esc(e.entryType.replace(/_/g, ' ')) + '</span>');
-  parts.push('<span class="badge">' + esc(e.categoryDisplay) + '</span></div>');
-  parts.push('</div></article>');
+  parts.push('<span class="badge">' + esc(e.categoryDisplay) + '</span>');
+  if (e.parentId) parts.push('<span class="badge parent jump" title="Jump to ' + esc(e.parentName) +
+    '" onclick="jumpTo(\'' + e.parentId + '\')">↗ ' + esc(e.parentName) + '</span>');
+  if (children.length) parts.push('<span class="badge parent">' + children.length +
+    (children.length === 1 ? ' event' : ' events') + '</span>');
+  parts.push('</div>');
+  parts.push('</div>');
+  if (children.length) parts.push(eventsStrip(children));
+  parts.push('</article>');
   return parts.join('');
 }
 
@@ -407,6 +570,7 @@ document.getElementById('timeline').addEventListener('click', ev => {
   const row = ev.target.closest('.ms-row');
   if (!row) return;
   const art = row.closest('.ms');
+  if (!art) return; // events-strip rows are jump links, not toggles
   art.classList.remove('auto'); // manual toggle: restore bloom animation
   const open = art.classList.toggle('open');
   row.setAttribute('aria-expanded', open);
@@ -417,6 +581,40 @@ function lb(src) {
   box.querySelector('img').src = src;
   box.style.display = 'flex';
   box.onclick = () => box.style.display = 'none';
+}
+
+function flash(el) {
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+  setTimeout(() => el.classList.remove('flash'), 1700);
+}
+function toggleStrip(btn) {
+  const s = btn.closest('.events-strip');
+  const open = s.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open);
+}
+function jumpTo(id, expand) {
+  const q = document.getElementById('q');
+  if (activeType || q.value.trim()) { // unfilter so the jump target is rendered
+    activeType = '';
+    q.value = '';
+    renderChips();
+    render();
+  }
+  const el = document.getElementById(id);
+  if (!el) return;
+  const strip = el.querySelector('.events-strip');
+  if (strip) {
+    strip.classList.add('open');
+    strip.querySelector('.es-head').setAttribute('aria-expanded', 'true');
+  }
+  if (expand && el.classList.contains('ms')) {
+    el.classList.add('open');
+    el.querySelector('.ms-row').setAttribute('aria-expanded', 'true');
+  }
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  flash(el.classList.contains('ms') ? el.querySelector('.ms-row') : el);
 }
 
 document.getElementById('q').addEventListener('input', render);
@@ -433,6 +631,7 @@ render();
 
 def main():
     entries = load_entries()
+    link_parents(entries)
 
     # Sort: by start date desc (undated last), then by end date, then company.
     def sort_key(e):

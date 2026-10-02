@@ -1,6 +1,7 @@
 entry_type: job
 milestone: false
 featured: false
+parent:
 company: Hostelling International
 role: Hostel Staff
 employment_type: part-time

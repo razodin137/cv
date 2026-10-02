@@ -1,12 +1,13 @@
-entry_type: volunteer
+entry_type: organization
 milestone: false
 featured: false
+parent: mae-fah-luang-university
 company: MFU Christian Club
 role:
 employment_type:
 industry: ministry
-start:
-end:
+start: "2023"
+end: "2026"
 location: Chiang Rai
 country: Thailand
 location_type:

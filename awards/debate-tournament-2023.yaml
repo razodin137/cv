@@ -1,8 +1,9 @@
 entry_type: creative
 milestone: true
 featured: false
-company: Mae Fah Luang University
-role: "Grand Champion - University-wide Debate Tournament (Additionally, awarded Best Speaker)"
+parent: debate-team
+company: "Grand Champion - University-wide Debate Tournament"
+role: "Additionally, awarded Best Speaker"
 employment_type:
 industry:
 start: "2023-02"
@@ -20,4 +21,4 @@ skills:
  -
 logo: mae-fah-luang.svg
 images:
- - DebateMFUWInners.png
+ - mfu-debate.jpeg
