@@ -2,7 +2,7 @@
 
 Live: **<https://razodin137.github.io/cv/>**
 
-Curriculum vitae as data: 74 YAML entries across category directories
+Curriculum vitae as data: 78 YAML entries across category directories
 (plus logos/images) rendered by `build.py` into a single self-contained
 `index.html` viewer.
 
@@ -16,6 +16,20 @@ Then open `index.html` in any browser — double-click works; no server or
 internet needed (all data is embedded; logos/images load from this folder).
 
 ### Adding an entry
+
+```sh
+python3 new_entry.py   # guided form: validates, writes <category>/<entry>.yaml, rebuilds
+```
+
+The form prompts for the 19 fields (Enter accepts the default, blank = skip),
+checks everything against the build's own rules — entry types, date formats,
+parent slugs, logo/image filenames — shows a summary you can edit field by
+field, writes the YAML in the same shape as `template.yaml`, and offers to
+rebuild in the style `index.html` is currently built with. Answers can be
+piped from a file, one per line (`python3 new_entry.py < answers.txt`); a run
+that runs out of input takes defaults, then aborts cleanly instead of looping.
+
+By hand, if you'd rather copy the skeleton:
 
 ```sh
 mkdir my-new-entry-dir

@@ -1,6 +1,7 @@
 # CV entry template.
 #
-# To add an entry:
+# To add an entry: run `python3 new_entry.py` — a guided form that validates
+# and writes the file for you — or, by hand:
 #   1. mkdir <new-directory>            (directory name becomes the category badge)
 #   2. cp template.yaml <new-directory>/<entry-name>.yaml
 #   3. Fill in the fields, drop logo/images files into the same directory
