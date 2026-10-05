@@ -2,23 +2,26 @@
 
 Live: **<https://razodin137.github.io/cv/>**
 
-Curriculum vitae as data: 78 YAML entries across category directories
-(plus logos/images) rendered by `build.py` into a single self-contained
-`index.html` viewer.
+Curriculum vitae as data: 78 YAML entries across directories under
+`content/` (plus logos/images) rendered by `build.py` into a single
+self-contained `index.html` viewer.
 
 ## Usage
 
 ```sh
-python3 build.py     # regenerate index.html from all */*.yaml files
+python3 build.py     # regenerate index.html from all content/*/*.yaml files
 ```
 
 Then open `index.html` in any browser — double-click works; no server or
 internet needed (all data is embedded; logos/images load from this folder).
+The viewer's JS lives in `app.js` and each render style in `styles/*.css`;
+the build splices both into `index.html` — edit those sources (not the
+built file), then rerun.
 
 ### Adding an entry
 
 ```sh
-python3 new_entry.py   # guided form: validates, writes <category>/<entry>.yaml, rebuilds
+python3 new_entry.py   # guided form: validates, writes content/<category>/<entry>.yaml, rebuilds
 ```
 
 The form prompts for the 19 fields (Enter accepts the default, blank = skip),
@@ -32,14 +35,14 @@ that runs out of input takes defaults, then aborts cleanly instead of looping.
 By hand, if you'd rather copy the skeleton:
 
 ```sh
-mkdir my-new-entry-dir
-cp template.yaml my-new-entry-dir/my-new-entry.yaml   # then fill it in
+mkdir content/my-new-entry-dir
+cp template.yaml content/my-new-entry-dir/my-new-entry.yaml   # then fill it in
 python3 build.py
 ```
 
 `template.yaml` (project root) is a blank, copy-ready skeleton — all 19 keys,
 no comments. Field-by-field documentation lives in `explainer-template.yaml`.
-Both sit outside the `*/*.yaml` scan pattern, so the build ignores them.
+Both sit outside the `content/*/*.yaml` scan pattern, so the build ignores them.
 
 ## Styles
 
@@ -60,11 +63,11 @@ in `fonts/`.
 
 ## Contact block
 
-`contact/contact.yaml` is the one place for your contact info — the header
-renders from it on every build, and blank fields drop out. Drop your profile
-picture in `contact/` as well; `photo:` takes its filename (resolved from
-`contact/`, then `logos/`) and renders as a little circle at the top of the
-page — print included.
+`content/contact/contact.yaml` is the one place for your contact info — the
+header renders from it on every build, and blank fields drop out. Drop your
+profile picture in `content/contact/` as well; `photo:` takes its filename
+(resolved from there, then `logos/`) and renders as a little circle at the top
+of the page — print included.
 
 ```yaml
 name:
@@ -113,8 +116,9 @@ one-line headline under it.
   so any image count scales to fill the frame), with the title, dates and
   place sitting on top under a faint dark highlight so they stay readable;
   click a picture to zoom. Print always shows the standard card.
-  Each career break lives in its own root directory labeled by location and
-  year (e.g. `chiang-mai-2018/`), its photos dropped in next to its YAML.
+  Each career break lives in its own directory under `content/`, labeled by
+  location and year (e.g. `content/chiang-mai-2018/`), its photos dropped in
+  next to its YAML.
 - Filter by entry type (single-select chips; milestones auto-expand while a
   type filter is active), live full-text search
 - Mobile-friendly: on narrow screens the filter chips become a swipeable
@@ -127,7 +131,7 @@ one-line headline under it.
 
 ## YAML schema
 
-Every `*/*.yaml` follows the same 19 fields:
+Every `content/*/*.yaml` follows the same 19 fields:
 
 | Field | Notes |
 |---|---|

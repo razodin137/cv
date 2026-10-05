@@ -7,7 +7,7 @@ Usage: python3 new_entry.py                 # answer the prompts
 Prompts for the 19 template.yaml fields in order, validates against the
 build's own rules (entry types, date formats, parent slugs, logo/image
 filenames), shows a summary you can edit field by field, writes
-<category>/<entry>.yaml in the exact shape build.py reads — verified by
+content/<category>/<entry>.yaml in the exact shape build.py reads — verified by
 a parse round-trip before anything hits disk — and offers to rebuild
 index.html in the style it's currently built with.
 
@@ -25,6 +25,7 @@ import sys
 import yaml
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+CONTENT = os.path.join(ROOT, "content")  # entry data lives under content/
 ASSET_DIRS = {"logos", "contact"}  # same exclusions as build.py's scan
 
 # (type, one-line description) — order matches README/explainer-template.
@@ -136,9 +137,9 @@ def ask_date(prompt):
 
 
 def scan_dirs():
-    """Directories the build scans for entries (mirrors build.py)."""
-    return [d for d in sorted(os.listdir(ROOT))
-            if os.path.isdir(os.path.join(ROOT, d))
+    """Entry categories under content/ (mirrors build.py's scan)."""
+    return [d for d in sorted(os.listdir(CONTENT))
+            if os.path.isdir(os.path.join(CONTENT, d))
             and d not in ASSET_DIRS and not d.startswith(".")]
 
 
@@ -146,11 +147,11 @@ def categories():
     """Scanned directories that already hold at least one entry YAML."""
     return [d for d in scan_dirs()
             if any(f.endswith(".yaml")
-                   for f in os.listdir(os.path.join(ROOT, d)))]
+                   for f in os.listdir(os.path.join(CONTENT, d)))]
 
 
 def dir_yamls(category):
-    d = os.path.join(ROOT, category)
+    d = os.path.join(CONTENT, category)
     if not os.path.isdir(d):
         return []
     return sorted(f for f in os.listdir(d) if f.endswith(".yaml"))
@@ -159,22 +160,26 @@ def dir_yamls(category):
 def parent_resolvable(slug, category, stem):
     """Mirror build.py's parent resolution: <slug>/<slug>.yaml, the only
     YAML in <slug>/, or a unique */<slug>.yaml (self excluded)."""
-    if os.path.isdir(os.path.join(ROOT, slug)):
+    if os.path.isdir(os.path.join(CONTENT, slug)):
         ys = dir_yamls(slug)
         if f"{slug}.yaml" in ys or len(ys) == 1:
             return True
     hits = [d for d in scan_dirs()
-            if os.path.isfile(os.path.join(ROOT, d, f"{slug}.yaml"))
+            if os.path.isfile(os.path.join(CONTENT, d, f"{slug}.yaml"))
             and not (d == category and slug == stem)]
     return len(hits) == 1
 
 
 def resolve_asset(category, filename, prefer_logos):
-    """build.py's asset search order: logos/ first for logos, entry
-    directory first for images."""
-    for d in (("logos", category) if prefer_logos else (category, "logos")):
-        if os.path.isfile(os.path.join(ROOT, d, filename)):
-            return os.path.join(d, filename)
+    """build.py's asset search order: logos/ (repo root) first for logos,
+    the content/<category>/ directory first for images."""
+    candidates = ([os.path.join("logos", filename),
+                   os.path.join("content", category, filename)] if prefer_logos else
+                  [os.path.join("content", category, filename),
+                   os.path.join("logos", filename)])
+    for c in candidates:
+        if os.path.isfile(os.path.join(ROOT, c)):
+            return c
     return None
 
 
@@ -206,7 +211,7 @@ def pick_file(category):
     hint = f" [Enter = {default}]" if default else ""
     while True:
         stem = ask_slug(f"Entry file name{hint}: ", default)
-        if os.path.isfile(os.path.join(ROOT, category, f"{stem}.yaml")):
+        if os.path.isfile(os.path.join(CONTENT, category, f"{stem}.yaml")):
             print(f"  {category}/{stem}.yaml already exists — this form creates "
                   f"new entries; pick another name.", file=sys.stderr)
             default = ""
@@ -218,7 +223,7 @@ def default_entry_type(category):
     counts = {}
     for f in dir_yamls(category):
         try:
-            with open(os.path.join(ROOT, category, f), encoding="utf-8") as fh:
+            with open(os.path.join(CONTENT, category, f), encoding="utf-8") as fh:
                 t = str((yaml.safe_load(fh) or {}).get("entry_type") or "").strip()
         except (OSError, yaml.YAMLError):
             continue
@@ -599,18 +604,18 @@ def offer_rebuild():
 
 
 def main():
-    print("CV entry form — one */*.yaml for build.py. Ctrl+C cancels.")
+    print("CV entry form — one content/*/*.yaml for build.py. Ctrl+C cancels.")
     a = collect()
     if not confirm(a):
         print("Cancelled — nothing written.")
         return
     text = entry_text(a)
     verify(text, a)
-    os.makedirs(os.path.join(ROOT, a["category"]), exist_ok=True)
-    path = os.path.join(ROOT, a["category"], a["file"] + ".yaml")
+    os.makedirs(os.path.join(CONTENT, a["category"]), exist_ok=True)
+    path = os.path.join(CONTENT, a["category"], a["file"] + ".yaml")
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
-    print(f"\nWrote {a['category']}/{a['file']}.yaml")
+    print(f"\nWrote content/{a['category']}/{a['file']}.yaml")
     offer_rebuild()
 
 
