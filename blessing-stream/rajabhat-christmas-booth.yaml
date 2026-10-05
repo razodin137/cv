@@ -1,13 +1,17 @@
 entry_type: events
-milestone: false
+milestone: true
 featured: false
 parent: blessing-stream
 company: Rajabhat Chiang Rai Christmas Booth
 role:
 employment_type:
 industry: ministry
-start: "2022-12"
-end: "2024-12"
+start:
+end:
+dates:
+ - "2022-12"
+ - "2023-12"
+ - "2024-12"
 location: Chiang Rai
 country: Thailand
 location_type:

@@ -2,17 +2,22 @@ entry_type: events
 milestone: true
 featured: false
 parent: mae-fah-luang-university
-company: Loi Kratong 2024
+company: Wan Waai Kruu
 role: Coordination Team
 employment_type:
 industry:
-start: "2024-11-15"
+start:
 end:
+dates:
+ - "2022-09-01"
+ - "2023-09-14"
+ - "2024-09-05"
+ - "2025-08-07"
 location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
- - "Part of the coordination team for MFU's Loi Kratong (วันลอยกระทอง) festival of lights."
+ - "Part of the coordination team for MFU's Wai Kru (ไหว้ครู) teacher-appreciation ceremony."
  -
  -
 skills:

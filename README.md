@@ -2,7 +2,7 @@
 
 Live: **<https://razodin137.github.io/cv/>**
 
-Curriculum vitae as data: 90 YAML entries across category directories
+Curriculum vitae as data: 74 YAML entries across category directories
 (plus logos/images) rendered by `build.py` into a single self-contained
 `index.html` viewer.
 
@@ -23,7 +23,7 @@ cp template.yaml my-new-entry-dir/my-new-entry.yaml   # then fill it in
 python3 build.py
 ```
 
-`template.yaml` (project root) is a blank, copy-ready skeleton — all 17 keys,
+`template.yaml` (project root) is a blank, copy-ready skeleton — all 19 keys,
 no comments. Field-by-field documentation lives in `explainer-template.yaml`.
 Both sit outside the `*/*.yaml` scan pattern, so the build ignores them.
 
@@ -72,9 +72,8 @@ one-line headline under it.
   with jump links to every child, and a child without its own `logo:`
   inherits the first parent's logo that has one. Jumps clear any active
   chip/search filter so the target is rendered; children may live in any
-  directory (their category badge comes from it). Recurring events use
-  this shape: one umbrella entry spanning the years plus a milestone per
-  instance (e.g. `play-ashram/`)
+  directory (their category badge comes from it). Recurring events
+  instead list their occurrence dates on one entry (see `dates` below)
 - Featured entries (`featured: true`) get a gold highlight with a star in the
   top-right corner (collapsed milestone lines show the star at the far right)
 - Career break photo view: `career_break` cards with `images:` get a
@@ -97,7 +96,7 @@ one-line headline under it.
 
 ## YAML schema
 
-Every `*/*.yaml` follows the same 18 fields:
+Every `*/*.yaml` follows the same 19 fields:
 
 | Field | Notes |
 |---|---|
@@ -108,6 +107,7 @@ Every `*/*.yaml` follows the same 18 fields:
 | `company`, `role`, `employment_type`, `industry` | plain text, any may be blank |
 | `url` | external link for the entry (e.g. a client's website) — rendered as a link on cards and milestone circles; print spells it out |
 | `start`, `end` | `YYYY-MM` strings (full `YYYY-MM-DD` also works), blank end = "Present" |
+| `dates` | a recurring event's occurrence dates — a list of any precision (`"2026-09-11"`, `"2024"`, `"2011-09"`), replaces `start`/`end`; needs `milestone: true`. The entry shows up once per date on the timeline, each point labeled with only its own date (e.g. `play-ashram/play-ashram.yaml`, `rocktoberfest/`) |
 | `location`, `country`, `location_type` | plain text |
 | `accomplishments`, `skills` | string lists (blank items are dropped) |
 | `logo` | filename; resolved from `logos/` first, then the entry's directory |

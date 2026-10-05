@@ -1,18 +1,27 @@
-entry_type: organization
-milestone: false
+entry_type: volunteer
+milestone: true
 featured: false
 parent:
 company: Red River Gorge Rocktoberfest
 role: "Security"
 employment_type: volunteer
 industry:
-start: "2011-09"
-end: "2013-09"
+start:
+end:
+dates:
+ - "2011-09"
+ - "2012-09"
+ - "2013-09"
 location: Kentucky
 country: United States of America
 location_type: onsite
 accomplishments:
  - Supported event operations and festival logistics in Kentucky.
+ -
+ -
 skills:
+ -
+ -
+ -
 logo:
 images:

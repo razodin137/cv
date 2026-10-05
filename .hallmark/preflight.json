@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-05",
+  "framework": "vanilla HTML (generated)",
+  "generator": "build.py (Python 3 stdlib) compiles */*.yaml into a single self-contained index.html; HTML+CSS live in build.py's embedded template (<style> at build.py L226); index.html is generated output",
+  "fonts": {
+    "body": "Georgia, 'Times New Roman', serif",
+    "ui_chrome": "system-ui, sans-serif",
+    "webfonts": false
+  },
+  "palette": {
+    "format": "hex custom properties at :root (index.html L9-11)",
+    "bg": "#f6f7f9",
+    "card": "#ffffff",
+    "ink": "#1a2233",
+    "muted": "#5c677d",
+    "line": "#e3e7ee",
+    "accent": "#2456d6",
+    "gold": "#d4af37",
+    "gold_deep": "#8a6d1e",
+    "note": "plus 9 per-entry-type badge pastels"
+  },
+  "motion": { "libraries": [], "stance": "motion-cut", "existing": "two ~0.2s CSS transitions" },
+  "spacing": "ad-hoc rem values, no named scale",
+  "design_md": false,
+  "hallmark_stamp": false,
+  "hallmark_log": false,
+  "first_run": true
+}

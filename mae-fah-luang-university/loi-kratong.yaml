@@ -2,12 +2,18 @@ entry_type: events
 milestone: true
 featured: false
 parent: mae-fah-luang-university
-company: Loi Kratong 2022
+company: Loi Kratong
 role: Coordination Team
 employment_type:
 industry:
-start: "2022-11-08"
+start:
 end:
+dates:
+ - "2021-11-19"
+ - "2022-11-08"
+ - "2023-11-27"
+ - "2024-11-15"
+ - "2025-11-05"
 location: Chiang Rai
 country: Thailand
 location_type:

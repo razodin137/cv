@@ -101,6 +101,25 @@ def load_entries():
             ms = str(raw.get("milestone")).strip().lower() in ("true", "yes", "1")
             images = [p for p in (resolve(category, str(i).strip(), prefer_logos=False)
                                   for i in (raw.get("images") or []) if i) if p]
+            start = str(raw.get("start") or "").strip().strip('"')
+            end = str(raw.get("end") or "").strip().strip('"')
+            # `dates` (milestones only): a recurring event's occurrences —
+            # the timeline renders one instance per date, each showing only
+            # its own date. start/end become the earliest…latest span, used
+            # for sorting and summary display (parent strips, card ranges).
+            raw_dates = raw.get("dates")
+            raw_dates = raw_dates if isinstance(raw_dates, list) else ([raw_dates] if raw_dates else [])
+            dates = [d for d in (str(x).strip().strip('"') for x in raw_dates) if d]
+            dates = list(dict.fromkeys(dates)) # dupes would collide instance ids in the DOM
+            if dates and not ms:
+                print(f"WARNING: {category}/{fname}: 'dates' needs milestone: true; ignoring it",
+                      file=sys.stderr)
+                dates = []
+            elif dates:
+                if start or end:
+                    print(f"WARNING: {category}/{fname}: 'dates' overrides 'start'/'end'",
+                          file=sys.stderr)
+                start, end = min(dates), max(dates)
             e = {
                 "category": category,
                 "categoryDisplay": slug_display(category),
@@ -117,8 +136,9 @@ def load_entries():
                 "employmentType": (raw.get("employment_type") or "").strip(),
                 "industry": (raw.get("industry") or "").strip(),
                 "url": (raw.get("url") or "").strip(),
-                "start": str(raw.get("start") or "").strip().strip('"'),
-                "end": str(raw.get("end") or "").strip().strip('"'),
+                "start": start,
+                "end": end,
+                "dates": dates,
                 "location": (raw.get("location") or "").strip(),
                 "country": (raw.get("country") or "").strip(),
                 "locationType": (raw.get("location_type") or "").strip(),
@@ -539,7 +559,9 @@ function msTitle(e) {
   return [e.company || e.role || e.categoryDisplay, ''];
 }
 function milestone(e) {
-  const uid = 'msd-' + e.file.replace(/[^a-z0-9]/g, '');
+  // uid keys off e.id, so two instances of one `dates` entry (same file) get
+  // distinct detail-panel ids and aria targets.
+  const uid = 'msd-' + e.id.replace(/^ent-/, '');
   const [title, sub] = msTitle(e);
   const d = msDate(e);
   const auto = !!activeType; // a type filter is on: milestones start expanded
@@ -607,8 +629,9 @@ function renderChips() {
 function stripRow(c) {
   const title = c.milestone ? msTitle(c)[0] : (c.company || c.role || c.categoryDisplay);
   const d = msDate(c);
+  const target = c.dates.length ? c.id + '-' + c.end : c.id; // jump to its latest occurrence
   return '<div class="ms-row"><span class="ms-dot"></span><span class="ms-rule"></span>' +
-    '<span class="ms-label"><span class="ms-title"><span class="plink" onclick="jumpTo(\'' + c.id + '\', true)">' +
+    '<span class="ms-label"><span class="ms-title"><span class="plink" onclick="jumpTo(\'' + target + '\', true)">' +
     esc(title) + '</span></span>' +
     (d ? '<span class="ms-date">' + esc(d) + '</span>' : '') +
     '</span><span class="ms-rule ms-tail"></span><span class="es-jump">↗</span></div>';
@@ -728,15 +751,24 @@ function render() {
   const groups = new Map();
   const undated = [];
   shown.forEach(e => {
-    if (!e.start) { undated.push(e); return; }
-    const y = e.start.slice(0, 4);
-    if (!groups.has(y)) groups.set(y, []);
-    groups.get(y).push(e);
+    // A `dates` entry renders once per date as its own instance showing
+    // only that date; the id suffix keeps DOM ids unique across instances.
+    const ds = e.dates.length ? e.dates : (e.start ? [e.start] : []);
+    if (!ds.length) { undated.push(e); return; }
+    ds.forEach(d => {
+      const y = d.slice(0, 4);
+      if (!groups.has(y)) groups.set(y, []);
+      groups.get(y).push(e.dates.length
+        ? Object.assign({}, e, { id: e.id + '-' + d, start: d, end: '' }) : e);
+    });
   });
   let html = '';
   [...groups.keys()].sort((a, b) => b.localeCompare(a)).forEach(y => {
-    html += '<div class="year">' + esc(y) + ' <span class="n">(' + groups.get(y).length + ')</span></div>';
-    html += groups.get(y).map(entryHtml).join('');
+    // Sort each year by date, newest first (stable — ties keep DATA order,
+    // which already breaks them by end date then company).
+    const list = groups.get(y).sort((a, b) => b.start.localeCompare(a.start));
+    html += '<div class="year">' + esc(y) + ' <span class="n">(' + list.length + ')</span></div>';
+    html += list.map(entryHtml).join('');
   });
   if (undated.length) {
     html += '<div class="year">Undated <span class="n">(' + undated.length + ')</span></div>';
