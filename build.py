@@ -3,7 +3,8 @@
 
 Usage: python3 build.py [style]
 Renders index.html in the chosen style — "original" (the pre-Hallmark
-look) or "hallmark" (Newsprint). With no argument, the build asks
+look), "hallmark" (Newsprint) or "libron" (Reading Edition, set
+entirely in the Libron book face). With no argument, the build asks
 interactively; non-interactive runs (pipes, CI) use the default style.
 Reads every */*.yaml in this directory, resolves logo + image paths,
 and writes index.html with all data embedded. Open index.html directly
@@ -253,7 +254,7 @@ __CSS__
 </main>
 <footer class="colophon">
   <hr class="colo-rule" aria-hidden="true">
-  <p>Set in Newsreader &amp; IBM Plex Mono · <span id="f-stats"></span> · built <span id="f-date">__BUILD_DATE__</span> · print via Ctrl+P / ⌘P</p>
+  <p>Set in __TYPEFACES__ · <span id="f-stats"></span> · built <span id="f-date">__BUILD_DATE__</span> · print via Ctrl+P / ⌘P</p>
 </footer>
 <div id="lightbox"><img alt=""></div>
 <script>
@@ -621,11 +622,16 @@ render();
 """
 
 # Render styles: one CSS file per style in styles/, chosen at build time.
-# Both are kept conformant to the 37signals house style (stylelint with
+# Each entry is stem -> (menu description, typefaces for the colophon line).
+# All are kept conformant to the 37signals house style (stylelint with
 # @37signals/stylelint-config-scss) — see README.md for the check command.
 STYLES = {
-    "1": ("original", "pre-Hallmark look: Georgia serif, navy header, blue accent"),
-    "2": ("hallmark", "Newsprint: Newsreader serif, warm paper, oxblood accent"),
+    "1": ("original", "pre-Hallmark look: Georgia serif, navy header, blue accent",
+          "Georgia & system-ui"),
+    "2": ("hallmark", "Newsprint: Newsreader serif, warm paper, oxblood accent",
+          "Newsreader & IBM Plex Mono"),
+    "3": ("libron", "Reading Edition: Libron book serif, ivory paper, library-green accent",
+          "Libron"),
 }
 DEFAULT_STYLE = "hallmark"  # matches the currently deployed page
 
@@ -634,22 +640,22 @@ def pick_style():
     """Resolve the render style: CLI argument if given, else an interactive
     prompt, else the default (so piped and CI runs still produce a build)."""
     arg = sys.argv[1].strip().lower() if len(sys.argv) > 1 else ""
-    for key, (stem, _) in STYLES.items():
+    for key, (stem, _desc, _tf) in STYLES.items():
         if arg in (key, stem):
             return stem
     if arg:
         sys.exit(f"Unknown style '{sys.argv[1]}'. "
-                 f"Choose one of: {', '.join(s for s, _ in STYLES.values())}.")
+                 f"Choose one of: {', '.join(s for s, _, _ in STYLES.values())}.")
     if not sys.stdin.isatty():
         return DEFAULT_STYLE
     print("Render style:")
-    for key, (stem, desc) in STYLES.items():
+    for key, (stem, desc, _tf) in STYLES.items():
         print(f"  {key}) {stem} — {desc}")
     try:
         choice = input(f"Choose [Enter = {DEFAULT_STYLE}]: ").strip().lower()
     except EOFError:
         return DEFAULT_STYLE
-    for key, (stem, _) in STYLES.items():
+    for key, (stem, _desc, _tf) in STYLES.items():
         if choice in (key, stem):
             return stem
     print(f"Unrecognized '{choice}' — using {DEFAULT_STYLE}.", file=sys.stderr)
@@ -685,11 +691,13 @@ def main():
         },
     }
     style = pick_style()
+    typefaces = next(tf for s, _desc, tf in STYLES.values() if s == style)
     with open(os.path.join(ROOT, "styles", f"{style}.css"), encoding="utf-8") as f:
         css = f.read()
     out = (HTML_TEMPLATE
            .replace("__CSS__", css)
            .replace("__DATA__", json.dumps(data, ensure_ascii=False))
+           .replace("__TYPEFACES__", typefaces.replace("&", "&amp;"))
            .replace("__BUILD_DATE__", date.today().isoformat()))
     dest = os.path.join(ROOT, "index.html")
     with open(dest, "w", encoding="utf-8") as f:

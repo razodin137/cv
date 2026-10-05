@@ -1,0 +1,18 @@
+[
+  {
+    "date": "2026-10-05",
+    "macrostructure": "Type Specimen",
+    "theme": "custom",
+    "theme_axes": "light / roman-serif / chromatic-green",
+    "vibe": "calm bookish reading edition, library green",
+    "enrichment": "none",
+    "brief": "CV third render style — styles/libron.css, typeset entirely in Libron (nicoverbruggen/libron, OFL)"
+  },
+  {
+    "date": "2026-10-05",
+    "macrostructure": "Long Document",
+    "theme": "Newsprint",
+    "enrichment": "none",
+    "brief": "CV second render style — styles/hallmark.css (entry inferred from its stamp; pre-log run)"
+  }
+]

@@ -27,6 +27,23 @@ python3 build.py
 no comments. Field-by-field documentation lives in `explainer-template.yaml`.
 Both sit outside the `*/*.yaml` scan pattern, so the build ignores them.
 
+## Styles
+
+Three render styles ship in `styles/` — pick one when building:
+
+```sh
+python3 build.py original   # 1 — pre-Hallmark look: Georgia serif, navy header, blue accent
+python3 build.py hallmark    # 2 — Newsprint: Newsreader, warm paper, oxblood accent (default)
+python3 build.py libron      # 3 — Reading Edition: Libron, ivory paper, library-green accent
+```
+
+With no argument the build asks interactively (defaults to `hallmark` when
+piped). The libron style is typeset entirely in
+[Libron](https://github.com/nicoverbruggen/libron) (OFL) — one book face doing
+everything via its real OpenType gear: small caps for labels, tabular figures
+for dates, true italic for roles, bold for titles; its four woff2 files live
+in `fonts/`.
+
 ## Contact block
 
 `contact/contact.yaml` is the one place for your contact info — the header

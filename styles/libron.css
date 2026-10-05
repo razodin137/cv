@@ -1,0 +1,434 @@
+  /* Hallmark · macrostructure: Type Specimen · tone: austere · anchor hue: green 150–160°
+   * theme: custom — Reading Edition (light ivory / book-serif / library-green accent)
+   * vibe: "calm bookish reading edition, library green" · genre: editorial
+   * enrichment: none · motion: static — Type Specimen 0× (functional jump-flash only)
+   * nav: N9 edge-aligned title page (frontispiece · single strong rule) · footer: Ft6 letter close
+   * fonts: Libron only — display, body, small caps (smcp), tabular figures (tnum), italic —
+   *   local woff2 in fonts/ · OFL, github.com/nicoverbruggen/libron
+   * audience: employers/recruiters · use: skim the timeline · differs from Newsprint on
+   *   macrostructure + accent hue (previous: Long Document · Newsprint · warm oxblood)
+   * contrast: pass (40–41) · honest: pass (46) · chrome: pass (47) · tokens: pass (48)
+   * responsive: pass (34, 49–57) · icons: pass (30) · slop: pass (42–45)
+   * pre-emit critique: P4 H4 E4 S5 R5 V5 */
+
+  /* Local webfonts — relative URLs, same offline rule as the images */
+  @font-face { font-family: 'Libron'; src: url('fonts/libron-regular.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Libron'; src: url('fonts/libron-italic.woff2') format('woff2');
+    font-weight: 400; font-style: italic; font-display: swap; }
+  @font-face { font-family: 'Libron'; src: url('fonts/libron-bold.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Libron'; src: url('fonts/libron-bolditalic.woff2') format('woff2');
+    font-weight: 700; font-style: italic; font-display: swap; }
+
+  :root {
+    /* palette — ivory book paper, oxidized green-black ink, library-cloth green accent */
+    --paper:       oklch(94.5% 0.012 105);
+    --paper-2:     oklch(92.5% 0.014 105);
+    --paper-print: oklch(98% 0.004 105);
+    --ink:         oklch(21% 0.014 140);
+    --ink-2:       oklch(33% 0.014 140);
+    --muted:       oklch(45% 0.015 140);
+    --rule:        oklch(83% 0.012 120);
+    --rule-strong: oklch(32% 0.016 140);
+    --accent:      oklch(38% 0.12 155);
+    --accent-line: oklch(38% 0.12 155 / 0.4);
+    --accent-wash: oklch(93% 0.03 155);
+    --focus:       oklch(42% 0.17 155);
+    --gold:        oklch(58% 0.10 85);
+    --gold-deep:   oklch(40% 0.09 85);
+    --gold-wash:   oklch(96.5% 0.03 95);
+    --overlay:     oklch(14% 0.02 150 / 0.42);
+    --overlay-strong: oklch(12% 0.02 150 / 0.9);
+    /* entry-type marker inks — muted print colors, dots only, never fills */
+    --type-job:             oklch(45% 0.07 250);
+    --type-volunteer:       oklch(42% 0.08 130);
+    --type-education:       oklch(45% 0.07 300);
+    --type-events:          oklch(52% 0.08 60);
+    --type-ministry:        oklch(45% 0.06 190);
+    --type-creative:        oklch(48% 0.08 350);
+    --type-career_break:    oklch(50% 0.012 75);
+    --type-organization:    oklch(45% 0.07 275);
+    --type-online_presence: oklch(48% 0.06 220);
+    /* type — one family, four styles; labels are its small caps (smcp), dates its
+       tabular figures (tnum), roles its true italic — the family IS the design */
+    --font-display: 'Libron', Georgia, 'Times New Roman', serif;
+    --font-body:    'Libron', Georgia, 'Times New Roman', serif;
+    /* scale — five steps, 1.25 ratio */
+    --text-base: 1rem;
+    --text-md: 1.25rem;
+    --text-lg: 1.55rem;
+    --text-xl: 1.95rem;
+    --text-display: clamp(2.5rem, 6vw, 4rem);
+    /* spacing — 4pt scale */
+    --space-3xs: 0.125rem;  --space-2xs: 0.25rem;  --space-xs: 0.5rem;
+    --space-sm: 0.75rem;    --space-md: 1rem;      --space-lg: 1.5rem;
+    --space-xl: 2.5rem;     --space-2xl: 4rem;
+    /* structure */
+    --measure: 45rem;
+    --radius-mark: 0;
+    --z-sticky: 200;
+    --z-modal: 400;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  * { box-sizing: border-box; }
+  html { overflow-x: clip; }
+  body { overflow-x: clip; margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--font-body); font-size: 1rem; line-height: 1.6; }
+  ::selection { background: var(--gold-wash); }
+
+  /* N9 title page — frontispiece plate, small-caps rubric, bold name, italic
+     tagline, small-caps contact, single strong rule. Left-set, quiet, bookish. */
+  .masthead { margin: 0; }
+  .mast-in { max-width: var(--measure); margin-inline: auto; text-align: left;
+    padding: var(--space-2xl) var(--space-md) var(--space-lg); }
+  .pfp { width: 88px; height: 110px; object-fit: cover; flex: none;
+    display: block; margin: 0 0 var(--space-sm); border: 1px solid var(--rule-strong);
+    outline: 1px solid var(--rule); outline-offset: 3px; }
+  .pfp[hidden] { display: none; }
+  .mast-line { margin: 0 0 var(--space-2xs); font-variant-caps: all-small-caps;
+    letter-spacing: .14em; font-size: var(--text-md); color: var(--muted); line-height: 1.3; }
+  .masthead h1 { margin: 0; font-family: var(--font-display); font-weight: 700;
+    font-size: var(--text-display); letter-spacing: -0.015em; line-height: 1.02;
+    overflow-wrap: anywhere; min-width: 0; }
+  .tagline { display: none; }
+  .tagline:not(:empty) { display: block; margin: var(--space-2xs) 0 0; font-style: italic;
+    color: var(--ink-2); font-size: var(--text-md); }
+  .links { margin: var(--space-sm) 0 0; font-variant-caps: all-small-caps;
+    letter-spacing: .08em; font-size: var(--text-md); color: var(--ink-2); line-height: 1.9; }
+  .links a { color: var(--accent); text-decoration: none;
+    border-bottom: 1px solid var(--accent-line); }
+  .links a:hover { border-color: var(--accent); }
+  .links span { color: var(--muted); }
+  .sub { margin: var(--space-2xs) 0 0; font-variant-caps: all-small-caps;
+    letter-spacing: .08em; font-size: var(--text-md); color: var(--muted);
+    font-variant-numeric: tabular-nums; }
+  .mast-rule { border: 0; border-top: 2px solid var(--rule-strong); height: 0; margin: 0; }
+
+  main { max-width: var(--measure); margin-inline: auto; padding: 0 var(--space-md) var(--space-xl); }
+  .controls { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--paper);
+    padding: var(--space-sm) 0; display: flex; flex-direction: column; gap: var(--space-xs);
+    border-bottom: 1px solid var(--rule); }
+  /* search as a fill-in-the-blank line — the book-reader's only instrument */
+  input[type=search] { font-family: var(--font-body); font-size: var(--text-base);
+    padding: .45rem 0; border: 0; border-bottom: 1px solid var(--rule-strong); border-radius: 0;
+    background: transparent; color: var(--ink); outline: none; width: 100%; }
+  input[type=search]::placeholder { color: var(--muted); font-style: italic; }
+  input[type=search]:focus { border-color: var(--accent); }
+  input[type=search]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-xs); }
+  .chip { font-family: var(--font-body); font-variant-caps: all-small-caps;
+    letter-spacing: .09em; font-size: var(--text-md); padding: .35rem .65rem;
+    border-radius: var(--radius-mark); border: 1px solid var(--rule);
+    background: transparent; cursor: pointer; color: var(--ink-2);
+    user-select: none; white-space: nowrap; }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip:active { border-color: var(--accent-line); color: var(--accent); }
+  .chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .chip .n { opacity: .55; margin-left: .35rem; font-variant-numeric: tabular-nums; }
+  .tdot { display: inline-block; width: 7px; height: 7px; border-radius: var(--radius-mark);
+    margin-right: .4rem; }
+  .type-job .tdot { background: var(--type-job); }
+  .type-volunteer .tdot { background: var(--type-volunteer); }
+  .type-education .tdot { background: var(--type-education); }
+  .type-events .tdot { background: var(--type-events); }
+  .type-ministry .tdot { background: var(--type-ministry); }
+  .type-creative .tdot { background: var(--type-creative); }
+  .type-career_break .tdot { background: var(--type-career_break); }
+  .type-organization .tdot { background: var(--type-organization); }
+  .type-online_presence .tdot { background: var(--type-online_presence); }
+
+  /* Year folios — chapter numerals: Libron's bold lining figures, tabular */
+  .year { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700;
+    color: var(--ink); margin: var(--space-xl) 0 var(--space-xs); display: flex;
+    align-items: baseline; gap: var(--space-sm); font-variant-numeric: tabular-nums;
+    line-height: 1.1; }
+  .year::after { content: ''; flex: 1; border-top: 1px solid var(--rule-strong); }
+  .year .n { font-family: var(--font-body); font-variant-caps: all-small-caps;
+    letter-spacing: .08em; font-size: var(--text-md); font-weight: 400;
+    color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  /* Entries sit on hairline ledger rules — no boxes, no radius, no shadows */
+  .card { border-top: 1px solid var(--rule); padding: var(--space-sm) 0 var(--space-md);
+    break-inside: avoid; }
+  .card.featured { background: var(--gold-wash); border: 1px solid var(--gold);
+    padding-inline: var(--space-md); margin-block: var(--space-2xs); }
+  .feat-star { color: var(--gold-deep); display: inline-flex; flex: none; }
+  .feat-star svg { width: 16px; height: 16px; }
+  .badges .feat-star { margin-bottom: var(--space-2xs); }
+  .card-top { display: flex; gap: var(--space-md); align-items: flex-start; }
+  .card img.logo { width: 52px; height: 52px; object-fit: contain;
+    border-radius: var(--radius-mark); background: var(--paper-2);
+    border: 1px solid var(--rule); padding: 4px; flex: none; }
+  .card h2 { margin: 0; font-family: var(--font-display); font-size: var(--text-md);
+    font-weight: 700; line-height: 1.25; }
+  .card .role { margin: .1rem 0 0; color: var(--muted); font-size: var(--text-base);
+    font-style: italic; }
+  .meta { display: flex; flex-wrap: wrap; gap: .3rem .9rem; margin-top: var(--space-2xs);
+    font-variant-caps: all-small-caps; letter-spacing: .06em; font-size: var(--text-md);
+    color: var(--muted); line-height: 1.5; }
+  .meta svg { width: 12px; height: 12px; vertical-align: -1px; margin-right: 3px; }
+  .meta .elink { color: var(--accent); text-decoration: none; }
+  .meta .elink:hover { text-decoration: underline; text-underline-offset: 3px; }
+  ul.acc { margin: var(--space-xs) 0 0; padding-left: 1.2rem; }
+  ul.acc li { font-size: var(--text-base); line-height: 1.6; margin-bottom: .3rem; }
+  .skills { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: var(--space-xs); }
+  .skill { font-variant-caps: all-small-caps; letter-spacing: .08em;
+    font-size: var(--text-md); color: var(--ink-2); border: 1px solid var(--rule);
+    border-radius: var(--radius-mark); padding: .1rem .45rem; }
+  .thumbs { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: var(--space-sm); }
+  .thumbs img { width: 76px; height: 76px; object-fit: cover;
+    border-radius: var(--radius-mark); border: 1px solid var(--rule); cursor: zoom-in; }
+  .thumbs img:hover { border-color: var(--accent); }
+  .badges { margin-left: auto; display: flex; flex-direction: column; gap: .25rem;
+    align-items: flex-end; flex: none; }
+  /* badges read as index entries — small-caps words, no boxes */
+  .badge { font-variant-caps: all-small-caps; letter-spacing: .09em;
+    font-size: var(--text-md); color: var(--muted); padding: 0; font-weight: 400; }
+  .badge.parent { color: var(--ink-2); }
+  .badge.jump { cursor: pointer; max-width: 210px; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; }
+  .badge.jump:hover { color: var(--accent); text-decoration: underline;
+    text-decoration-color: var(--accent-line); text-underline-offset: 3px; }
+  .badge.jump:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  /* Career break photo view: expanding fills the whole card frame with the
+     entry's pictures — tiles crop to fit so any image count fills the frame
+     edge to edge — with the text overlaid on a faint dark highlight. */
+  .card.cb { position: relative; }
+  .cb-frame { display: none; }
+  .card.cb.photo { border: 1px solid var(--rule-strong); height: clamp(300px, 58vw, 430px);
+    overflow: hidden; }
+  .card.photo .cb-body { display: none; }
+  .card.photo .cb-frame { position: absolute; inset: 0; display: block; }
+  .cb-collage { position: absolute; inset: 0; display: flex; flex-direction: column; }
+  .cb-row { flex: 1 1 0; min-height: 0; display: flex; }
+  .cb-row img { flex: 1 1 0; min-width: 0; width: 100%; height: 100%;
+    object-fit: cover; cursor: zoom-in; display: block; }
+  .cb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column;
+    justify-content: space-between; align-items: flex-start;
+    padding: var(--space-sm) var(--space-md); pointer-events: none; overflow: hidden; }
+  .cb-head, .cb-foot { display: flex; flex-direction: column; align-items: flex-start;
+    gap: .4rem; max-width: 100%; }
+  .cb-head > *, .cb-foot > * { width: fit-content; max-width: 100%; }
+  .cb-frame h2, .cb-frame .role, .cb-frame .meta, .cb-frame ul.acc, .cb-frame .skills {
+    background: var(--overlay); backdrop-filter: blur(3px);
+    border-radius: var(--radius-mark); padding: .32rem .65rem; margin: 0;
+    color: var(--paper); text-shadow: 0 1px 6px var(--overlay-strong); }
+  .cb-frame ul.acc { padding-left: 1.2rem; }
+  .cb-frame .skill { background: var(--overlay); color: var(--paper);
+    border-color: transparent; backdrop-filter: blur(2px); }
+  .cb-frame .badge { background: var(--overlay); color: var(--paper);
+    padding: .18rem .5rem; backdrop-filter: blur(2px); }
+  .cb-frame .badges { margin: 0; flex-direction: row; flex-wrap: wrap;
+    align-items: center; gap: .3rem; }
+  .cb-frame .meta .elink { color: var(--paper); }
+  .cb-overlay :is(a, .badge.jump) { pointer-events: auto; }
+  .cb-strip { display: flex; align-items: center; gap: .55rem; width: 100%;
+    margin-top: var(--space-sm); padding: .4rem 0 .15rem; background: none; border: 0;
+    border-top: 1px solid var(--rule); cursor: pointer; font: inherit; text-align: left;
+    color: var(--ink); }
+  .cb-label { font-variant-caps: all-small-caps; letter-spacing: .09em;
+    font-size: var(--text-md); color: var(--muted); flex: none; }
+  .cb-strip:hover .cb-label { color: var(--accent); }
+  .cb-strip:active .cb-label { color: var(--accent); }
+  .cb-strip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .cb-tw { flex: none; color: var(--muted); display: inline-flex; }
+  .cb-tw svg { width: 11px; height: 11px; }
+  .card.photo .cb-strip { position: absolute; top: var(--space-xs); right: var(--space-xs);
+    z-index: 2; width: auto; margin: 0; padding: .28rem .65rem; border: 0;
+    border-radius: var(--radius-mark); background: var(--overlay-strong);
+    backdrop-filter: blur(3px); }
+  .card.photo .cb-strip .cb-label, .card.photo .cb-strip .cb-tw { color: var(--paper); }
+  .card.photo .cb-strip .cb-rule { display: none; }
+  .card.photo .cb-strip .cb-tw { transform: rotate(45deg); }
+
+  /* Milestone one-line entries (milestone: true) — index lines with a diamond
+     ornament; expanded detail opens as a typeset plate (double-frame) */
+  .ms { border-top: 1px solid var(--rule); padding: .3rem 0 .55rem; }
+  .ms-row { display: flex; align-items: center; gap: .55rem; width: 100%;
+    padding: .5rem 0; background: none; border: 0; cursor: pointer;
+    font: inherit; text-align: left; color: var(--ink); }
+  .ms-row:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .ms-row:active .ms-title { color: var(--accent); }
+
+  .ms-dot { width: 8px; height: 8px; border-radius: var(--radius-mark);
+    border: 1.5px solid var(--muted); background: var(--paper); flex: none;
+    margin-left: .35rem; transform: rotate(45deg); }
+  .ms-row:hover .ms-dot { border-color: var(--accent); }
+  .ms.open .ms-dot { background: var(--accent); border-color: var(--accent); }
+  .ms-rule { height: 1px; background: var(--rule); flex: 0 0 22px; }
+  .ms-tail { flex: 1 1 auto; min-width: 12px; }
+  .ms-label { display: flex; align-items: baseline; gap: .5rem; min-width: 0; }
+  .ms-title { font-family: var(--font-body); font-size: var(--text-base); font-weight: 400;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; min-width: 0; }
+  .ms-row:hover .ms-title { color: var(--accent); }
+  .ms-sub { color: var(--muted); font-size: var(--text-base); font-style: italic;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; min-width: 0; }
+  .ms-date { font-variant-caps: all-small-caps; letter-spacing: .08em;
+    font-size: var(--text-md); color: var(--muted); white-space: nowrap; flex: none;
+    font-variant-numeric: tabular-nums; }
+  .ms-tw { flex: none; color: var(--muted); display: inline-flex; }
+  .ms-tw svg { width: 11px; height: 11px; }
+  .ms.open .ms-tw { transform: rotate(45deg); }
+  /* Featured entries (featured: true): gilt wash + gold diamond */
+  .ms.featured .ms-dot { border-color: var(--gold); background: var(--gold); }
+  .ms.featured .ms-title { color: var(--gold-deep); font-weight: 700; }
+  .ms.featured .ms-row:hover .ms-title { color: var(--accent); }
+  .ms-row .feat-star svg { width: 14px; height: 14px; }
+  .ms-detail { display: none; }
+  .ms.open .ms-detail { display: flex; justify-content: center;
+    padding: var(--space-xs) 0 var(--space-md); }
+  /* the plate: hairline outer frame, inner rule — a book figure */
+  .ms-circle { width: clamp(300px, 76vw, 470px); border: 1px solid var(--rule-strong);
+    outline: 1px solid var(--rule); outline-offset: -6px;
+    background: var(--paper); padding: 2rem 2.2rem; margin: 0;
+    display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .ms.featured .ms-circle { border-color: var(--gold); outline-color: var(--gold);
+    background: var(--gold-wash); }
+  .ms-circle img.clogo { width: 58px; height: 58px; object-fit: contain;
+    border-radius: var(--radius-mark); background: var(--paper-2);
+    border: 1px solid var(--rule); padding: 4px; margin-bottom: var(--space-2xs); }
+  .ms-circle h3 { margin: 0; font-family: var(--font-display); font-size: var(--text-md);
+    font-weight: 700; }
+  .ms-circle .csub { margin: .2rem 0 0; color: var(--muted); font-size: var(--text-base);
+    font-style: italic; }
+  .ms-circle .cmeta { display: flex; flex-wrap: wrap; justify-content: center;
+    gap: .3rem .8rem; margin-top: var(--space-2xs);
+    font-variant-caps: all-small-caps; letter-spacing: .06em; font-size: var(--text-md);
+    color: var(--muted); font-variant-numeric: tabular-nums; }
+  .ms-circle .cmeta svg { width: 11px; height: 11px; vertical-align: -1px; margin-right: 3px; }
+  .ms-circle .cbadges { display: flex; flex-wrap: wrap; justify-content: center;
+    gap: .3rem .9rem; margin-top: .55rem; }
+  .ms-circle p.cacc { margin: var(--space-xs) 0 0; font-size: var(--text-base); line-height: 1.6; }
+  .ms-circle ul.cacc { margin: var(--space-xs) 0 0; padding-left: 1.05rem; text-align: left; }
+  .ms-circle ul.cacc li { font-size: var(--text-base); line-height: 1.5; margin-bottom: .35rem; }
+  .ms-circle .cskills { display: flex; flex-wrap: wrap; justify-content: center;
+    gap: .3rem; margin-top: var(--space-xs); }
+  .ms-circle .cimgs { display: flex; flex-wrap: wrap; justify-content: center;
+    gap: .45rem; margin-top: var(--space-sm); }
+  .ms-circle .cimgs img { width: 52px; height: 52px; object-fit: cover;
+    border-radius: var(--radius-mark); border: 1px solid var(--rule); cursor: zoom-in; }
+  .ms-circle .cimgs img:hover { border-color: var(--accent); }
+
+  /* Parent links + collapsible Entries strip on parent cards */
+  .plink { color: var(--accent); text-decoration: underline;
+    text-decoration-color: var(--accent-line); text-underline-offset: 3px;
+    font-style: normal; cursor: pointer; }
+  .plink:hover { text-decoration-color: var(--accent); }
+  .events-strip { border-top: 1px solid var(--rule); margin-top: var(--space-sm);
+    padding-top: var(--space-2xs); }
+  .es-head { display: flex; align-items: center; gap: var(--space-xs); width: 100%;
+    padding: var(--space-2xs) 0; background: none; border: 0; cursor: pointer;
+    font: inherit; text-align: left; color: var(--ink); }
+  .es-label { font-variant-caps: all-small-caps; letter-spacing: .09em;
+    font-size: var(--text-md); color: var(--muted); flex: none; }
+  .es-head:hover .es-label { color: var(--accent); }
+  .es-head:active .es-label { color: var(--accent); }
+  .es-head:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .es-rule { height: 1px; background: var(--rule); flex: 1 1 auto; }
+  .es-tw { flex: none; color: var(--muted); display: inline-flex; }
+  .es-head .es-tw svg { width: 11px; height: 11px; }
+  .es-head[aria-expanded="true"] .es-tw { transform: rotate(45deg); }
+  .es-lines { display: none; padding-top: var(--space-2xs); }
+  .events-strip.open .es-lines { display: block; }
+  .es-lines .ms-row { padding: var(--space-2xs) 0; cursor: default; }
+  .events-strip .es-lines .ms-row:hover .ms-title { color: var(--ink); }
+  .es-jump { flex: none; color: var(--muted); font-variant-caps: all-small-caps;
+    letter-spacing: .08em; font-size: var(--text-md); }
+  .es-jump:hover, .plink:hover + .es-jump { color: var(--accent); }
+  /* picture bubbles under a collapsed milestone line (aligned with its title;
+     the 54px left inset optically aligns bubbles under the line's title text) */
+  .ms-pips { display: flex; align-items: center; gap: var(--space-2xs);
+    padding: 0 0 var(--space-xs) 54px; }
+  .pip { width: 15px; height: 15px; border-radius: var(--radius-mark);
+    object-fit: cover; border: 1px solid var(--rule); background: var(--paper-2);
+    cursor: zoom-in; }
+  .pip:hover { border-color: var(--accent); }
+  .ms.open .ms-pips { display: none; } /* expanded plate shows the real photos */
+  /* flash highlight for jump targets — the one functional motion on an otherwise static page */
+  @keyframes flashbg { 0% { outline: 2px solid var(--accent); background: var(--accent-wash); }
+    70% { background: var(--accent-wash); }
+    100% { outline: 2px solid transparent; background: transparent; } }
+  .flash { animation: flashbg 1.4s var(--ease-out); }
+  @media (prefers-reduced-motion: reduce) { .flash { animation-duration: 300ms; } }
+  .empty { text-align: center; color: var(--muted); font-style: italic;
+    margin-top: var(--space-xl); }
+  #lightbox { position: fixed; inset: 0; background: var(--overlay-strong); display: none;
+    align-items: center; justify-content: center; cursor: zoom-out; z-index: var(--z-modal); }
+  #lightbox img { max-width: 92vw; max-height: 90vh; border-radius: var(--radius-mark); }
+
+  /* Ft6 letter close — centered book colophon under a short rule */
+  .colophon { max-width: var(--measure); margin: var(--space-xl) auto var(--space-2xl);
+    padding: 0 var(--space-md); text-align: center; }
+  .colo-rule { border: 0; border-top: 1px solid var(--rule-strong); height: 0;
+    width: 5rem; margin: 0 auto var(--space-sm); }
+  .colophon p { margin: 0; font-variant-caps: all-small-caps; letter-spacing: .09em;
+    font-size: var(--text-md); color: var(--muted); line-height: 1.9;
+    font-variant-numeric: tabular-nums; }
+
+  /* Mobile phones: compact title page, swipeable filter chips with 44px hit
+     targets, badges stacked under card text, wrapping milestone lines, and
+     the milestone plate opening full-width. */
+  @media (max-width: 40rem) {
+    .mast-in { padding: var(--space-lg) var(--space-sm) var(--space-md); }
+    .pfp { width: 68px; height: 85px; }
+    main { padding: 0 var(--space-sm) var(--space-lg); }
+    .controls { padding: var(--space-2xs) 0; }
+    input[type=search] { font-size: 16px; } /* >=16px stops iOS auto-zoom on focus */
+    .chips { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { flex: none; min-height: 44px; padding: var(--space-xs) var(--space-sm); }
+    .year { margin: var(--space-md) 0 var(--space-2xs); }
+    .card { padding-block: var(--space-2xs) var(--space-sm); }
+    .card.featured { padding-inline: var(--space-sm); }
+    .card-top { flex-wrap: wrap; }
+    .card-top > div { flex: 1 1 auto; }
+    .badges { width: 100%; margin-left: 0; flex-direction: row; flex-wrap: wrap;
+      align-items: center; gap: var(--space-2xs) var(--space-sm); }
+    .badges .feat-star { margin-bottom: 0; }
+    .ms-row { padding: var(--space-xs) 0; }
+    .ms-tail { display: none; }
+    .ms-label { flex: 1 1 auto; flex-wrap: wrap; }
+    .ms-date { margin-left: auto; }
+    .pip { width: 22px; height: 22px; }
+    .card.cb.photo { height: clamp(250px, 80vw, 340px); }
+    .cb-overlay { padding: var(--space-2xs) var(--space-sm); }
+    .ms-circle { width: 100%; outline-offset: -4px; padding: var(--space-sm) var(--space-md);
+      overflow: visible; align-items: flex-start; text-align: left; }
+    .ms-circle .cmeta, .ms-circle .cbadges, .ms-circle .cskills, .ms-circle .cimgs {
+      justify-content: flex-start; }
+  }
+  @media print {
+    .controls, #lightbox { display: none !important; }
+    .colophon { display: none !important; }
+    body { background: var(--paper-print); }
+    .mast-in { padding: 0 0 var(--space-sm); }
+    .masthead h1 { font-size: 1.9rem; }
+    .mast-rule { border-top-width: 1px; }
+    .pfp { width: 56px; height: 70px; }
+    .links a { color: var(--ink); border-bottom: 0; }
+    .links span { color: var(--ink-2); }
+    .links a[href^="http"]::after, .meta .elink[href^="http"]::after {
+      content: " (" attr(href) ")"; font-size: .85em; overflow-wrap: anywhere; }
+    main { padding: var(--space-2xs) 0 0; }
+    .year { margin: var(--space-sm) 0 var(--space-2xs); }
+    .card { padding-block: var(--space-2xs) var(--space-xs); }
+    .ms { break-inside: avoid; padding: var(--space-2xs) 0 var(--space-2xs); }
+    .ms-row { display: none; }
+    .es-lines .ms-row { display: flex; }
+    .es-head { display: none; }
+    .es-lines { display: block !important; }
+    .ms-pips { display: none !important; }
+    .ms-detail { display: flex !important; padding: 0; }
+    .ms-circle { width: 100%; outline-offset: -4px; padding: var(--space-xs) var(--space-md);
+      overflow: visible; align-items: flex-start; text-align: left; }
+    .card.featured, .ms.featured .ms-circle {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .card.cb { position: static; height: auto !important; overflow: visible; }
+    .card.cb .cb-frame { display: none !important; }
+    .card.cb .cb-body { display: block !important; }
+    .card.cb .cb-strip { display: none !important; }
+  }
