@@ -1,5 +1,5 @@
 entry_type: online_presence
-milestone: false
+milestone: true
 featured: false
 parent:
  - kaojaicam

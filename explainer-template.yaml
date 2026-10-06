@@ -7,7 +7,7 @@
 #   3. Fill in the fields, drop logo/images files into the same directory
 #   4. python3 build.py                  (refreshes index.html)
 #
-# Keep all 19 keys — blank fields are fine (blank list items are dropped).
+# Keep all 20 keys — blank fields are fine (blank list items are dropped).
 # This file lives at the root, so the build ignores it; only */*.yaml entries load.
 
 entry_type: job            # job | volunteer | education | events | ministry | creative | career_break
@@ -53,3 +53,9 @@ logo:                      # Logo filename — put the file in logos/ or this en
 images:                    # Photo filenames — put the files in this entry's directory
  -
  -
+ -
+image_view:                # 'full' = picture view — the expanded milestone detail
+                           # shows its ONE picture whole (never cropped), instead of the
+                           # round detail circle; the picture is the meat, the text sits
+                           # beneath it as a caption. Needs milestone: true and exactly
+                           # one image (anything else falls back to the circle view)

@@ -24,13 +24,51 @@ built file), then rerun.
 python3 new_entry.py   # guided form: validates, writes content/<category>/<entry>.yaml, rebuilds
 ```
 
-The form prompts for the 19 fields (Enter accepts the default, blank = skip),
+The form prompts for the 20 fields (Enter accepts the default, blank = skip),
 checks everything against the build's own rules — entry types, date formats,
 parent slugs, logo/image filenames — shows a summary you can edit field by
 field, writes the YAML in the same shape as `template.yaml`, and offers to
 rebuild in the style `index.html` is currently built with. Answers can be
 piped from a file, one per line (`python3 new_entry.py < answers.txt`); a run
 that runs out of input takes defaults, then aborts cleanly instead of looping.
+
+### Editing entries
+
+```sh
+python3 tui.py   # terminal list of every entry: toggle, filter, edit
+```
+
+One row per entry — a filled dot (●) marks `milestone: true`, a star (★)
+marks `featured: true`. Run down the list with ↑/↓ and press `space` to
+flip the dot (in the ★ column it flips the star); `enter` opens the full 20-field editor; `d` appends
+occurrence dates to a recurring event; `r` rebuilds `index.html` in its
+current style and reports the result — success or the failing tail — in
+a centered popup. `/` filters live — free text
+plus tokens (`ms:true`,
+`ms:false`, `feat:true`, `cat:<dir>`, `type:<entry_type>`, `undated`,
+`dated`, `hasdates`), so "all milestones" is `/ms:true` and "every
+recurring event" is `/hasdates`. `s` sorts by the focused column — press
+again to flip direction (blanks first ⇄ blanks last), a third time to
+clear; date columns sort by precision — blanks, then year-only, then
+year+month, then full dates — so the least-refined dates surface for
+filling in, while text sorts alphabetically and `ms`/`★` by on/off.
+The grid opens with undated entries in their own leading segment (under
+a dim divider row), dated entries below, and the split survives every
+sort — the needs-work backlog stays on top. `accomplishments`/`skills`
+sit at the far right of the grid so their long bullets don't spread the
+other columns. The grid's top line shows the highlighted row's company
+as a bold title, so scrolling far left or right keeps the row
+identifiable. `q` with session changes opens a centered save/discard
+dialog: save, save and rebuild, or discard (every file touched this
+session is restored). Save + rebuild shows the same build popup — on
+error you stay put and quitting is blocked until it builds, on success
+the changes are committed and a second `q` closes the editor.
+Writes are immediate and minimal: booleans flip their single line in
+place, everything else rewrites the file in `template.yaml`'s canonical
+shape — re-parsed before it touches
+disk, so a save can't corrupt an entry. Turning a dated entry's dot off
+asks first (the build ignores `dates:` without `milestone: true`). Needs
+`pip install pyyaml textual`.
 
 By hand, if you'd rather copy the skeleton:
 
@@ -40,7 +78,7 @@ cp template.yaml content/my-new-entry-dir/my-new-entry.yaml   # then fill it in
 python3 build.py
 ```
 
-`template.yaml` (project root) is a blank, copy-ready skeleton — all 19 keys,
+`template.yaml` (project root) is a blank, copy-ready skeleton — all 20 keys,
 no comments. Field-by-field documentation lives in `explainer-template.yaml`.
 Both sit outside the `content/*/*.yaml` scan pattern, so the build ignores them.
 
@@ -119,6 +157,10 @@ one-line headline under it.
   Each career break lives in its own directory under `content/`, labeled by
   location and year (e.g. `content/chiang-mai-2018/`), its photos dropped in
   next to its YAML.
+- Picture view (`image_view: full` on a milestone): when the detail is one
+  clean picture (an album cover, a poster), it expands to show that single
+  picture whole — never cropped, so slightly-off-square images show in full —
+  with the title, date and place as a small caption beneath it.
 - Filter by entry type (single-select chips; milestones auto-expand while a
   type filter is active), live full-text search
 - Mobile-friendly: on narrow screens the filter chips become a swipeable
@@ -131,7 +173,7 @@ one-line headline under it.
 
 ## YAML schema
 
-Every `content/*/*.yaml` follows the same 19 fields:
+Every `content/*/*.yaml` follows the same 20 fields:
 
 | Field | Notes |
 |---|---|
@@ -147,5 +189,6 @@ Every `content/*/*.yaml` follows the same 19 fields:
 | `accomplishments`, `skills` | string lists (blank items are dropped) |
 | `logo` | filename; resolved from `logos/` first, then the entry's directory |
 | `images` | filenames resolved from the entry's directory, then `logos/` |
+| `image_view` | `full` = picture view — a milestone's single picture shown whole as the meat of its expanded detail (never cropped; slightly-off-square images included), with the title/date/place as a caption beneath; needs `milestone: true` and exactly one image, anything else falls back to the detail circle |
 
 Re-run `python3 build.py` after editing any YAML to refresh the viewer.

@@ -312,6 +312,16 @@
     border-radius: var(--radius-mark); border: 1px solid var(--rule); cursor: zoom-in; }
   .ms-circle .cimgs img:hover { border-color: var(--accent); }
 
+  /* Picture view (image_view: full): a milestone's single picture is the meat
+     of its detail — shown whole, never cropped; the circle's typography and
+     spacing carry; only the shape and image treatment change. The square
+     plate keeps its hairline outer frame + inner rule. */
+  .ms-circle.pict { padding: var(--space-md) var(--space-lg); overflow: visible; }
+  .ms-circle.pict img.phero { display: block; max-width: 100%; max-height: 80vh;
+    width: auto; height: auto; margin: 0 auto var(--space-xs);
+    border: 1px solid var(--rule); background: var(--paper-2); cursor: zoom-in; }
+  .ms-circle.pict img.phero:hover { border-color: var(--accent); }
+
   /* Parent links + collapsible Entries strip on parent cards */
   .plink { color: var(--accent); text-decoration: underline;
     text-decoration-color: var(--accent-line); text-underline-offset: 3px;

@@ -1,9 +1,11 @@
-entry_type:
-milestone:
-featured:
+entry_type: job
+milestone: false
+featured: false
 parent:
-company:
-role:
+ - amazon
+ - zz-smoke-a
+company: Smoke B Final
+role: Old Style
 employment_type:
 industry:
 url:

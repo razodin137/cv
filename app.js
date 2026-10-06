@@ -60,8 +60,14 @@ function milestone(e) {
   if (e.pips.length) pips = '<div class="ms-pips">' + e.pips.map((p, i) =>
     '<img class="pip" loading="lazy" src="' + esc(p) + '" data-full="' + esc(e.images[i]) + '" alt="" ' +
     'onclick="lb(this.dataset.full)" onerror="this.remove()">').join('') + '</div>';
-  let c = '<div class="ms-detail" id="' + uid + '"><div class="ms-circle">';
-  if (e.logo) c += '<img class="clogo" src="' + esc(e.logo) + '" alt="" loading="lazy" onerror="this.remove()">';
+  // Picture view: image_view: full + exactly one image — the picture is the
+  // meat of the detail, shown whole (never cropped), text as a caption beneath.
+  const pict = e.imageView === 'full' && e.images.length === 1;
+  let c = '<div class="ms-detail" id="' + uid + '"><div class="ms-circle' +
+    (pict ? ' pict' : '') + '">';
+  if (pict) c += '<img class="phero" src="' + esc(e.images[0]) +
+    '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">';
+  else if (e.logo) c += '<img class="clogo" src="' + esc(e.logo) + '" alt="" loading="lazy" onerror="this.remove()">';
   c += '<h3>' + esc(title) + '</h3>';
   const csub = sub || e.parentNames.join(' · ');
   if (csub) c += '<p class="csub">' + esc(csub) + '</p>';
@@ -81,7 +87,7 @@ function milestone(e) {
     e.accomplishments.map(a => '<li>' + esc(a) + '</li>').join('') + '</ul>';
   if (e.skills.length) c += '<div class="cskills">' +
     e.skills.map(s => '<span class="skill">' + esc(s) + '</span>').join('') + '</div>';
-  if (e.images.length) c += '<div class="cimgs">' + e.images.map(i =>
+  if (e.images.length && !pict) c += '<div class="cimgs">' + e.images.map(i =>
     '<img src="' + esc(i) + '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">').join('') + '</div>';
   c += '</div></div>';
   return '<article class="ms' + (auto ? ' open auto' : '') + (e.featured ? ' featured' : '') +

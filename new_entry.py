@@ -4,7 +4,7 @@
 Usage: python3 new_entry.py                 # answer the prompts
        python3 new_entry.py < answers.txt   # same prompts, one answer per line
 
-Prompts for the 19 template.yaml fields in order, validates against the
+Prompts for the template.yaml fields in order, validates against the
 build's own rules (entry types, date formats, parent slugs, logo/image
 filenames), shows a summary you can edit field by field, writes
 content/<category>/<entry>.yaml in the exact shape build.py reads — verified by
@@ -15,6 +15,9 @@ Enter accepts the [default]; blank = skip; Ctrl+C cancels. Multi-line
 fields (accomplishments, skills, images) read one item per line and end
 on an empty line. Piped runs that run out of input take defaults, and
 abort cleanly after a few consecutive end-of-inputs instead of looping.
+
+Validation and the YAML writer live in entry_lib.py, shared with tui.py
+(the terminal editor for existing entries).
 """
 
 import os
@@ -24,31 +27,10 @@ import sys
 
 import yaml
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
-CONTENT = os.path.join(ROOT, "content")  # entry data lives under content/
-ASSET_DIRS = {"logos", "contact"}  # same exclusions as build.py's scan
-
-# (type, one-line description) — order matches README/explainer-template.
-ENTRY_TYPES = [
-    ("job", "paid work"),
-    ("volunteer", "unpaid work"),
-    ("education", "schools, degrees, certifications"),
-    ("events", "gigs, one-offs, recurring events"),
-    ("ministry", "church / missions / ministry work"),
-    ("creative", "awards, art, performances"),
-    ("career_break", "travel or a break between roles"),
-    ("online_presence", "websites & digital presence work, e.g. client sites"),
-    ("organization", "an umbrella entry (club, team) that sub-events parent to"),
-]
-
-# Markers to detect which style the current index.html was built with,
-# so the form's rebuild keeps the look (falls back to build.py's own
-# interactive/default choice when undetectable).
-STYLE_MARKERS = [("'Libron'", "libron"), ("'Newsreader'", "hallmark"),
-                 ("#2456d6", "original")]
-
-SLUG_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
-DATE_RE = re.compile(r"^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$")
+import entry_lib as lib
+from entry_lib import (ASSET_DIRS, CONTENT, ENTRY_TYPES, ROOT, categories,
+                       current_style, dir_yamls, parent_resolvable,
+                       parse_date, resolve_asset, slugify)
 
 _eof_hits = 0  # consecutive end-of-inputs — abort instead of looping forever
 
@@ -100,10 +82,6 @@ def ask_line_list(prompt):
 
 # ------------------------------------------------------------- validation
 
-def slugify(s):
-    return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
-
-
 def ask_slug(prompt, default=""):
     while True:
         v = slugify(ask(prompt, default))
@@ -111,19 +89,6 @@ def ask_slug(prompt, default=""):
             print("  Enter a name — lowercase letters, digits, hyphens.", file=sys.stderr)
             continue
         return v
-
-
-def parse_date(s):
-    """Sortable (y, m, d) for YYYY / YYYY-MM / YYYY-MM-DD, else None."""
-    m = DATE_RE.match(s.strip())
-    if not m:
-        return None
-    y, mo, d = (int(g) if g else 0 for g in m.groups())
-    if mo and not 1 <= mo <= 12:
-        return None
-    if d and not 1 <= d <= 31:
-        return None
-    return (y, mo, d)
 
 
 def ask_date(prompt):
@@ -135,52 +100,6 @@ def ask_date(prompt):
             return v
         print("  Dates look like YYYY, YYYY-MM or YYYY-MM-DD.", file=sys.stderr)
 
-
-def scan_dirs():
-    """Entry categories under content/ (mirrors build.py's scan)."""
-    return [d for d in sorted(os.listdir(CONTENT))
-            if os.path.isdir(os.path.join(CONTENT, d))
-            and d not in ASSET_DIRS and not d.startswith(".")]
-
-
-def categories():
-    """Scanned directories that already hold at least one entry YAML."""
-    return [d for d in scan_dirs()
-            if any(f.endswith(".yaml")
-                   for f in os.listdir(os.path.join(CONTENT, d)))]
-
-
-def dir_yamls(category):
-    d = os.path.join(CONTENT, category)
-    if not os.path.isdir(d):
-        return []
-    return sorted(f for f in os.listdir(d) if f.endswith(".yaml"))
-
-
-def parent_resolvable(slug, category, stem):
-    """Mirror build.py's parent resolution: <slug>/<slug>.yaml, the only
-    YAML in <slug>/, or a unique */<slug>.yaml (self excluded)."""
-    if os.path.isdir(os.path.join(CONTENT, slug)):
-        ys = dir_yamls(slug)
-        if f"{slug}.yaml" in ys or len(ys) == 1:
-            return True
-    hits = [d for d in scan_dirs()
-            if os.path.isfile(os.path.join(CONTENT, d, f"{slug}.yaml"))
-            and not (d == category and slug == stem)]
-    return len(hits) == 1
-
-
-def resolve_asset(category, filename, prefer_logos):
-    """build.py's asset search order: logos/ (repo root) first for logos,
-    the content/<category>/ directory first for images."""
-    candidates = ([os.path.join("logos", filename),
-                   os.path.join("content", category, filename)] if prefer_logos else
-                  [os.path.join("content", category, filename),
-                   os.path.join("logos", filename)])
-    for c in candidates:
-        if os.path.isfile(os.path.join(ROOT, c)):
-            return c
-    return None
 
 
 # ------------------------------------------------------------ field picks
@@ -339,13 +258,23 @@ def pick_images(category):
     return keep
 
 
+def pick_image_view():
+    while True:
+        v = ask("image_view — 'full' = picture view (the detail shows this "
+                "milestone's ONE picture whole, as the meat of the content; "
+                "blank = standard detail): ").strip().lower()
+        if not v or v == "full":
+            return v
+        print("  image_view is 'full' or blank.", file=sys.stderr)
+
+
 # ------------------------------------------------------------------ state
 
 def collect():
     a = {"category": pick_category()}
     a["file"] = pick_file(a["category"])
-    print(f"\n{a['category']}/{a['file']}.yaml — 19 fields; Enter = default, "
-          f"blank = skip.")
+    print(f"\n{a['category']}/{a['file']}.yaml — {len(lib.TEMPLATE_KEYS)} "
+          f"fields; Enter = default, blank = skip.")
 
     a["entry_type"] = pick_entry_type(a["category"])
 
@@ -386,99 +315,36 @@ def collect():
 
     a["logo"] = pick_logo(a["category"])
     a["images"] = pick_images(a["category"])
+    a["image_view"] = pick_image_view()
     normalize(a)
     return a
 
 
 def normalize(a):
     """Enforce the build's invariants: dates need milestone: true and
-    override start/end."""
+    override start/end; the picture view needs a milestone with exactly
+    one image."""
     if a["dates"] and not a["milestone"]:
         a["dates"] = []
         print("  dates cleared — they need milestone: true.", file=sys.stderr)
     if a["dates"]:
         a["start"] = a["end"] = ""
+    if a["image_view"] and (not a["milestone"] or len(a["images"]) != 1):
+        a["image_view"] = ""
+        print("  image_view cleared — the picture view needs milestone: true "
+              "and exactly one image.", file=sys.stderr)
 
 
 # ------------------------------------------------------------- YAML output
 
-def needs_quote(v):
-    if re.fullmatch(r"[-+]?[\d.]+", v):
-        return True  # keep numbers-as-text strings strings
-    if v.lower() in ("true", "false", "null", "yes", "no", "on", "off", "~"):
-        return True
-    if v[0] in " \t" or v[-1] in " \t" or v[0] in "-?:,[]{}#&*!|>'\"%@`":
-        return True
-    if ": " in v or v.endswith(":") or " #" in v:
-        return True
-    return False
-
-
-def scalar(v, force_quote=False):
-    if not v:
-        return ""
-    if force_quote or needs_quote(v):
-        return '"' + v.replace("\\", "\\\\").replace('"', '\\"') + '"'
-    return v
-
-
-def key_line(k, v, force_quote=False):
-    """`key:` when blank (matches the hand-written entries), `key: value` otherwise."""
-    s = scalar(v, force_quote)
-    return f"{k}: {s}" if s else k + ":"
-
-
 def entry_text(a):
-    L = [f"entry_type: {a['entry_type']}",
-         f"milestone: {'true' if a['milestone'] else 'false'}",
-         f"featured: {'true' if a['featured'] else 'false'}"]
-    if len(a["parent"]) == 1:
-        L.append(f"parent: {a['parent'][0]}")
-    else:
-        L.append("parent:")
-        L.extend(f" - {s}" for s in a["parent"])
-    for k in ("company", "role", "employment_type", "industry", "url"):
-        L.append(key_line(k, a[k]))
-    L.append(key_line("start", a["start"], True))
-    L.append(key_line("end", a["end"], True))
-    L.append("dates:")
-    L.extend(f' - "{d}"' for d in a["dates"])
-    for k in ("location", "country", "location_type"):
-        L.append(key_line(k, a[k]))
-    for k in ("accomplishments", "skills"):
-        L.append(k + ":")
-        L.extend(f" - {scalar(x)}" for x in a[k])
-    L.append(key_line("logo", a["logo"]))
-    L.append("images:")
-    L.extend(f" - {scalar(x)}" for x in a["images"])
-    return "\n".join(L) + "\n"
+    """Canonical YAML text for the answers (template order, house quoting)."""
+    return lib.serialize({k: a[k] for k in lib.TEMPLATE_KEYS})
 
 
 def verify(text, a):
     """Guarantee the written YAML round-trips to exactly the answers."""
-    loaded = yaml.safe_load(text)
-    expected = {
-        "entry_type": a["entry_type"],
-        "milestone": a["milestone"],
-        "featured": a["featured"],
-        "parent": a["parent"][0] if len(a["parent"]) == 1 else (a["parent"] or None),
-        "company": a["company"] or None,
-        "role": a["role"] or None,
-        "employment_type": a["employment_type"] or None,
-        "industry": a["industry"] or None,
-        "url": a["url"] or None,
-        "start": a["start"] or None,
-        "end": a["end"] or None,
-        "dates": a["dates"] or None,
-        "location": a["location"] or None,
-        "country": a["country"] or None,
-        "location_type": a["location_type"] or None,
-        "accomplishments": a["accomplishments"] or None,
-        "skills": a["skills"] or None,
-        "logo": a["logo"] or None,
-        "images": a["images"] or None,
-    }
-    if loaded != expected:
+    if not lib.verify(text, {k: a[k] for k in lib.TEMPLATE_KEYS}):
         sys.exit("INTERNAL: generated YAML does not round-trip to the answers; "
                  "nothing written.")
 
@@ -501,7 +367,7 @@ def show_summary(a):
             ("entry_type", "milestone", "featured", "parent", "company", "role",
              "employment_type", "industry", "url", "start", "end", "dates",
              "location", "country", "location_type", "accomplishments",
-             "skills", "logo", "images")]
+             "skills", "logo", "images", "image_view")]
     for i, (k, v) in enumerate(rows, 1):
         print(f"  {i:>2}) {k:<16} {disp(v)}")
     print("  (blank end = Present; blank start = undated, sorts last)")
@@ -553,8 +419,11 @@ def edit_field(a, n):
         a["logo"] = pick_logo(cat)
     elif n == 19:
         a["images"] = pick_images(cat)
+    elif n == 20:
+        a["image_view"] = pick_image_view()
     else:
-        print("  Fields are numbered 1–19 (or f = file location).", file=sys.stderr)
+        print(f"  Fields are numbered 1–{len(lib.TEMPLATE_KEYS)} "
+              "(or f = file location).", file=sys.stderr)
         return
     normalize(a)
 
@@ -580,19 +449,6 @@ def confirm(a):
 
 
 # ------------------------------------------------------------------ write
-
-def current_style():
-    """Which build style index.html carries now, or None."""
-    try:
-        with open(os.path.join(ROOT, "index.html"), encoding="utf-8") as f:
-            html = f.read()
-    except OSError:
-        return None
-    for marker, style in STYLE_MARKERS:
-        if marker in html:
-            return style
-    return None
-
 
 def offer_rebuild():
     if not ask_yes_no("Rebuild index.html now? [Y/n]: ", True):

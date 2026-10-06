@@ -157,6 +157,7 @@ def load_entries():
                 "skills": [s.strip() for s in (raw.get("skills") or []) if s and s.strip()],
                 "logo": resolve(category, str(raw.get("logo") or "").strip(), prefer_logos=True),
                 "images": images,
+                "imageView": str(raw.get("image_view") or "").strip(),
                 "pips": pip_srcs(images) if ms else [],
             }
             entries.append(e)
