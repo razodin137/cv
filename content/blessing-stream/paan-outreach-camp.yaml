@@ -2,22 +2,19 @@ entry_type: events
 milestone: true
 featured: false
 parent: blessing-stream
-company: Survivor Camp
+company: Paan Outreach Camp
 role:
 employment_type:
 industry: ministry
-start: "2022-12-07"
-end: "2022-12-11"
-location: Chiang Rai
+url:
+start: "2023-09-01"
+end: "2023-09-03"
+dates:
+location: Amphoe Paan, Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
- - Church teaching and Bible study event in Chiang Rai, Thailand.
- -
- -
+ - Three-day outreach camp in Amphoe Paan, Chiang Rai.
 skills:
- -
- -
- -
 logo:
 images:

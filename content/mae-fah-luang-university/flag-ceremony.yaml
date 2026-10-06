@@ -2,18 +2,19 @@ entry_type: events
 milestone: true
 featured: false
 parent: mae-fah-luang-university
-company: International Flag Ceremony
+company: International Flag Parade
 role: Representative
 employment_type:
 industry:
 start:
 end:
-dates: 2025-02-01
+dates:
+ - "2023-09-25"
 location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
- - "Represented the United Kingdom in Mae Fah Luang's Annual International Ceremony"
+ - "Represented the United Kingdom in the International Flag Parade, part of the Mae Fah Luang University Celebration"
  -
  -
 skills:

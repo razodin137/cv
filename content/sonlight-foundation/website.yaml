@@ -1,0 +1,27 @@
+entry_type: online_presence
+milestone: false
+featured: false
+parent:
+ - kaojaicam
+ - sonlight-foundation
+company: SonLight Foundation
+role: Website Design & Development
+employment_type: contract
+industry: nonprofit
+url: https://sonlightfoundation.moww.space
+start: "2025-08"
+end:
+dates:
+location: Thung Chang, Nan
+country: Thailand
+location_type: remote
+accomplishments:
+ - A bilingual Thai/English home for the foundation — the mission in Naan, the four program areas, and a proposal page laying the foundation's objectives out for partners and donors.
+ - Hand-rolled static pages, no build step — a full-bleed collage of life in Naan, the foundation's logo, a representative's photo, and the address, phone and email beside an embedded map.
+skills:
+ - Web Design
+ - Web Development
+ - Bilingual Content
+logo: logo.jpg
+images:
+ - homepage-2026-10-06.jpg

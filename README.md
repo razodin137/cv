@@ -2,7 +2,7 @@
 
 Live: **<https://razodin137.github.io/cv/>**
 
-Curriculum vitae as data: 78 YAML entries across directories under
+Curriculum vitae as data: 107 YAML entries across directories under
 `content/` (plus logos/images) rendered by `build.py` into a single
 self-contained `index.html` viewer.
 

@@ -2,22 +2,19 @@ entry_type: events
 milestone: true
 featured: false
 parent: blessing-stream
-company: Survivor Camp
+company: Outreach at Blessing Stream Church Chiang Mai
 role:
 employment_type:
 industry: ministry
-start: "2022-12-07"
-end: "2022-12-11"
-location: Chiang Rai
+url:
+start: "2023-01"
+end: "2023-01"
+dates:
+location: Chiang Mai
 country: Thailand
 location_type:
 accomplishments:
- - Church teaching and Bible study event in Chiang Rai, Thailand.
- -
- -
+ - Outreach with the Chiang Mai church.
 skills:
- -
- -
- -
 logo:
 images:
