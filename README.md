@@ -40,7 +40,13 @@ python3 tui.py   # terminal list of every entry: toggle, filter, edit
 
 One row per entry — a filled dot (●) marks `milestone: true`, a star (★)
 marks `featured: true`. Run down the list with ↑/↓ and press `space` to
-flip the dot (in the ★ column it flips the star); `enter` opens the full 20-field editor; `d` appends
+flip the dot (in the ★ column it flips the star); on any other cell
+`space`/`enter` opens the bar editor — free text for scalars, one item
+per line for `dates`/`accomplishments`/`skills`/`images`, where `enter`
+adds a line and `ctrl+s` saves the list (`esc` cancels; the list editor
+is sized to its items so the lines you add stay visible). `e` opens the
+full 20-field editor (its Save/Cancel sit pinned below the fields, with
+`ctrl+s`/`esc`); `d` appends
 occurrence dates to a recurring event; `r` rebuilds `index.html` in its
 current style and reports the result — success or the failing tail — in
 a centered popup. `/` filters live — free text

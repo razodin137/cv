@@ -36,8 +36,11 @@ employment_type, location_type and parent are dropdowns (arrows move,
 enter picks, space backs out) — parent's options are the corpus's own
 entry slugs, with several current parents shown as one "both of these"
 choice; the other list fields (dates, accomplishments, skills, images)
-take one item per line — enter adds a line, an empty line saves the list
-(the form's convention).
+take one item per line — enter adds a line, ctrl+s (or enter on an empty
+line) saves the list. Every open editor shows ctrl+s save / esc cancel in
+the footer; the list editor is sized to its items so the lines stay
+visible, and ctrl+s (not a bare `s`) is the save key precisely because a
+bare `s` has to type the letter `s` into the text.
 
 Writes are immediate and minimal: booleans flip their single line in
 place, scalar cells rewrite just their line, lists rewrite the file in
@@ -142,9 +145,11 @@ def dates_sort_key(items):
 # --------------------------------------------------------- cell edit widgets
 
 class CellInput(Input):
-    """The bar's text editor: enter submits, escape cancels."""
+    """The bar's text editor for scalars: enter or ctrl+s saves, escape
+    cancels."""
 
-    BINDINGS = [Binding("escape", "cancel", "cancel", priority=True)]
+    BINDINGS = [Binding("escape", "cancel", "cancel", priority=True),
+                Binding("ctrl+s", "submit", "save", priority=True)]
 
     class Cancelled(Message):
         pass
@@ -155,9 +160,10 @@ class CellInput(Input):
 
 class CellTextArea(TextArea):
     """The bar's list editor — one item per line: enter adds a line;
-    enter on an empty line saves the list (the form's convention)."""
+    ctrl+s (or enter on an empty line) saves the list."""
 
     BINDINGS = [Binding("enter", "commit_or_line", show=False, priority=True),
+                Binding("ctrl+s", "save", "save", priority=True),
                 Binding("escape", "cancel", "cancel", priority=True)]
 
     class Commit(Message):
@@ -173,6 +179,9 @@ class CellTextArea(TextArea):
             self.post_message(self.Commit())
         else:
             self.insert("\n")
+
+    def action_save(self):
+        self.post_message(self.Commit())
 
     def action_cancel(self):
         self.post_message(self.Cancel())
@@ -460,7 +469,7 @@ class MainScreen(Screen):
             inp.styles.border = None
             inp.value = e[field]
             hint = (" — YYYY, YYYY-MM or YYYY-MM-DD" if kind == "date"
-                    else " — enter saves, esc cancels")
+                    else " — enter or ctrl+s saves, esc cancels")
             label.update(f"{field} · {e['relpath']}{hint}")
             inp.focus()
         else:  # list kinds
@@ -468,11 +477,20 @@ class MainScreen(Screen):
             area.styles.display = "block"
             area.styles.border = None
             items = e[field]
+            # A tall 2-row border stays on the TextArea (the app's
+            # `styles.border = None` is a no-op — Textual treats None as
+            # "leave alone" — so the editor keeps its box), hence visible
+            # text rows = height - 2. Size to one row per item plus a spare
+            # to type on, clamped under the bar's 10-row cap, so the list is
+            # actually visible while editing instead of collapsing to one
+            # hidden line.
+            content = min(max(len(items) + 1, 3), 8)
+            area.styles.height = content + 2
             area.load_text("\n".join(items))
             if items:  # caret after the last char: typing appends an item
                 area.move_cursor(location=(len(items) - 1, len(items[-1])))
             label.update(f"{field} · {e['relpath']} — one item per line; "
-                         "enter adds a line, an empty line saves")
+                         "enter adds a line, ctrl+s saves (esc cancels)")
             area.focus()
 
     def cell_error(self, msg):
@@ -1131,9 +1149,14 @@ class EditorScreen(ModalScreen):
             Label("image_view — 'full' = picture view (needs milestone + "
                   "exactly one image)"),
             self._select("image_view", e["image_view"]),
-            Horizontal(Button("Save", id="btn-save"),
-                       Button("Cancel", id="btn-cancel"), id="editor-buttons"),
             id="editor-scroll")
+        # Save/Cancel pinned below the scroll (not inside it): they stay
+        # visible however long the field list scrolls, so the save affordance
+        # is never below the fold.
+        yield Horizontal(Button("Save", id="btn-save"),
+                         Button("Cancel", id="btn-cancel"),
+                         id="editor-buttons")
+        yield Footer()
 
     def on_mount(self):
         self.query_one("#fld-company", Input).focus()
@@ -1237,7 +1260,7 @@ class EntriesApp(App):
     #cell-label { height: 1; color: $text-muted; }
     #cell-view { height: 1; }
     #cell-input { height: 3; display: none; }
-    #cell-area { height: auto; max-height: 10; display: none; }
+    #cell-area { height: 3; max-height: 10; display: none; }
     #status { height: 1; }
     EditorScreen { layout: vertical; }
     #editor-scroll { border: round $primary; padding: 0 2; height: 1fr; }

@@ -188,6 +188,25 @@ async def main():
         await pilot.press("enter"); await pilot.press("enter"); await pilot.pause()
         assert " - smoke\n - test" in open(A).read()
 
+        # ---- list cell: the editor shows its item lines (it used to
+        #      collapse to one hidden row), and ctrl+s is the save key
+        goto(app, A, COL["accomplishments"])
+        await pilot.press("enter"); await pilot.pause()
+        area = m.query_one("#cell-area", TextArea)
+        assert area.size.height > 1, area.size           # more than one line visible
+        area.load_text("one\ntwo\nthree")
+        await pilot.press("ctrl+s"); await pilot.pause()  # explicit save
+        assert not bar_visible(app)
+        assert " - one\n - two\n - three" in open(A).read(), open(A).read()
+
+        # ---- scalar cell: ctrl+s saves too, and never types a literal 's'
+        goto(app, A, COL["industry"])
+        await pilot.press("space"); await pilot.pause()
+        m.query_one("#cell-input", Input).value = "ctrl-s industry"
+        await pilot.press("ctrl+s"); await pilot.pause()
+        assert not bar_visible(app)
+        assert "industry: ctrl-s industry" in open(A).read(), open(A).read()
+
         # ---- bool cells: space toggles; ★ column is featured, ms is milestone
         goto(app, A, COL["★"])
         await pilot.press("space"); await pilot.pause()

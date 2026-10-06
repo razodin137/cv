@@ -10,6 +10,7 @@ url:
 start:
 end:
 dates:
+ - "2025-12-13"
 location:
 country:
 location_type:
@@ -18,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:
