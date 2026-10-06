@@ -331,7 +331,6 @@ def main():
     c = load_contact()
     data = {
         "entries": entries,
-        "categories": len({e["category"] for e in entries}),
         "contact": {
             "name": str(c.get("name") or "").strip(),
             "tagline": str(c.get("tagline") or "").strip(),
@@ -361,7 +360,7 @@ def main():
     with open(dest, "w", encoding="utf-8") as f:
         f.write(out)
     print(f"Wrote {dest} ({len(out) / 1024:.0f} KB) — {len(entries)} entries, "
-          f"{data['categories']} categories, style '{style}'.")
+          f"{len({e['category'] for e in entries})} categories, style '{style}'.")
 
 
 if __name__ == "__main__":

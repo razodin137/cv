@@ -1,0 +1,21 @@
+entry_type: ministry
+milestone: true
+featured: false
+parent:
+company: YWAM Chiang Rai Open House
+role:
+employment_type: volunteer
+industry: ministry
+url:
+start: "2023"
+end: "2024"
+dates:
+location: Chiang Rai
+country: Thailand
+location_type: onsite
+accomplishments:
+ - Weekly open house meeting hosted by YWAM Chiang Rai, running through 2023 and 2024.
+skills:
+logo:
+images:
+image_view:

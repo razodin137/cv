@@ -30,6 +30,13 @@
     font-style: italic; color: #cdd5e8; }
   header .links a { color: #b8c0d4; text-decoration: none; border-bottom: 1px solid rgba(184,192,212,.45); }
   header .links a:hover { color: #fff; border-color: #fff; }
+  /* Contact-line icons: 12px stroke marks for the direct lines, 13px brand
+     marks standing alone as links — currentColor, so they follow the link
+     colour here (and #444 in print). */
+  header .links svg { width: 12px; height: 12px; vertical-align: -1px; margin-right: 3px; }
+  header .links a.ic { border-bottom: 0; }
+  header .links a.ic svg { width: 13px; height: 13px; vertical-align: -2px; margin: 0; }
+  header .links a.ic:hover { color: #fff; }
   .mast-rule { display: none; }
   .colophon { font-family: system-ui, sans-serif; font-size: .78rem; color: var(--muted);
     text-align: center; padding: 1.1rem 1rem 2.2rem; }

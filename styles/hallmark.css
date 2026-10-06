@@ -88,6 +88,13 @@
   .links a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--rule); }
   .links a:hover { border-color: var(--accent); }
   .links span { color: var(--muted); }
+  /* Contact-line icons: 12px stroke marks for the direct lines, 13px brand
+     marks standing alone as links. Both draw currentColor, so each style's
+     own link colour (and the print sheet's) recolours them for free. */
+  .links svg { width: 12px; height: 12px; vertical-align: -1px; margin-right: 3px; }
+  .links a.ic { border-bottom: 0; }
+  .links a.ic svg { width: 13px; height: 13px; vertical-align: -2px; margin: 0; }
+  .links a.ic:hover { color: var(--ink); }
   .sub { margin: var(--space-2xs) 0 0; font-family: var(--font-agate); font-size: var(--text-xs);
     color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
   .mast-rule { border: 0; border-top: 1.5px solid var(--rule-strong);

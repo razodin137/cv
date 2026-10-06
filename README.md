@@ -125,6 +125,14 @@ and printing spells out every external link's full URL. A filled `name:`
 becomes a header line and the browser tab title; a filled `tagline:` is a
 one-line headline under it.
 
+Each contact line carries an icon: a stroke mark for location, email, phone
+and website, and for a recognised social host the brand mark alone, as the
+link itself (name on `title`/`aria-label`, URL spelled out in print). The
+recognised set lives in `SOCIAL_ICONS`/`SOCIAL_LABELS` in `app.js` — hosts
+listed in both get a mark; any other host keeps the globe icon and its
+label. Brand paths are Simple Icons (CC0), `fill: currentColor`, so each
+style recolours them for free.
+
 ## Viewer features
 
 - Timeline grouped by year, newest first, undated entries at the end

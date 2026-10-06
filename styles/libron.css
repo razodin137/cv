@@ -100,6 +100,13 @@
     border-bottom: 1px solid var(--accent-line); }
   .links a:hover { border-color: var(--accent); }
   .links span { color: var(--muted); }
+  /* Contact-line icons: 12px stroke marks for the direct lines, 13px brand
+     marks standing alone as links. Both draw currentColor, so each style's
+     own link colour (and the print sheet's) recolours them for free. */
+  .links svg { width: 12px; height: 12px; vertical-align: -1px; margin-right: 3px; }
+  .links a.ic { border-bottom: 0; }
+  .links a.ic svg { width: 13px; height: 13px; vertical-align: -2px; margin: 0; }
+  .links a.ic:hover { color: var(--ink); }
   .sub { margin: var(--space-2xs) 0 0; font-variant-caps: all-small-caps;
     letter-spacing: .08em; font-size: var(--text-md); color: var(--muted);
     font-variant-numeric: tabular-nums; }
