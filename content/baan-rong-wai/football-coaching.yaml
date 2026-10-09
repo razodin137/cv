@@ -7,12 +7,12 @@ role:
 employment_type:
 industry: ministry
 url:
-start:
-end:
+start: "2025"
+end: "2025"
 dates:
 location:
 country:
-location_type:
+location_type: onsite
 accomplishments:
  - Soccer (football) coaching as part of the Baan Rong Wai volunteer outreach.
 skills:

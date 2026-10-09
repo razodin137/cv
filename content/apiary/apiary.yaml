@@ -12,7 +12,7 @@ end:
 dates:
 location:
 country:
-location_type:
+location_type: onsite
 accomplishments:
 skills:
 logo: apiary.png

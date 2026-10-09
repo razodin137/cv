@@ -2,22 +2,21 @@ entry_type: events
 milestone: true
 featured: false
 parent: nexus
-company: "Sawok Gin Nuea Camp (สวกกินเนื้อ)"
+company: Sawok Gin Nuea Camp (สวกกินเนื้อ)
 role:
 employment_type:
 industry: ministry
+url:
 start:
 end:
+dates:
+ - "2026-02-10"
 location: Chiang Rai
 country: Thailand
-location_type:
+location_type: onsite
 accomplishments:
  - Ministry camp event in Chiang Rai, Thailand.
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:
