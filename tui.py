@@ -21,7 +21,7 @@ to cell; the bar under the grid shows the focused cell.
     e       open the full 20-field editor for the cursor's row
     d       add occurrence dates… (modal; keeps existing dates)
     /       filter — text plus ms:true, ms:false, feat:true, cat:<dir>,
-            type:<t>, undated, dated, hasdates (combined with spaces)
+            type:<t>, tag:<t>, undated, dated, hasdates (combined with spaces)
     s       sort by the focused column — s again flips direction (blanks
             first ⇄ blanks last), a third s clears it. Date columns sort
             by precision first: blank, then year-only, then year+month,
@@ -35,7 +35,7 @@ Cell editors by field: text fields take free text; entry_type,
 employment_type, location_type and parent are dropdowns (arrows move,
 enter picks, space backs out) — parent's options are the corpus's own
 entry slugs, with several current parents shown as one "both of these"
-choice; the other list fields (dates, accomplishments, skills, images)
+choice; the other list fields (tags, dates, accomplishments, skills, images)
 take one item per line — enter adds a line, ctrl+s (or enter on an empty
 line) saves the list. Every open editor shows ctrl+s save / esc cancel in
 the footer; the list editor is sized to its items so the lines stay
@@ -90,7 +90,7 @@ COLUMNS = [
     ("parent", "parent", "parent"),
     ("company", "company", "text"),
     ("role", "role", "text"),
-    ("industry", "industry", "text"),
+    ("tags", "tags", "list"),
     ("url", "url", "text"),
     ("start", "start", "date"),
     ("end", "end", "date"),
@@ -732,7 +732,7 @@ class MainScreen(Screen):
         if not q:
             return True
         blob = " ".join((e["company"], e["role"], e["entry_type"], e["category"],
-                         e["stem"], e["industry"], e["location"], e["country"],
+                         e["stem"], " ".join(e["tags"]), e["location"], e["country"],
                          " ".join(e["parent"]))).lower()
         for tok in q.lower().split():
             if tok in ("ms", "ms:true", "milestone"):
@@ -753,6 +753,8 @@ class MainScreen(Screen):
                 ok = e["category"].startswith(tok[4:])
             elif tok.startswith("type:"):
                 ok = e["entry_type"] == tok[5:]
+            elif tok.startswith("tag:"):
+                ok = tok[4:] in [t.lower() for t in e["tags"]]
             else:
                 ok = tok in blob
             if not ok:
@@ -1079,7 +1081,7 @@ class EditorScreen(ModalScreen):
     BINDINGS = [Binding("ctrl+s", "save", "save"),
                 Binding("escape", "cancel", "cancel")]
 
-    TEXT_SCALARS = ("company", "role", "industry", "url", "start", "end",
+    TEXT_SCALARS = ("company", "role", "url", "start", "end",
                     "location", "country", "logo")
     DROPDOWN_SCALARS = ("entry_type", "employment_type", "location_type",
                         "image_view")
@@ -1125,8 +1127,10 @@ class EditorScreen(ModalScreen):
                 value=e[k], id=f"fld-{k}"))],
             Label("employment_type:"),
             self._select("employment_type", e["employment_type"]),
-            *[w for k in ("industry", "url") for w in (Label(f"{k}:"), Input(
-                value=e[k], id=f"fld-{k}"))],
+            Label("tags — one relevance tag per line"),
+            TextArea("\n".join(e["tags"]), id="fld-tags"),
+            Label("url:"),
+            Input(value=e["url"], id="fld-url"),
             *[w for k in ("start", "end") for w in (
                 Label(f"{k}: {self.HINTS[k]}"), Input(
                     value=e[k], id=f"fld-{k}"))],
@@ -1182,7 +1186,7 @@ class EditorScreen(ModalScreen):
         c["dates"] = [d.strip() for d in
                       self.query_one("#fld-dates", TextArea).text.splitlines()
                       if d.strip()]
-        for k in ("accomplishments", "skills", "images"):
+        for k in ("tags", "accomplishments", "skills", "images"):
             c[k] = [x.strip() for x in
                     self.query_one(f"#fld-{k}", TextArea).text.splitlines()
                     if x.strip()]

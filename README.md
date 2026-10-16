@@ -42,7 +42,7 @@ One row per entry — a filled dot (●) marks `milestone: true`, a star (★)
 marks `featured: true`. Run down the list with ↑/↓ and press `space` to
 flip the dot (in the ★ column it flips the star); on any other cell
 `space`/`enter` opens the bar editor — free text for scalars, one item
-per line for `dates`/`accomplishments`/`skills`/`images`, where `enter`
+per line for `tags`/`dates`/`accomplishments`/`skills`/`images`, where `enter`
 adds a line and `ctrl+s` saves the list (`esc` cancels; the list editor
 is sized to its items so the lines you add stay visible). `e` opens the
 full 20-field editor (its Save/Cancel sit pinned below the fields, with
@@ -51,7 +51,7 @@ occurrence dates to a recurring event; `r` rebuilds `index.html` in its
 current style and reports the result — success or the failing tail — in
 a centered popup. `/` filters live — free text
 plus tokens (`ms:true`,
-`ms:false`, `feat:true`, `cat:<dir>`, `type:<entry_type>`, `undated`,
+`ms:false`, `feat:true`, `cat:<dir>`, `type:<entry_type>`, `tag:<tag>`, `undated`,
 `dated`, `hasdates`), so "all milestones" is `/ms:true` and "every
 recurring event" is `/hasdates`. `s` sorts by the focused column — press
 again to flip direction (blanks first ⇄ blanks last), a third time to
@@ -183,8 +183,9 @@ style recolours them for free.
   clean picture (an album cover, a poster), it expands to show that single
   picture whole — never cropped, so slightly-off-square images show in full —
   with the title, date and place as a small caption beneath it.
-- Filter by entry type (single-select chips; milestones auto-expand while a
-  type filter is active), live full-text search
+- Filter by relevance tag via top menu chips and `#<tag>` URL hashes (e.g.
+  `#hospitality`, `#education`, `#ministry`; single-select chips; milestones
+  auto-expand while a tag filter is active), plus live full-text search
 - Mobile-friendly: on narrow screens the filter chips become a swipeable
   single row, card badges stack under the text, milestone lines wrap instead
   of truncating, and an expanded milestone opens as a full-width card rather
@@ -199,11 +200,12 @@ Every `content/*/*.yaml` follows the same 20 fields:
 
 | Field | Notes |
 |---|---|
-| `entry_type` | `job`, `volunteer`, `education`, `events`, `ministry`, `creative`, `career_break`, `online_presence`, `organization` |
+| `entry_type` | `job`, `volunteer`, `education`, `events`, `creative`, `career_break`, `online_presence`, `organization` |
 | `milestone` | `true` = one-off point event → compact line headlined by the entry's own title (`company`); role/organization secondary; `false` = standard card |
 | `parent` | slug of the parent entity — its directory (e.g. `mae-fah-luang-university`) or its YAML file name (e.g. `mfu-christian-club`); a list gives multiple parents; cross-links + logo inheritance |
 | `featured` | `true` = gold highlight + star in the top-right corner (milestones: star at the far right); `false` = standard |
-| `company`, `role`, `employment_type`, `industry` | plain text, any may be blank |
+| `company`, `role`, `employment_type` | plain text, any may be blank |
+| `tags` | list of relevance tags for the top filter bar and `#<tag>` URL links (e.g. `hospitality`, `education`, `ministry`) |
 | `url` | external link for the entry (e.g. a client's website) — rendered as a link on cards and milestone circles; print spells it out |
 | `start`, `end` | `YYYY-MM` strings (full `YYYY-MM-DD` also works), blank end = "Present" |
 | `dates` | a recurring event's occurrence dates — a list of any precision (`"2026-09-11"`, `"2024"`, `"2011-09"`), replaces `start`/`end`; needs `milestone: true`. The entry shows up once per date on the timeline, each point labeled with only its own date (e.g. `play-ashram/play-ashram.yaml`, `rocktoberfest/`) |

@@ -5,7 +5,8 @@ parent:
 company: SonLight Foundation
 role:
 employment_type:
-industry: nonprofit
+tags:
+ - organization
 url: https://sonlightfoundation.moww.space
 start: "2025-08"
 end:
@@ -19,3 +20,4 @@ accomplishments:
 skills:
 logo: logo.jpg
 images:
+image_view:

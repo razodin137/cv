@@ -5,7 +5,8 @@ parent:
 company: Neutral Grounds
 role: Performer
 employment_type:
-industry:
+tags:
+ - creative
 url:
 start: "2016-04"
 end: "2016-04"
@@ -18,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

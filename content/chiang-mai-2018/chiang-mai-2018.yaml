@@ -5,7 +5,8 @@ parent:
 company: Chiang Mai
 role: Travel
 employment_type:
-industry:
+tags:
+ - career_break
 url:
 start: "2018-04"
 end: "2018-05"

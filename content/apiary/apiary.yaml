@@ -5,7 +5,9 @@ parent:
 company: The Apiary
 role: Event & Catering Staff
 employment_type:
-industry:
+tags:
+ - events
+ - hospitality
 url:
 start: "2017"
 end: "2017"

@@ -5,9 +5,12 @@ parent:
 company: Historic Home Renovation
 role: Renovation and Maintenance
 employment_type: freelance
-industry:
+tags:
+ - job
+url:
 start: "2015"
 end: "2017"
+dates:
 location: Lexington, KY
 country: United States of America
 location_type: onsite
@@ -16,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

@@ -12,7 +12,7 @@ a parse round-trip before anything hits disk — and offers to rebuild
 index.html in the style it's currently built with.
 
 Enter accepts the [default]; blank = skip; Ctrl+C cancels. Multi-line
-fields (accomplishments, skills, images) read one item per line and end
+fields (tags, accomplishments, skills, images) read one item per line and end
 on an empty line. Piped runs that run out of input take defaults, and
 abort cleanly after a few consecutive end-of-inputs instead of looping.
 
@@ -294,8 +294,9 @@ def collect():
 
     a["employment_type"] = ask("employment_type (full-time | part-time | "
                                "contract | seasonal | intern — free text): ")
-    a["industry"] = ask("industry (e.g. hospitality, ministry, food service, "
-                        "education): ")
+    a["tags"] = ask_line_list(
+        "tags — one relevance tag per line, e.g. hospitality, education, "
+        "ministry (empty line to finish):")
     a["url"] = pick_url()
 
     a["dates"] = pick_dates() if a["milestone"] else []
@@ -362,11 +363,7 @@ def disp(v):
 
 def show_summary(a):
     print(f"\n{'─' * 64}\n  {a['category']}/{a['file']}.yaml\n{'─' * 64}")
-    rows = [(k, a[k]) for k in
-            ("entry_type", "milestone", "featured", "parent", "company", "role",
-             "employment_type", "industry", "url", "start", "end", "dates",
-             "location", "country", "location_type", "accomplishments",
-             "skills", "logo", "images", "image_view")]
+    rows = [(k, a[k]) for k in lib.TEMPLATE_KEYS]
     for i, (k, v) in enumerate(rows, 1):
         print(f"  {i:>2}) {k:<16} {disp(v)}")
     print("  (blank end = Present; blank start = undated, sorts last)")
@@ -389,7 +386,7 @@ def edit_field(a, n):
     elif n == 7:
         a["employment_type"] = ask("employment_type (free text): ")
     elif n == 8:
-        a["industry"] = ask("industry: ")
+        a["tags"] = ask_line_list("tags — one per line (empty line to finish):")
     elif n == 9:
         a["url"] = pick_url()
     elif n == 10:

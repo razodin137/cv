@@ -5,7 +5,9 @@ parent:
 company: Kentucky Native Cafe
 role: Restaurant Staff
 employment_type: full-time
-industry:
+tags:
+ - job
+ - hospitality
 url:
 start: "2016-06"
 end: "2016-08"

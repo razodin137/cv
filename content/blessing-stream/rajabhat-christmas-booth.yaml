@@ -5,7 +5,10 @@ parent: blessing-stream
 company: Rajabhat Chiang Rai Christmas Booth
 role:
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
+url:
 start:
 end:
 dates:
@@ -17,11 +20,7 @@ country: Thailand
 location_type:
 accomplishments:
  - Annual Christmas event for Rajabhat University in Chiang Rai, Thailand. Booth setup includes games and food served to students, churches from all over Chiang Rai come to participate and set up booths.
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

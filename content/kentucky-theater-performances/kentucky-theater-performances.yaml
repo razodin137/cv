@@ -5,7 +5,8 @@ parent:
 company: Kentucky Theater Performances
 role: Performer
 employment_type:
-industry:
+tags:
+ - creative
 url:
 start: "2019-08"
 end: "2020-03"
@@ -18,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

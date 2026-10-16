@@ -5,7 +5,9 @@ parent:
 company: Centered Holistic Health
 role: Healing Center Coordinator - Front Desk
 employment_type: part-time
-industry:
+tags:
+ - job
+ - hospitality
 url:
 start: "2019-06"
 end: "2019-11"

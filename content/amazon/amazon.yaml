@@ -5,7 +5,8 @@ parent:
 company: Amazon Fulfillment Central KY
 role: Fulfillment Associate
 employment_type: full-time
-industry:
+tags:
+ - job
 url:
 start: "2013-11"
 end: "2013-12"

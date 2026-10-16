@@ -5,7 +5,9 @@ parent:
 company: Medialight
 role: Participant
 employment_type:
-industry:
+tags:
+ - education
+ - ministry
 url:
 start: "2022"
 end: "2025"
@@ -18,3 +20,4 @@ accomplishments:
 skills:
 logo: medialight-logo.png
 images:
+image_view:

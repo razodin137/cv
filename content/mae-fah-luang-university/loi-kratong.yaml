@@ -5,7 +5,10 @@ parent: mae-fah-luang-university
 company: Loi Kratong
 role: Coordination Team
 employment_type:
-industry:
+tags:
+ - events
+ - hospitality
+ - teaching
 url:
 start:
 end:

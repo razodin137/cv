@@ -5,7 +5,9 @@ parent: mae-fah-luang-university
 company: Cooking Expo
 role: Chef
 employment_type:
-industry:
+tags:
+ - events
+ - hospitality
 url:
 start:
 end:

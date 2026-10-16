@@ -5,19 +5,19 @@ parent: mae-fah-luang-university
 company: MFU Christian Club
 role:
 employment_type:
-industry: ministry
+tags:
+ - organization
+ - ministry
+url:
 start: "2023"
 end: "2026"
+dates:
 location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
  - Active participant in Christian club MFU (Mae Fah Luang University).
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

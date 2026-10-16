@@ -2,12 +2,15 @@ entry_type: volunteer
 milestone: false
 featured: false
 parent: wwoof
-company: "Megan & Ben House"
+company: Megan & Ben House
 role: Work-Trade
 employment_type: volunteer
-industry:
+tags:
+ - volunteer
+url:
 start: "2020-11"
 end: "2020-11"
+dates:
 location: Machynlleth, Wales
 country: United Kingdom
 location_type: onsite
@@ -16,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

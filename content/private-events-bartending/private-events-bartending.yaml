@@ -5,7 +5,9 @@ parent:
 company: Private Events
 role: Freelance Bartender
 employment_type: freelance
-industry:
+tags:
+ - events
+ - hospitality
 url:
 start: "2018"
 end: "2019"

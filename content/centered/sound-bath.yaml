@@ -5,7 +5,8 @@ parent: centered
 company: Sound Bath Facilitation
 role: Practitioner
 employment_type: freelance
-industry: health
+tags:
+ - job
 url:
 start: "2019-07"
 end: "2019-07"

@@ -5,7 +5,8 @@ parent:
 company: WWOOF (World Wide Organization of Organic Farms)
 role:
 employment_type: volunteer
-industry: environment
+tags:
+ - organization
 url:
 start: "2013"
 end: "2020"

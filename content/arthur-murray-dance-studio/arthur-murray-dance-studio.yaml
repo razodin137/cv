@@ -5,7 +5,8 @@ parent:
 company: Arthur Murray Dance Studio
 role:
 employment_type:
-industry:
+tags:
+ - education
 url:
 start: "2019-07"
 end: "2020-03"
@@ -18,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

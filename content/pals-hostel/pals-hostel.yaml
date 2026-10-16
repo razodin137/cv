@@ -5,7 +5,9 @@ parent:
 company: Pal's Mini Hostel Budapest
 role: Auditor
 employment_type: part-time
-industry:
+tags:
+ - job
+ - hospitality
 url:
 start: "2017-10"
 end: "2017-11"

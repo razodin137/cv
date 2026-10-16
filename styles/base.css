@@ -5,12 +5,14 @@
    * visual personality; block files in styles/blocks/ define entry blocks. */
 
   :root {
-    /* entry-type marker inks — desaturated print colors, dots only, never fills */
+    /* entry-type & tag marker inks — desaturated print colors, dots only, never fills */
     --type-job:             oklch(45% 0.07 250);
     --type-volunteer:       oklch(45% 0.07 150);
     --type-education:       oklch(45% 0.07 300);
     --type-events:          oklch(52% 0.08 60);
     --type-ministry:        oklch(45% 0.06 190);
+    --type-hospitality:     oklch(48% 0.09 35);
+    --type-teaching:        oklch(46% 0.08 210);
     --type-creative:        oklch(48% 0.08 350);
     --type-career_break:    oklch(50% 0.012 75);
     --type-organization:    oklch(45% 0.07 275);
@@ -90,12 +92,14 @@
   .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   .chip .n { opacity: .55; margin-left: .35rem; font-variant-numeric: tabular-nums; }
   .tdot { display: inline-block; width: 7px; height: 7px; border-radius: var(--radius-mark);
-    margin-right: .4rem; }
+    margin-right: .4rem; background: var(--muted); }
   .type-job .tdot { background: var(--type-job); }
   .type-volunteer .tdot { background: var(--type-volunteer); }
   .type-education .tdot { background: var(--type-education); }
   .type-events .tdot { background: var(--type-events); }
   .type-ministry .tdot { background: var(--type-ministry); }
+  .type-hospitality .tdot { background: var(--type-hospitality); }
+  .type-teaching .tdot { background: var(--type-teaching); }
   .type-creative .tdot { background: var(--type-creative); }
   .type-career_break .tdot { background: var(--type-career_break); }
   .type-organization .tdot { background: var(--type-organization); }

@@ -5,9 +5,14 @@ parent: xenos
 company: The Buffalo Christian Center
 role: Volunteer Children's Guide
 employment_type: volunteer
-industry: ministry
+tags:
+ - volunteer
+ - ministry
+ - teaching
+url:
 start: "2010-06"
 end: "2010-07"
+dates:
 location: Buffalo, NY
 country: United States of America
 location_type: onsite
@@ -16,3 +21,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

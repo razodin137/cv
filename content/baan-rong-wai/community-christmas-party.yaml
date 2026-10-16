@@ -5,7 +5,9 @@ parent: baan-rong-wai
 company: Community Christmas Party
 role:
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
 url:
 start:
 end:

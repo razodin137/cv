@@ -5,7 +5,9 @@ parent:
 company: Hostelling International USA (HI USA)
 role: Front Desk - Fisherman's Wharf
 employment_type: full-time
-industry:
+tags:
+ - job
+ - hospitality
 url:
 start: "2016-08"
 end: "2017-02"

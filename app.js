@@ -10,9 +10,27 @@ const ICONS = {
 };
 const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-const byId = {};
-DATA.entries.forEach(e => byId[e.entryType] = (byId[e.entryType] || 0) + 1);
-let activeType = ''; // '' = show all entry types (chips are single-select)
+const byTag = {};
+DATA.entries.forEach(e => (e.tags || []).forEach(t => byTag[t] = (byTag[t] || 0) + 1));
+let activeTag = ''; // '' = show all entries (chips are single-select; synced with URL #tag)
+function tagFromHash() {
+  const h = decodeURIComponent(location.hash.replace(/^#/, '')).trim();
+  return (h && byTag[h]) ? h : '';
+}
+function setTag(t, updateHash = true) {
+  activeTag = (t && byTag[t]) ? t : '';
+  if (updateHash) {
+    const url = activeTag ? '#' + encodeURIComponent(activeTag) : location.pathname + location.search;
+    history.replaceState(null, '', url);
+  }
+  renderChips();
+  render();
+}
+activeTag = tagFromHash();
+window.addEventListener('hashchange', () => {
+  const t = tagFromHash();
+  if (t !== activeTag) setTag(t, false);
+});
 
 function fmtRange(e) {
   const s = e.start ? monthName(e.start) : '';
@@ -47,7 +65,7 @@ function milestone(e) {
   const uid = 'msd-' + e.id.replace(/^ent-/, '');
   const [title, sub] = msTitle(e);
   const d = msDate(e);
-  const auto = !!activeType; // a type filter is on: milestones start expanded
+  const auto = !!activeTag; // a tag filter is on: milestones start expanded
   let rowSub = '';
   const under = e.parentIds.length ? 'under ' +
     e.parentIds.map((id, i) => '<span class="plink" onclick="event.stopPropagation();jumpTo(\'' + id + '\')">' +
@@ -82,7 +100,6 @@ function milestone(e) {
   const pl = placeStr(e);
   if (pl) meta.push('<span>' + ICONS.place + esc(pl) + '</span>');
   if (e.employmentType) meta.push('<span>' + esc(e.employmentType) + '</span>');
-  if (e.industry) meta.push('<span>' + esc(e.industry) + '</span>');
   if (e.url) meta.push('<span><a class="elink" href="' + esc(e.url) + '" target="_blank" rel="noopener">' +
     esc(hostLabel(e.url)) + ' ↗</a></span>');
   if (meta.length) c += '<div class="cmeta">' + meta.join('') + '</div>';
@@ -104,20 +121,19 @@ function entryHtml(e) { return e.milestone ? milestone(e) : card(e); }
 function renderChips() {
   const box = document.getElementById('chips');
   box.innerHTML = '';
-  const mk = (label, typeKey, on, count, onclick) => {
+  const mk = (label, tagKey, on, count, onclick) => {
     const c = document.createElement('button');
     c.type = 'button';
-    c.className = 'chip' + (typeKey ? ' type-' + typeKey : '') + (on ? ' on' : '');
-    c.innerHTML = (typeKey ? '<span class="tdot"></span>' : '') + esc(label) +
+    c.className = 'chip' + (tagKey ? ' type-' + tagKey : '') + (on ? ' on' : '');
+    c.innerHTML = (tagKey ? '<span class="tdot"></span>' : '') + esc(label) +
       ' <span class="n">' + count + '</span>';
     c.onclick = onclick;
     box.appendChild(c);
   };
-  mk('All', '', !activeType, DATA.entries.length,
-    () => { activeType = ''; renderChips(); render(); });
-  Object.keys(byId).sort().forEach(k => {
-    mk(k.replace(/_/g, ' '), k, activeType === k, byId[k],
-      () => { activeType = (activeType === k) ? '' : k; renderChips(); render(); });
+  mk('All', '', !activeTag, DATA.entries.length, () => setTag(''));
+  Object.keys(byTag).sort().forEach(k => {
+    mk(k.replace(/_/g, ' '), k, activeTag === k, byTag[k],
+      () => setTag(activeTag === k ? '' : k));
   });
 }
 
@@ -161,7 +177,6 @@ function cbFrame(e) {
   const pl = placeStr(e);
   if (pl) meta.push('<span>' + ICONS.place + esc(pl) + '</span>');
   if (e.employmentType) meta.push('<span>' + esc(e.employmentType) + '</span>');
-  if (e.industry) meta.push('<span>' + esc(e.industry) + '</span>');
   if (e.url) meta.push('<span><a class="elink" href="' + esc(e.url) + '" target="_blank" rel="noopener">' +
     esc(hostLabel(e.url)) + ' ↗</a></span>');
   if (meta.length) head += '<div class="meta">' + meta.join('') + '</div>';
@@ -202,7 +217,6 @@ function card(e) {
   const pl = placeStr(e);
   if (pl) meta.push('<span>' + ICONS.place + esc(pl) + '</span>');
   if (e.employmentType) meta.push('<span>' + esc(e.employmentType) + '</span>');
-  if (e.industry) meta.push('<span>' + esc(e.industry) + '</span>');
   if (e.url) meta.push('<span><a class="elink" href="' + esc(e.url) + '" target="_blank" rel="noopener">' +
     esc(hostLabel(e.url)) + ' ↗</a></span>');
   if (meta.length) parts.push('<div class="meta">' + meta.join('') + '</div>');
@@ -235,9 +249,9 @@ function card(e) {
 function render() {
   const q = document.getElementById('q').value.trim().toLowerCase();
   const shown = DATA.entries.filter(e => {
-    if (activeType && e.entryType !== activeType) return false;
+    if (activeTag && !e.tags.includes(activeTag)) return false;
     if (!q) return true;
-    return [e.company, e.role, e.country, e.location, e.industry, e.employmentType,
+    return [e.company, e.role, e.country, e.location, e.tags.join(' '), e.employmentType,
             e.categoryDisplay, e.entryType, e.url,
             e.accomplishments.join(' '), e.skills.join(' ')].join(' ').toLowerCase().includes(q);
   });
@@ -311,11 +325,9 @@ function toggleStrip(btn) {
 }
 function jumpTo(id, expand) {
   const q = document.getElementById('q');
-  if (activeType || q.value.trim()) { // unfilter so the jump target is rendered
-    activeType = '';
+  if (activeTag || q.value.trim()) { // unfilter so the jump target is rendered
     q.value = '';
-    renderChips();
-    render();
+    setTag('');
   }
   const el = document.getElementById(id);
   if (!el) return;

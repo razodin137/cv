@@ -3,11 +3,17 @@ milestone: true
 featured: false
 parent:
 company: Ruen Jam Temporary Rehabilitation Prison Doi Hang
-role: "Interpreter and Translator"
+role: Interpreter and Translator
 employment_type:
-industry: ministry
+tags:
+ - volunteer
+ - ministry
+ - hospitality
+ - teaching
+url:
 start: "2025"
 end: "2025"
+dates:
 location:
 country: Thailand
 location_type:
@@ -16,8 +22,6 @@ accomplishments:
  - At Ruen Jam, non-violent, well-behaved offenders are given the chance to earn work experience, and learn valuable skills. They work while they are finishing their sentencing, usually during the last several months to a year of their incarceration.
  - There, the incarcerated participate in gardening, Thai handicrafts, and even operation of a small cafe and bistro. They return to their dormitory at the end of the work day and continue their prison sentence.
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

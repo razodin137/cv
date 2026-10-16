@@ -7,10 +7,12 @@ parent:
 company: Lauren Faye Love
 role: Website Design & Development
 employment_type: contract
-industry: wellness
+tags:
+ - online_presence
 url: https://laurenfaye.love
 start: "2023-07"
 end: "2024-03"
+dates:
 location: Lexington, KY
 country: United States of America
 location_type: remote
@@ -23,6 +25,4 @@ skills:
 logo: favicon.jpg
 images:
  - homepage-2026-10-02.jpg
- -
- -
- -
+image_view:

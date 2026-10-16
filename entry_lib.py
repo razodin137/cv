@@ -32,7 +32,6 @@ ENTRY_TYPES = [
     ("volunteer", "unpaid work"),
     ("education", "schools, degrees, certifications"),
     ("events", "gigs, one-offs, recurring events"),
-    ("ministry", "church / missions / ministry work"),
     ("creative", "awards, art, performances"),
     ("career_break", "travel or a break between roles"),
     ("online_presence", "websites & digital presence work, e.g. client sites"),
@@ -50,7 +49,7 @@ DATE_RE = re.compile(r"^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$")
 
 # The 20 template.yaml keys, in template order.
 TEMPLATE_KEYS = ("entry_type", "milestone", "featured", "parent", "company",
-                 "role", "employment_type", "industry", "url", "start", "end",
+                 "role", "employment_type", "tags", "url", "start", "end",
                  "dates", "location", "country", "location_type",
                  "accomplishments", "skills", "logo", "images", "image_view")
 
@@ -61,10 +60,10 @@ EMPLOYMENT_TYPES = ("full-time", "part-time", "contract", "seasonal",
 LOCATION_TYPES = ("onsite", "remote", "hybrid")
 
 # Plain string fields vs string-list fields within TEMPLATE_KEYS.
-SCALAR_KEYS = ("entry_type", "company", "role", "employment_type", "industry",
+SCALAR_KEYS = ("entry_type", "company", "role", "employment_type",
                "url", "start", "end", "location", "country", "location_type",
                "logo", "image_view")
-LIST_KEYS = ("accomplishments", "skills", "images")
+LIST_KEYS = ("tags", "accomplishments", "skills", "images")
 
 
 # ------------------------------------------------------------ basic checks
@@ -299,8 +298,11 @@ def serialize(c):
     else:
         L.append("parent:")
         L.extend(f" - {s}" for s in c["parent"])
-    for k in ("company", "role", "employment_type", "industry", "url"):
+    for k in ("company", "role", "employment_type"):
         L.append(key_line(k, c[k]))
+    L.append("tags:")
+    L.extend(f" - {scalar(x)}" for x in c["tags"])
+    L.append(key_line("url", c["url"]))
     L.append(key_line("start", c["start"], True))
     L.append(key_line("end", c["end"], True))
     L.append("dates:")

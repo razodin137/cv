@@ -5,7 +5,10 @@ parent:
 company: Mae Fah Luang University
 role: B.A., Thai Language & Culture
 employment_type: full-time
-industry:
+tags:
+ - education
+ - hospitality
+ - teaching
 url:
 start: "2021-08"
 end: "2026-07"

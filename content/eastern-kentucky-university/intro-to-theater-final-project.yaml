@@ -2,22 +2,21 @@ entry_type: creative
 milestone: true
 featured: false
 parent: eastern-kentucky-university
-company: "Stage Performance - Final Project for Intro To Theater"
+company: Stage Performance - Final Project for Intro To Theater
 role: Performer
 employment_type:
-industry:
+tags:
+ - creative
+url:
 start: "2019-12"
 end:
+dates:
 location: Richmond, KY
 country: United States of America
 location_type:
 accomplishments:
  - Performed on stage at the end of the semester as part of a student-led, student-written play.
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

@@ -2,12 +2,17 @@ entry_type: creative
 milestone: true
 featured: true
 parent: debate-team
-company: "Grand Champion Team - University-wide Debate Tournament"
-role: "Team tournament first place"
+company: Grand Champion Team - University-wide Debate Tournament
+role: Team tournament first place
 employment_type:
-industry:
+tags:
+ - creative
+ - hospitality
+ - teaching
+url:
 start: "2023-02"
 end:
+dates:
 location: Chiang Rai
 country: Thailand
 location_type:
@@ -15,11 +20,8 @@ accomplishments:
  - My team took first place at Mae Fah Luang University's annual debate tournament, winning the grand championship and a generous cash prize.
  - The competition ran as a tournament lasting several months and concluded with a substantial final event.
  - Also named Best Speaker of the tournament, awarded its own featured milestone and cash prize.
- -
 skills:
- -
- -
- -
 logo: mae-fah-luang.svg
 images:
  - mfu-debate.jpeg
+image_view:

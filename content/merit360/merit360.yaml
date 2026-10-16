@@ -5,7 +5,10 @@ parent:
 company: World Merit
 role: Action Plan Executor (APE)
 employment_type: full-time
-industry:
+tags:
+ - job
+ - hospitality
+ - teaching
 url:
 start: "2017-01"
 end: "2017-09"

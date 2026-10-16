@@ -5,7 +5,9 @@ parent: nexus
 company: Nexus Nang Lae Campus Ministry
 role:
 employment_type:
-industry: ministry
+tags:
+ - organization
+ - ministry
 url:
 start: "2025-08"
 end: "2026"
@@ -18,3 +20,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

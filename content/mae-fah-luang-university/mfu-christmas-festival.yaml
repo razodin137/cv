@@ -3,21 +3,21 @@ milestone: true
 featured: false
 parent: mfu-christian-club
 company: MFU Christian Club Christmas Festival
-role: "Volunteer Staff"
+role: Volunteer Staff
 employment_type:
-industry: ministry
+tags:
+ - volunteer
+ - ministry
+url:
 start: "2024-12"
 end:
+dates:
 location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
  - Volunteer staff at one of the University's largest winter events, welcoming guests for the Christmas festival.
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

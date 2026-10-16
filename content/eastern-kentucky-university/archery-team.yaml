@@ -5,19 +5,17 @@ parent: eastern-kentucky-university
 company: EKU Archery Team
 role: Archer
 employment_type:
-industry:
+tags:
+ - organization
+url:
 start: "2019-09-12"
 end: "2020-02"
+dates:
 location: Richmond, KY
 country: United States of America
 location_type:
 accomplishments:
- -
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

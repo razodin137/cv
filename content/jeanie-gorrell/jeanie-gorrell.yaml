@@ -5,7 +5,9 @@ parent:
 company: Jeanie Gorrell Floral Design
 role: Floral Assistant and Contractor for Events
 employment_type: contract
-industry:
+tags:
+ - events
+ - hospitality
 url:
 start: "2015-06"
 end: "2017-08"

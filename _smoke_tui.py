@@ -24,7 +24,8 @@ parent:
 company: Smoke A
 role: Test Entry
 employment_type:
-industry: testing
+tags:
+ - testing
 url:
 start: "2024-01"
 end: "2024-06"
@@ -46,7 +47,7 @@ parent:
 company: Smoke B
 role: Old Style
 employment_type:
-industry:
+tags:
 start: "2020"
 end:
 location:
@@ -200,12 +201,20 @@ async def main():
         assert " - one\n - two\n - three" in open(A).read(), open(A).read()
 
         # ---- scalar cell: ctrl+s saves too, and never types a literal 's'
-        goto(app, A, COL["industry"])
+        goto(app, A, COL["location"])
         await pilot.press("space"); await pilot.pause()
-        m.query_one("#cell-input", Input).value = "ctrl-s industry"
+        m.query_one("#cell-input", Input).value = "ctrl-s location"
         await pilot.press("ctrl+s"); await pilot.pause()
         assert not bar_visible(app)
-        assert "industry: ctrl-s industry" in open(A).read(), open(A).read()
+        assert "location: ctrl-s location" in open(A).read(), open(A).read()
+
+        # ---- tags list cell: ctrl+s saves multiple relevance tags
+        goto(app, A, COL["tags"])
+        await pilot.press("enter"); await pilot.pause()
+        m.query_one("#cell-area", TextArea).load_text("hospitality\neducation")
+        await pilot.press("ctrl+s"); await pilot.pause()
+        assert not bar_visible(app)
+        assert "tags:\n - hospitality\n - education" in open(A).read(), open(A).read()
 
         # ---- bool cells: space toggles; ★ column is featured, ms is milestone
         goto(app, A, COL["★"])

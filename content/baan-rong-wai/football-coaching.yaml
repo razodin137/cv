@@ -5,7 +5,10 @@ parent: baan-rong-wai
 company: Soccer (Football) Coaching
 role:
 employment_type:
-industry: ministry
+tags:
+ - volunteer
+ - ministry
+ - teaching
 url:
 start: "2025"
 end: "2025"
@@ -18,3 +21,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

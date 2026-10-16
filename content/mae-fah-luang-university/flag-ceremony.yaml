@@ -5,7 +5,10 @@ parent: mae-fah-luang-university
 company: International Flag Parade
 role: Representative
 employment_type:
-industry:
+tags:
+ - events
+ - teaching
+url:
 start:
 end:
 dates:
@@ -14,13 +17,9 @@ location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
- - "Represented the United Kingdom in the International Flag Parade, part of the Mae Fah Luang University Celebration"
- -
- -
+ - Represented the United Kingdom in the International Flag Parade, part of the Mae Fah Luang University Celebration
 skills:
- -
- -
- -
 logo:
-images: 
-- flag-ceremony.jpeg
+images:
+ - flag-ceremony.jpeg
+image_view:

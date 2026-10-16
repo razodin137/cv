@@ -5,7 +5,9 @@ parent: wwoof
 company: Hostelling International
 role: Hostel Staff
 employment_type: part-time
-industry:
+tags:
+ - job
+ - hospitality
 url:
 start: "2014-03"
 end: "2015-03"

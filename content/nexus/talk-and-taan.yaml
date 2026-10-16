@@ -3,21 +3,23 @@ milestone: true
 featured: false
 parent: nexus
 company: Talk and Taan
-role: "MC, Event Host"
+role: MC, Event Host
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
+ - hospitality
+ - teaching
+url:
 start: "2026-08"
 end: "2026-08"
+dates:
 location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
  - MC and event host for a ministry event in Chiang Rai, Thailand.
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

@@ -5,7 +5,10 @@ parent:
 company: Play Ashram
 role: Participant
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
+url:
 start:
 end:
 dates:
@@ -16,12 +19,8 @@ location: Kentucky
 country: United States of America
 location_type: onsite
 accomplishments:
- - "Attended Play Ashram, a recurring ministry event in Kentucky, United States of America, in 2019, 2021, and 2023."
- -
- -
+ - Attended Play Ashram, a recurring ministry event in Kentucky, United States of America, in 2019, 2021, and 2023.
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

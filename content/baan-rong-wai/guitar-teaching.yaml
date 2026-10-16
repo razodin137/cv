@@ -5,7 +5,10 @@ parent: baan-rong-wai
 company: Guitar Teaching
 role:
 employment_type:
-industry: ministry
+tags:
+ - volunteer
+ - ministry
+ - teaching
 url:
 start: "2025"
 end: "2026"

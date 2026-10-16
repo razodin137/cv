@@ -5,7 +5,9 @@ parent:
 company: Mellow Mushroom Pizza
 role: Server
 employment_type: part-time
-industry:
+tags:
+ - job
+ - hospitality
 url:
 start: "2019-07"
 end: "2019-10"

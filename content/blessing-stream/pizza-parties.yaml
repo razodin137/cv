@@ -5,7 +5,9 @@ parent: blessing-stream
 company: Pizza Parties
 role:
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
 url:
 start: "2023"
 end: "2024"
@@ -18,3 +20,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

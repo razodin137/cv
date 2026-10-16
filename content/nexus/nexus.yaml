@@ -1,11 +1,13 @@
-entry_type: ministry
+entry_type: volunteer
 milestone: false
 featured: false
 parent:
 company: Nexus Chiang Rai
 role: Ministry & Event Host
 employment_type:
-industry:
+tags:
+ - volunteer
+ - ministry
 url:
 start: "2025-08"
 end:

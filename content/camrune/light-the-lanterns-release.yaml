@@ -5,7 +5,8 @@ parent: camrune
 company: Light the Lanterns
 role: Album release
 employment_type:
-industry:
+tags:
+ - creative
 url:
 start: "2020"
 end:

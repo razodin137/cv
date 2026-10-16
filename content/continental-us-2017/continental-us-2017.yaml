@@ -5,7 +5,8 @@ parent:
 company: Continental United States
 role: Travel
 employment_type:
-industry:
+tags:
+ - career_break
 url:
 start: "2017-05"
 end: "2017-09"

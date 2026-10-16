@@ -7,7 +7,8 @@ parent:
 company: SonLight Foundation
 role: Website Design & Development
 employment_type: contract
-industry: nonprofit
+tags:
+ - online_presence
 url: https://sonlightfoundation.moww.space
 start: "2025-08"
 end: "2025-08"

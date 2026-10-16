@@ -5,22 +5,22 @@ parent: wwoof
 company: Clos Saron
 role: Vineyard Hand
 employment_type: volunteer
-industry: environment
+tags:
+ - volunteer
+ - hospitality
+url:
 start: "2014-02"
 end: "2014-03"
+dates:
 location: Oregon House, CA
 country: United States of America
 location_type: onsite
 accomplishments:
  - WWOOF work trade farm volunteer.
  - Trimmed vines, petted some sheep, fed chickens and geese. Cooked some incredible meals and drank top-quality wine.
- -
- -
 skills:
- -
- -
- -
 logo: clos-saron.svg
 images:
  - images (1).jpeg
  - images.jpeg
+image_view:

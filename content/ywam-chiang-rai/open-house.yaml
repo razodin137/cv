@@ -1,11 +1,13 @@
-entry_type: ministry
+entry_type: events
 milestone: true
 featured: false
 parent:
 company: YWAM Chiang Rai Open House
 role:
 employment_type: volunteer
-industry: ministry
+tags:
+ - events
+ - ministry
 url:
 start: "2023"
 end: "2024"

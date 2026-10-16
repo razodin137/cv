@@ -5,7 +5,8 @@ parent:
 company: Lafayette High School Choir
 role:
 employment_type:
-industry:
+tags:
+ - creative
 url:
 start: "2012"
 end: "2013"
@@ -18,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

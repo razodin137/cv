@@ -5,9 +5,13 @@ parent: xenos
 company: Oyate Oglala Sioux Reservation
 role: Construction Volunteer
 employment_type: volunteer
-industry:
+tags:
+ - volunteer
+ - ministry
+url:
 start: "2012-07"
 end: "2012-07"
+dates:
 location: Pine Ridge, SD
 country: United States of America
 location_type: onsite
@@ -16,3 +20,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

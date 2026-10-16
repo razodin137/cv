@@ -2,22 +2,22 @@ entry_type: events
 milestone: true
 featured: false
 parent: blessing-stream
-company: "Pupichit (Conquerer) Camp"
+company: Pupichit (Conquerer) Camp
 role: Participant
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
+url:
 start: "2023-11"
 end: "2023-11"
+dates:
 location: Pattaya
 country: Thailand
 location_type:
 accomplishments:
  - Deep Bible study retreat in Pattaya, Thailand.
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

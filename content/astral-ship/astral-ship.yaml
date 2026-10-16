@@ -5,7 +5,8 @@ parent: wwoof
 company: Astral Ship
 role: Pirate Crew
 employment_type: volunteer
-industry:
+tags:
+ - volunteer
 url:
 start: "2020-10"
 end: "2020-11"

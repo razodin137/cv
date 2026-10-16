@@ -1,11 +1,13 @@
-entry_type: ministry
+entry_type: volunteer
 milestone: false
 featured: false
 parent:
 company: Blessing Stream Church
 role: Volunteer & Ministry Team
 employment_type: volunteer
-industry:
+tags:
+ - volunteer
+ - ministry
 url:
 start: "2022-08"
 end: "2025-08"

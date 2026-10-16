@@ -1,11 +1,13 @@
-entry_type: ministry
+entry_type: events
 milestone: true
 featured: false
 parent: nexus
 company: Build Up
 role:
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
 url:
 start: "2025-08"
 end: "2026-07"
@@ -18,3 +20,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

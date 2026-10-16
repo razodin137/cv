@@ -152,7 +152,10 @@ def load_entries():
                 "company": (raw.get("company") or "").strip(),
                 "role": (raw.get("role") or "").strip(),
                 "employmentType": (raw.get("employment_type") or "").strip(),
-                "industry": (raw.get("industry") or "").strip(),
+                "tags": [str(t).strip() for t in (
+                    raw.get("tags") if isinstance(raw.get("tags"), list)
+                    else ([raw.get("tags")] if raw.get("tags") else [])
+                ) if t and str(t).strip()],
                 "url": (raw.get("url") or "").strip(),
                 "start": start,
                 "end": end,

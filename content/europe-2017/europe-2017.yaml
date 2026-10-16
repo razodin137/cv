@@ -5,7 +5,8 @@ parent:
 company: Europe
 role: Voluntary Work & Travel
 employment_type:
-industry:
+tags:
+ - career_break
 url:
 start: "2017-09"
 end: "2017-11"

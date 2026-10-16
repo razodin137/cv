@@ -5,7 +5,8 @@ parent:
 company: Camrune
 role:
 employment_type:
-industry: music
+tags:
+ - organization
 url:
 start: "2018"
 end: "2020"
@@ -14,13 +15,7 @@ location:
 country:
 location_type:
 accomplishments:
- -
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
 image_view:

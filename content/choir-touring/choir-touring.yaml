@@ -5,7 +5,8 @@ parent:
 company: Choir Touring
 role:
 employment_type:
-industry:
+tags:
+ - creative
 url:
 start: "2005"
 end: "2005"
@@ -17,3 +18,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

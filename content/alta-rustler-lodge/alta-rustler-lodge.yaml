@@ -5,7 +5,9 @@ parent:
 company: Alta's Rustler Lodge
 role: Rustler Staff
 employment_type: seasonal
-industry:
+tags:
+ - job
+ - hospitality
 url:
 start: "2018-12"
 end: "2019-02"

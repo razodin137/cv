@@ -5,7 +5,9 @@ parent: blessing-stream
 company: Naan Province Outreach Retreat
 role: Participant
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
 url:
 start: "2023-05"
 end: "2023-05"
@@ -19,3 +21,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

@@ -5,7 +5,9 @@ parent:
 company: kaojaicam
 role: Website Design, Events and Community
 employment_type: contract
-industry:
+tags:
+ - job
+ - hospitality
 url:
 start: "2021-10"
 end:

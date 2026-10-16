@@ -5,7 +5,8 @@ parent:
 company: Busking
 role:
 employment_type:
-industry:
+tags:
+ - creative
 url:
 start: "2017-06"
 end: "2017-06"
@@ -18,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

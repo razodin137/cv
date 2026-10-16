@@ -5,7 +5,8 @@ parent:
 company: Muay Thai Training
 role:
 employment_type:
-industry:
+tags:
+ - education
 url:
 start: "2023-07"
 end: "2024-02"
@@ -18,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

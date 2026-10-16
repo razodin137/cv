@@ -10,7 +10,7 @@
 # Keep all 20 keys — blank fields are fine (blank list items are dropped).
 # This file lives at the root, so the build ignores it; only */*.yaml entries load.
 
-entry_type: job            # job | volunteer | education | events | ministry | creative | career_break
+entry_type: job            # job | volunteer | education | events | creative | career_break
                            # | online_presence (websites & digital presence work, e.g. client sites)
                            # | organization (an umbrella entry, e.g. a club, that sub-events parent to)
 milestone: false           # true = one-off point event: renders as a single timeline line
@@ -27,7 +27,9 @@ parent:                      # Slug of a parent entity: its directory (e.g. mae-
 company:                  # Organization name; for a milestone, the event title that headlines the line
 role:                     # Job title / role / activity
 employment_type:           # full-time | part-time | contract | seasonal | intern (free text)
-industry:                  # e.g. hospitality, ministry, food service, education
+tags:                      # Relevance tags for menu bar & #tag URL filtering (delete unused lines)
+ - hospitality
+ - education
 url:                        # The entry's external link (e.g. a client's website) — renders as a
                              # link on cards and milestone circles; print spells out the full URL
 start: "YYYY-MM"           # e.g. "2024-05" — always quote it; full "YYYY-MM-DD" dates work too

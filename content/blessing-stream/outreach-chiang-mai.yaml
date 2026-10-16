@@ -5,7 +5,9 @@ parent: blessing-stream
 company: Outreach at Blessing Stream Church Chiang Mai
 role:
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
 url:
 start: "2023-01"
 end: "2023-01"
@@ -18,3 +20,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

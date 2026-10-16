@@ -5,7 +5,9 @@ parent:
 company: Breaking Bread Bakery
 role: Dishwasher
 employment_type: full-time
-industry:
+tags:
+ - job
+ - hospitality
 url:
 start: "2014-10"
 end: "2015-05"

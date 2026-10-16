@@ -5,7 +5,8 @@ parent:
 company: Open Mic Performances
 role:
 employment_type:
-industry:
+tags:
+ - creative
 url:
 start: "2016-01"
 end: "2017-09"
@@ -18,3 +19,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

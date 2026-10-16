@@ -5,7 +5,9 @@ parent: blessing-stream
 company: Taway Duay Kwaam Dtem Jai Camp
 role:
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
 url:
 start: "2022-11-11"
 end: "2022-11-12"
@@ -18,3 +20,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

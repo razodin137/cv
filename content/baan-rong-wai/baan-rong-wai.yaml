@@ -5,7 +5,9 @@ parent:
 company: Baan Rong Wai
 role:
 employment_type:
-industry: ministry
+tags:
+ - organization
+ - ministry
 url:
 start: "2025-08"
 end: "2026-02"
@@ -18,3 +20,4 @@ accomplishments:
 skills:
 logo:
 images:
+image_view:

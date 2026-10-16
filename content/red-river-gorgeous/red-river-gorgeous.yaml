@@ -3,20 +3,21 @@ milestone: false
 featured: false
 parent:
 company: Red River Gorgeous
-role: "Cabin Maintenance & Operations"
+role: Cabin Maintenance & Operations
 employment_type: volunteer
-industry: environment
+tags:
+ - volunteer
+ - hospitality
+url:
 start: "2009-06-01"
 end: "2009-07-28"
+dates:
 location: Stanton, KY
 country: United States of America
 location_type: onsite
 accomplishments:
  - Operational support and cabin life maintenance in the Red River Gorge area of Kentucky.
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

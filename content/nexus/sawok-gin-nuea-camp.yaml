@@ -5,7 +5,9 @@ parent: nexus
 company: Sawok Gin Nuea Camp (สวกกินเนื้อ)
 role:
 employment_type:
-industry: ministry
+tags:
+ - events
+ - ministry
 url:
 start:
 end:

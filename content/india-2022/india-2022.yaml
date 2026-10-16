@@ -5,7 +5,8 @@ parent:
 company: India
 role: Travel
 employment_type:
-industry:
+tags:
+ - career_break
 url:
 start: "2022-02"
 end: "2022-03"

@@ -5,19 +5,20 @@ parent: mae-fah-luang-university
 company: MFU Debate Team
 role: Debater
 employment_type:
-industry:
+tags:
+ - organization
+ - hospitality
+ - teaching
+url:
 start: "2023"
 end: "2024"
+dates:
 location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
  - Active member of the MFU Debate Team across both tournament years. University-wide champions in 2023 with a Best Speaker award; returned to the grand finale in 2024 as finalists.
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:
