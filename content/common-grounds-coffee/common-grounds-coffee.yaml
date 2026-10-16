@@ -6,22 +6,23 @@ company: Common Grounds Coffee
 role: Barista and Chef
 employment_type: full-time
 industry:
+url:
 start: "2015-09"
 end: "2016-01"
+dates:
 location: Lexington, KY
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Dual barista and kitchen role preparing espresso drinks, café meals, and daily prep at a busy Lexington coffeehouse.
 skills:
- -
- -
- -
+ - Espresso & Barista Service
+ - Café Kitchen Prep
+ - Customer Service
 logo: common-grounds.svg
 images:
  - images (1).jpeg
  - imagsdgsdes.jpeg
  - common-grounds_august-2014_3.jpg
  - images.jpeg
+image_view:

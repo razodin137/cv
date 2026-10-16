@@ -1,23 +1,20 @@
 entry_type: career_break
-milestone: true
+milestone: false
 featured: false
 parent:
-company:
-role: Voluntary work
+company: England & Wales
+role: Voluntary Work & Travel
 employment_type:
 industry:
+url:
 start: "2020-07"
 end: "2020-11"
+dates:
 location: England and Wales
 country: United Kingdom
 location_type:
 accomplishments:
- -
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

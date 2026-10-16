@@ -3,23 +3,27 @@ milestone: false
 featured: true
 parent:
 company: Mae Fah Luang University
-role: Student
+role: B.A., Thai Language & Culture
 employment_type: full-time
 industry:
+url:
 start: "2021-08"
 end: "2026-07"
+dates:
 location: Chiang Rai
 country: Thailand
 location_type: onsite
 accomplishments:
+ - Completed degree coursework in Thai Language & Culture, culminating in a senior thesis and media project on Choui Fong Tea Plantation.
+ - Grand Champion & Best Speaker at the 2023 University-wide Debate Tournament and Grand Finalist in 2024; active in cultural ceremonies and campus clubs.
  - ก็ผ่านอะไรมาเยอะเหมือนกัน
- -
- -
 skills:
- -
- -
- -
+ - Thai Language & Culture
+ - Bilingual Communication (EN/TH)
+ - Public Speaking & Debate
+ - Translation & Interpretation
 logo: mae-fah-luang.svg
 images:
  - images (1).jpeg
  - images.jpeg
+image_view:

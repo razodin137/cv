@@ -6,21 +6,22 @@ company: Hostelling International USA (HI USA)
 role: Front Office - Marin Headlands
 employment_type: full-time
 industry:
+url:
 start: "2017-02"
 end: "2017-05"
+dates:
 location: Marin County, CA
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Front-office operations, reservations, and guest relations at the Marin Headlands hostel property in the Golden Gate National Recreation Area.
 skills:
- -
- -
- -
+ - Front Office Operations
+ - Reservations
+ - Guest Services
 logo: hostelling-international-logo.svg
 images:
  - unnamed.webp
  - unnamed (1).webp
  - unnamed (2).webp
+image_view:

@@ -1,24 +1,25 @@
 entry_type: job
 milestone: false
-featured: false
+featured: true
 parent:
 company: 21c Museum Hotels
-role: Bartender
+role: Bartender, Lockbox
 employment_type: full-time
 industry:
+url:
 start: "2018-01"
 end: "2018-04"
+dates:
 location: Lexington, KY
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Full-time cocktail, wine, and beverage service for hotel guests and fine-dining patrons at Lockbox inside Lexington's luxury boutique art-museum hotel.
 skills:
- -
- -
- -
+ - Craft Bartending
+ - Wine & Beverage Service
+ - Boutique Hotel Hospitality
+ - Fine Dining
 logo: 21c.svg
 images:
  - restaurant-view.jpg
@@ -26,3 +27,4 @@ images:
  - images (3).jpeg
  - images (1).jpeg
  - images.jpeg
+image_view:

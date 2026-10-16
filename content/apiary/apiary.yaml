@@ -3,18 +3,22 @@ milestone: false
 featured: false
 parent:
 company: The Apiary
-role:
+role: Event & Catering Staff
 employment_type:
 industry:
 url:
 start: "2017"
-end:
+end: "2017"
 dates:
-location:
-country:
+location: Lexington, KY
+country: United States of America
 location_type: onsite
 accomplishments:
+ - Fine-dining catering and event service for luxury weddings and private receptions at one of Lexington's premier historic event venues.
 skills:
+ - Event Service
+ - Fine-Dining Catering
+ - Hospitality
 logo: apiary.png
 images:
  - steviecameron-wedding-0325_51_1050363-172359309876876.webp
@@ -22,3 +26,4 @@ images:
  - Lexington-Golf-Course.jpg
  - IMG_20190608_162834.jpg
  - images.jpeg
+image_view:

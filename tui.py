@@ -60,6 +60,7 @@ closes the editor. Turning a dated entry's milestone dot off asks first
 import asyncio
 import sys
 
+import entry_lib as lib
 import yaml
 from rich.text import Text
 
@@ -74,8 +75,6 @@ try:
                                  Label, ListItem, ListView, Select, TextArea)
 except ImportError:
     sys.exit("tui.py needs Textual — install it with: pip install textual")
-
-import entry_lib as lib
 
 DOT_TRUE, DOT_FALSE, STAR = "●", "○", "★"
 

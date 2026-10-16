@@ -6,6 +6,7 @@ company: Loi Kratong
 role: Coordination Team
 employment_type:
 industry:
+url:
 start:
 end:
 dates:
@@ -18,12 +19,10 @@ location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
- - "Part of the coordination team for MFU's Loi Kratong (วันลอยกระทอง) festival of lights."
- -
- -
+ - Part of the coordination team for MFU's Loi Kratong (วันลอยกระทอง) festival of lights.
 skills:
- -
- -
- -
 logo:
 images:
+ - loi-kratong.jpeg
+ - loi-kratong-2.jpeg
+image_view:

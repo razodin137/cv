@@ -6,18 +6,18 @@ company: NoLi Artist Space
 role: Resident Artist
 employment_type: part-time
 industry:
+url:
 start: "2019-05"
 end: "2019-12"
+dates:
 location: Lexington, KY
 country: United States of America
-location_type:
+location_type: onsite
 accomplishments:
- -
- -
- -
+ - Studio practice and collaborative community arts involvement in Lexington's North Limestone arts district.
 skills:
- -
- -
- -
+ - Studio Art
+ - Community Arts
 logo:
 images:
+image_view:

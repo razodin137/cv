@@ -6,20 +6,21 @@ company: Centered Holistic Health
 role: Healing Center Coordinator - Front Desk
 employment_type: part-time
 industry:
+url:
 start: "2019-06"
 end: "2019-11"
+dates:
 location: Lexington, KY
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Coordinated front-desk operations, client intake, and practitioner scheduling at a holistic wellness center in Lexington.
 skills:
- -
- -
- -
+ - Front Desk Coordination
+ - Client Scheduling
+ - Guest Reception
 logo: centered.svg
 images:
  - images.jpeg
  - images (1).jpeg
+image_view:

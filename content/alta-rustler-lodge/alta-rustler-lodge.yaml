@@ -1,24 +1,24 @@
 entry_type: job
 milestone: false
-featured: false
+featured: true
 parent:
 company: Alta's Rustler Lodge
 role: Rustler Staff
-employment_type:
+employment_type: seasonal
 industry:
+url:
 start: "2018-12"
 end: "2019-02"
+dates:
 location: Alta, UT
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Peak winter ski season at a full-service, ski-in/ski-out mountain lodge in Alta, supporting daily guest operations and lodge hospitality.
 skills:
- -
- -
- -
+ - Mountain Lodge Hospitality
+ - Guest Services
+ - Seasonal Resort Operations
 logo: alta-rustler-lodge.svg
 images:
  - IMG_20181211_144852.jpg
@@ -26,3 +26,4 @@ images:
  - IMG_20181218_164034.jpg
  - IMG_20190104_010053.jpg
  - IMG_20190118_112933377_HDR.jpg
+image_view:

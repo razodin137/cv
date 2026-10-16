@@ -2,22 +2,20 @@ entry_type: job
 milestone: true
 featured: false
 parent: centered
-company: Centered Holistic Health
-role: Sound Bath
+company: Sound Bath Facilitation
+role: Practitioner
 employment_type: freelance
 industry: health
+url:
 start: "2019-07"
 end: "2019-07"
+dates:
 location: Lexington, KY
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Facilitated group sound bath meditation sessions for wellness clients at Centered Holistic Health.
 skills:
- -
- -
- -
 logo: centered.svg
 images:
+image_view:

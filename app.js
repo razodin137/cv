@@ -49,14 +49,17 @@ function milestone(e) {
   const d = msDate(e);
   const auto = !!activeType; // a type filter is on: milestones start expanded
   let rowSub = '';
-  if (e.parentIds.length) rowSub = '<span class="ms-sub">under ' +
+  const under = e.parentIds.length ? 'under ' +
     e.parentIds.map((id, i) => '<span class="plink" onclick="event.stopPropagation();jumpTo(\'' + id + '\')">' +
-      esc(e.parentNames[i]) + '</span>').join(' · ') + '</span>';
+      esc(e.parentNames[i]) + '</span>').join(' · ') : '';
+  if (sub && under) rowSub = '<span class="ms-sub">' + esc(sub) + ' · ' + under + '</span>';
+  else if (under) rowSub = '<span class="ms-sub">' + under + '</span>';
   else if (sub) rowSub = '<span class="ms-sub">' + esc(sub) + '</span>';
   let row = '<button class="ms-row" aria-expanded="' + auto + '" aria-controls="' + uid + '">' +
     '<span class="ms-dot"></span><span class="ms-rule"></span><span class="ms-label">' +
     '<span class="ms-title">' + esc(title) + '</span>' + rowSub;
   if (d) row += '<span class="ms-date">' + esc(d) + '</span>';
+  if (e._span) row += '<span class="ms-date ms-span">' + esc(e._span) + '</span>';
   row += '</span><span class="ms-rule ms-tail"></span><span class="ms-tw">' + ICONS.plus + '</span>' +
     (e.featured ? '<span class="feat-star" title="Featured">' + ICONS.star + '</span>' : '') + '</button>';
   let pips = '';
@@ -72,7 +75,7 @@ function milestone(e) {
     '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">';
   else if (e.logo) c += '<img class="clogo" src="' + esc(e.logo) + '" alt="" loading="lazy" onerror="this.remove()">';
   c += '<h3>' + esc(title) + '</h3>';
-  const csub = sub || e.parentNames.join(' · ');
+  const csub = [sub, e.parentNames.join(' · ')].filter(Boolean).join(' · ');
   if (csub) c += '<p class="csub">' + esc(csub) + '</p>';
   const meta = [];
   if (d) meta.push('<span>' + ICONS.date + esc(d) + '</span>');
@@ -94,7 +97,7 @@ function milestone(e) {
     '<img src="' + esc(i) + '" alt="" loading="lazy" onclick="lb(this.src)" onerror="this.remove()">').join('') + '</div>';
   c += '</div></div>';
   return '<article class="ms' + (auto ? ' open auto' : '') + (e.featured ? ' featured' : '') +
-    '" id="' + e.id + '">' + row + pips + c + '</article>';
+    (e._repeat ? ' ms-repeat' : '') + '" id="' + e.id + '">' + row + pips + c + '</article>';
 }
 function entryHtml(e) { return e.milestone ? milestone(e) : card(e); }
 
@@ -247,11 +250,18 @@ function render() {
     // only that date; the id suffix keeps DOM ids unique across instances.
     const ds = e.dates.length ? e.dates : (e.start ? [e.start] : []);
     if (!ds.length) { undated.push(e); return; }
+    const span = e.dates.length > 1 ? fmtRange(e) + ' (' + e.dates.length + '×)' : '';
     ds.forEach(d => {
       const y = d.slice(0, 4);
       if (!groups.has(y)) groups.set(y, []);
       groups.get(y).push(e.dates.length
-        ? Object.assign({}, e, { id: e.id + '-' + d, start: d, end: '' }) : e);
+        ? Object.assign({}, e, {
+            id: e.id + '-' + d,
+            start: d,
+            end: '',
+            _repeat: e.dates.length > 1 && d !== e.end,
+            _span: d === e.end ? span : ''
+          }) : e);
     });
   });
   let html = '';
@@ -259,7 +269,9 @@ function render() {
     // Sort each year by date, newest first (stable — ties keep DATA order,
     // which already breaks them by end date then company).
     const list = groups.get(y).sort((a, b) => b.start.localeCompare(a.start));
-    html += '<div class="year">' + esc(y) + ' <span class="n">(' + list.length + ')</span></div>';
+    const repOnly = list.every(x => x._repeat);
+    html += '<div class="year' + (repOnly ? ' year-repeat-only' : '') + '">' +
+      esc(y) + ' <span class="n">(' + list.length + ')</span></div>';
     html += list.map(entryHtml).join('');
   });
   if (undated.length) {
@@ -393,8 +405,9 @@ const countries = new Set(DATA.entries.map(e => e.country).filter(Boolean)).size
 // city:") but often carries a region suffix ("Lexington, KY"), so count the
 // segment before the first comma, case-insensitively, to keep one city one
 // count. Entries with no location just drop out, like blank countries above.
+const NON_CITIES = new Set(['across the continental us', 'england and wales', 'europe', 'kentucky']);
 const cities = new Set(DATA.entries.map(e => e.location.split(',')[0].trim().toLowerCase())
-  .filter(Boolean)).size;
+  .filter(c => c && !NON_CITIES.has(c))).size;
 // Years: span of record — earliest to latest dated point (start/end/dates).
 // Derived from the data, not the build clock, so the number only moves when
 // entries are added, and stays truthful if the corpus goes quiet.
@@ -410,5 +423,17 @@ document.getElementById('sub').textContent =
   orgs + ' organizations';
 document.getElementById('f-stats').textContent = 'compiled from ' + DATA.entries.length + ' YAML entries';
 document.getElementById('q').addEventListener('input', render);
+window.addEventListener('beforeprint', () => {
+  document.querySelectorAll('.thumbs img, .cimgs img, img.phero, .cb-collage img, .ms-pips img, img.clogo').forEach(img => {
+    const s = img.getAttribute('src');
+    if (s) { img.dataset.psrc = s; img.removeAttribute('src'); }
+  });
+});
+window.addEventListener('afterprint', () => {
+  document.querySelectorAll('img[data-psrc]').forEach(img => {
+    img.setAttribute('src', img.dataset.psrc);
+    delete img.dataset.psrc;
+  });
+});
 renderChips();
 render();

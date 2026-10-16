@@ -6,19 +6,19 @@ company: Kentucky Native Cafe
 role: Restaurant Staff
 employment_type: full-time
 industry:
+url:
 start: "2016-06"
 end: "2016-08"
+dates:
 location: Lexington, KY
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Summer-season food and beverage service at Lexington's outdoor greenhouse and garden café.
 skills:
- -
- -
- -
+ - Restaurant Service
+ - Seasonal Menu Knowledge
+ - Hospitality
 logo: kentucky-native-cafe.svg
 images:
  - images (3).jpeg
@@ -26,3 +26,4 @@ images:
  - images (1).jpeg
  - images.jpeg
  - Winter-cafe-slide.jpg
+image_view:

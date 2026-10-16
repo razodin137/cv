@@ -6,19 +6,20 @@ company: Meze Wine Bar & Bistro
 role: Sous Chef
 employment_type: full-time
 industry:
+url:
 start: "2014-06"
 end: "2014-08"
+dates:
 location: San Luis Obispo, CA
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Sous chef for the summer season at a Mediterranean wine bar and bistro, running line prep, plating, and dinner service alongside wine-pairing menus.
 skills:
- -
- -
- -
+ - Sous Chef
+ - Line Cooking
+ - Mediterranean Cuisine
+ - Kitchen Prep
 logo: meze-wine-bar.svg
 images:
  - o.jpg
@@ -37,3 +38,4 @@ images:
  - o (13).jpg
  - o (14).jpg
  - 2000o.jpg
+image_view:

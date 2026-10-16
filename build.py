@@ -17,12 +17,19 @@ Re-run after editing YAML files.
 import base64
 import io
 import json
+import glob
 import os
 import re
 import sys
 from datetime import date
 
-import yaml
+try:
+    import yaml
+except ModuleNotFoundError:
+    for pat in ("~/.local/share/mise/installs/python/*/lib/python3*/site-packages",
+                "/usr/lib/python3*/site-packages"):
+        sys.path.extend(sorted(glob.glob(os.path.expanduser(pat)), reverse=True))
+    import yaml
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 

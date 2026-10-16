@@ -4,22 +4,21 @@ featured: false
 parent:
 company: Mellow Mushroom Pizza
 role: Server
-employment_type:
+employment_type: part-time
 industry:
+url:
 start: "2019-07"
 end: "2019-10"
+dates:
 location: Lexington, KY
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Table service and guest hospitality in a high-volume restaurant setting.
 skills:
- -
- -
- -
+ - Table Service
+ - Food & Beverage
+ - Hospitality
 logo: mellow-mushroom.png
 images:
- -
- -
+image_view:

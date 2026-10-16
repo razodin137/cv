@@ -1,9 +1,9 @@
 entry_type: ministry
-milestone: true
+milestone: false
 featured: false
 parent:
 company: Blessing Stream Church
-role:
+role: Volunteer & Ministry Team
 employment_type: volunteer
 industry:
 url:
@@ -14,7 +14,11 @@ location: Chiang Rai
 country: Thailand
 location_type: onsite
 accomplishments:
+ - Three years of bilingual ministry and community outreach across Northern Thailand, including public-school Christmas events, youth and university camps, and weekly Maker Group and Ultimate Frisbee ministries.
 skills:
+ - Bilingual Ministry (EN/TH)
+ - Community Outreach
+ - Event Coordination
 logo: blessing-stream-cr.svg
 images:
  - IMG_1432.jpg
@@ -27,3 +31,4 @@ images:
  - Screenshot_2022-12-08_20-09-46.png
  - churchpals.png
  - churchsafaf.png
+image_view:

@@ -6,21 +6,22 @@ company: Cooking Expo
 role: Chef
 employment_type:
 industry:
+url:
 start:
 end:
-dates: 2025-09-01
+dates:
+ - "2025-09-01"
 location: Chiang Rai
 country: Thailand
 location_type:
 accomplishments:
- - "Thai Language and Culture Program's annual cooking class with presentation of final results"
- -
- -
+ - Thai Language and Culture Program's annual cooking class with presentation of final results
 skills:
- -
- -
- -
 logo:
-images: 
-- cooking-class.jpeg
-- cooking-class-stern.jpeg
+images:
+ - cooking-class.jpeg
+ - cooking-class-stern.jpeg
+ - cooking-expo.jpeg
+ - cooking-expo-bt2.jpeg
+ - cooking-expo-team.jpeg
+image_view:

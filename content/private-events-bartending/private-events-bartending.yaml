@@ -3,22 +3,23 @@ milestone: false
 featured: false
 parent:
 company: Private Events
-role: Bartender
-employment_type:
+role: Freelance Bartender
+employment_type: freelance
 industry:
+url:
 start: "2018"
 end: "2019"
-location:
-country:
-location_type:
+dates:
+location: Lexington, KY
+country: United States of America
+location_type: onsite
 accomplishments:
- -
- -
- -
+ - Freelance bar setup and beverage service for private weddings, parties, and marquee community events including Lexington's Picnic with the Pops.
 skills:
- -
- -
- -
+ - Mobile Bartending
+ - Private Event Service
+ - Cocktail & Beverage Prep
 logo:
 images:
  - picnic-with-the-pops.jpeg
+image_view:

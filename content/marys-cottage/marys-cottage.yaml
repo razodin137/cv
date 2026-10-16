@@ -2,16 +2,20 @@ entry_type: volunteer
 milestone: false
 featured: false
 parent: wwoof
-company: "Mary's Cottage"
+company: Mary's Cottage
 role: Maintenance
 employment_type: volunteer
 industry:
+url:
 start: "2020-11"
 end: "2020-11"
+dates:
 location: Deiniolen, Wales
 country: United Kingdom
 location_type: onsite
 accomplishments:
+ - Property maintenance and grounds care work-trade in Deiniolen, North Wales.
 skills:
 logo:
 images:
+image_view:

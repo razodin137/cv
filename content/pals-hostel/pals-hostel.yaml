@@ -6,22 +6,23 @@ company: Pal's Mini Hostel Budapest
 role: Auditor
 employment_type: part-time
 industry:
+url:
 start: "2017-10"
 end: "2017-11"
+dates:
 location: Budapest
 country: Hungary
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Audited front-desk operations, bookings, and daily workflows at a boutique hostel in central Budapest.
 skills:
- -
- -
- -
+ - Operational Auditing
+ - Hostel Operations
+ - Front Desk Review
 logo: pals.svg
 images:
  - 145489716.jpg
  - 30489_2.jpg
  - Pals-Hostel-and-Apartments-Budapest-Hungary-Building-Day-light-view.jpg
  - images (2).jpeg
+image_view:

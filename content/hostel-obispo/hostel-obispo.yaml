@@ -6,21 +6,22 @@ company: Hostelling International
 role: Hostel Staff
 employment_type: part-time
 industry:
+url:
 start: "2014-03"
 end: "2015-03"
+dates:
 location: San Luis Obispo, CA
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Year-long hostel staffing in San Luis Obispo, handling guest check-in, daily turnover, housekeeping, and traveler hospitality.
 skills:
- -
- -
- -
+ - Hostel Operations
+ - Guest Hospitality
+ - Housekeeping
 logo: hostel-obispo.svg
 images:
  - images (1).jpeg
  - Hostel_Obispo-Dining-Room-1-HR-2000x1336.jpg
  - images.jpeg
+image_view:

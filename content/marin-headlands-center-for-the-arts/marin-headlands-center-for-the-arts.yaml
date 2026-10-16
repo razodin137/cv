@@ -1,24 +1,24 @@
 entry_type: job
 milestone: false
-featured: false
+featured: true
 parent:
 company: Marin Headlands' Center For The Arts
 role: Chef's Assistant
 employment_type: part-time
 industry:
+url:
 start: "2017-02"
 end: "2017-05"
+dates:
 location: Marin County, CA
 country: United States of America
 location_type: onsite
 accomplishments:
  - The Marin Headlands Center For The Arts generously hosts artists for up to a year to pursue their work in the inspiring Marin mountain coastline. Their meal program is one of the most exceptional I have ever come across in my wide years of hospitality experience and I am honored to have been partnered directly with Chef Damon to make it happen. Just us two back there, Damon is the extraordinary genius behind the operation.
- -
- -
 skills:
- -
- -
- -
+ - Culinary Prep
+ - Artist Residency Hospitality
+ - Menu Execution
 logo: marin-headlands-center-for-the-arts.svg
 images:
  - images (3).jpeg
@@ -28,3 +28,4 @@ images:
  - images.jpeg
  - 009_HCA112111_AndriaLo-copy.jpg
  - 348s.jpg
+image_view:

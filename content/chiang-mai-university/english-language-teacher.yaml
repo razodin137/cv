@@ -6,16 +6,22 @@ company: Chiang Mai University Language Institute
 role: English Language Teacher
 employment_type: part-time
 industry:
+url:
 start: "2018-07-30"
 end: "2018-11-01"
+dates:
 location: Chiang Mai
 country: Thailand
 location_type: onsite
 accomplishments:
- - "Educator within one of Thailand's top public universities, featuring a rich language program."
+ - Educator within one of Thailand's top public universities, featuring a rich language program.
  - Served as Agent Educator for the entirety of Chiang Mai Province.
 skills:
-logo:
+ - ESL Instruction
+ - Classroom Management
+ - Cross-Cultural Communication
+logo: language-institute-chiang-mai-university-licmu.svg
 images:
  - agro.jpg
  - images (4).jpeg
+image_view:

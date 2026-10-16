@@ -6,12 +6,16 @@ company: Astral Ship
 role: Pirate Crew
 employment_type: volunteer
 industry:
+url:
 start: "2020-10"
 end: "2020-11"
+dates:
 location: Deiniolen, Wales
 country: United Kingdom
 location_type: onsite
 accomplishments:
+ - Work-trade crew member at an off-grid creative retreat and community project in Snowdonia, North Wales.
 skills:
 logo:
 images:
+image_view:

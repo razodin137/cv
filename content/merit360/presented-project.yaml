@@ -6,12 +6,16 @@ company: Presented Final SDG12 Project at British Parliament
 role: Presentation
 employment_type:
 industry:
-start: 2017-08-17
+url:
+start: "2017-08-17"
 end:
+dates:
 location: London
-country: 'United Kingdom'
+country: United Kingdom
 location_type: onsite
 accomplishments:
+ - Presented our five-country team's proposal to reduce restaurant food waste (UN SDG 12) at the British Parliament, House of Lords.
 skills:
 logo:
 images:
+image_view:

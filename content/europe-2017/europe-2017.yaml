@@ -2,22 +2,19 @@ entry_type: career_break
 milestone: false
 featured: false
 parent:
-company:
-role: Voluntary work
+company: Europe
+role: Voluntary Work & Travel
 employment_type:
 industry:
+url:
 start: "2017-09"
 end: "2017-11"
+dates:
 location: Europe
 country:
 location_type:
 accomplishments:
- -
- -
- -
 skills:
- -
- -
- -
 logo:
 images:
+image_view:

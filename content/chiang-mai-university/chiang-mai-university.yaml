@@ -6,12 +6,16 @@ company: Chiang Mai University
 role:
 employment_type:
 industry:
+url:
 start: "2018-06"
 end: "2018-11"
+dates:
 location: Chiang Mai
 country: Thailand
 location_type: onsite
 accomplishments:
+ - Completed TEFL certification and taught English through the Chiang Mai University Language Institute.
 skills:
 logo: chiang-mai-university.svg
 images:
+image_view:

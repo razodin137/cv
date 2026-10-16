@@ -6,22 +6,23 @@ company: Breaking Bread Bakery
 role: Dishwasher
 employment_type: full-time
 industry:
+url:
 start: "2014-10"
 end: "2015-05"
+dates:
 location: San Luis Obispo, CA
 country: United States of America
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Maintained kitchen sanitation, dish pit throughput, and back-of-house prep support across full artisan bakery production shifts.
 skills:
- -
- -
- -
+ - Kitchen Sanitation
+ - Bakery Support
+ - Back of House
 logo: breaking-bread-bakery.svg
 images:
  - screenshot-2026-10-01_16-52-35.png
  - screenshot-2026-10-01_16-52-26.png
  - screenshot-2026-10-01_16-52-02.png
  - screenshot-2026-10-01_16-51-52.png
+image_view:

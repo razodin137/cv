@@ -25,9 +25,8 @@ import re
 import subprocess
 import sys
 
-import yaml
-
 import entry_lib as lib
+import yaml
 from entry_lib import (ASSET_DIRS, CONTENT, ENTRY_TYPES, ROOT, categories,
                        current_style, dir_yamls, parent_resolvable,
                        parse_date, resolve_asset, slugify)

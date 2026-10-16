@@ -6,19 +6,19 @@ company: kaojaicam
 role: Website Design, Events and Community
 employment_type: contract
 industry:
+url:
 start: "2021-10"
 end:
-location:
-country:
+dates:
+location: Chiang Rai
+country: Thailand
 location_type: hybrid
 accomplishments:
  - People look at me like a web designer, but I'm really more of a doula or a birth coach. People are pregnant with these big ideas but are cripplingly terrified of putting them out there. I'm here to make sure the birth of your creative work is smooth and joyful, even when it's seems insurmountable.
- -
- -
- -
 skills:
- -
- -
- -
+ - Web Design
+ - Event Production
+ - Community Building
 logo:
 images:
+image_view:

@@ -1,5 +1,5 @@
 entry_type: online_presence
-milestone: true
+milestone: false
 featured: false
 parent:
  - kaojaicam
@@ -10,7 +10,7 @@ employment_type: contract
 industry: nonprofit
 url: https://sonlightfoundation.moww.space
 start: "2025-08"
-end:
+end: "2025-08"
 dates:
 location: Thung Chang, Nan
 country: Thailand
@@ -25,3 +25,4 @@ skills:
 logo: logo.jpg
 images:
  - homepage-2026-10-06.jpg
+image_view:

@@ -3,24 +3,25 @@ milestone: false
 featured: false
 parent:
 company: Nexus Chiang Rai
-role:
+role: Ministry & Event Host
 employment_type:
 industry:
+url:
 start: "2025-08"
 end:
+dates:
 location: Chiang Rai
 country: Thailand
 location_type: onsite
 accomplishments:
- -
- -
- -
+ - Active in bilingual church community, campus ministry outreach in Nang Lae, and hosting community events including Talk and Taan in Chiang Rai.
 skills:
- -
- -
- -
+ - Bilingual Ministry (EN/TH)
+ - Event Hosting & MC
+ - Campus Outreach
 logo: nexuschiangrai.svg
 images:
  - screenshot-2026-10-01_16-55-02.png
  - screenshot-2026-10-01_16-54-33.png
  - images (2).jpeg
+image_view:
