@@ -658,7 +658,7 @@ function msDate(e) {
   return monthName(e.start || e.end);
 }
 // Milestones headline the event's own title (`company`); role + organization
-// stay secondary (italic sub / "under …" link). Cards, in contrast, lead
+// stay secondary (italic sub / "with …" link). Cards, in contrast, lead
 // with organization + role.
 function msTitle(e) {
   if (e.role && e.company) return [e.company, e.role];
@@ -672,7 +672,7 @@ function milestone(e) {
   const d = msDate(e);
   const auto = !!activeTag; // a tag filter is on: milestones start expanded
   let rowSub = '';
-  const under = e.parentIds.length ? 'under ' +
+  const under = e.parentIds.length ? 'with ' +
     e.parentIds.map((id, i) => '<span class="plink" onclick="event.stopPropagation();jumpTo(\'' + id + '\')">' +
       esc(e.parentNames[i]) + '</span>').join(' · ') : '';
   if (sub && under) rowSub = '<span class="ms-sub">' + esc(sub) + ' · ' + under + '</span>';
