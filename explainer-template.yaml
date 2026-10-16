@@ -21,7 +21,7 @@ featured: false            # true = highlight this entry in gold with a star in 
 parent:                      # Slug of a parent entity: its directory (e.g. mae-fah-luang-university)
                              # or, for an umbrella like a club or team, its YAML file name
                              # (e.g. mfu-christian-club) — or a LIST of slugs for multiple parents.
-                             # Links to it both ways: "under …" on milestone lines, a collapsible
+                             # Links to it both ways: "with …" on milestone lines, a collapsible
                              # Entries strip on the parent card; inherits a parent's logo when this
                              # entry's logo is blank (first parent that has one)
 company:                  # Organization name; for a milestone, the event title that headlines the line

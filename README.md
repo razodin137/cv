@@ -154,7 +154,7 @@ style recolours them for free.
   thin-line circle with the title and date; click/tap expands a circular
   detail view (logo, tags, location, description). The event's own title
   (`company`) headlines the line, with organization and role kept secondary
-  (italic sub, "under …" parent link) — unlike cards, which lead with
+  (italic sub, "with …" parent link) — unlike cards, which lead with
   organization + role. Milestones with pictures show tiny bubbles of each
   picture under the collapsed line (click one to zoom); bubbles are
   build-time thumbnails, so full photos load only on open
