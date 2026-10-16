@@ -281,10 +281,10 @@ __JS__
 </html>
 """
 
-# Render styles: one CSS file per style in styles/, chosen at build time.
+# Render styles: one theme file per style in styles/, chosen at build time.
+# Shared layout (styles/base.css), block types (styles/blocks/*.css), and
+# print rules (styles/print.css) are assembled around the chosen theme.
 # Each entry is stem -> (menu description, typefaces for the colophon line).
-# All are kept conformant to the 37signals house style (stylelint with
-# @37signals/stylelint-config-scss) — see README.md for the check command.
 STYLES = {
     "1": ("original", "pre-Hallmark look: Georgia serif, navy header, blue accent",
           "Georgia & system-ui"),
@@ -294,6 +294,37 @@ STYLES = {
           "Libron"),
 }
 DEFAULT_STYLE = "hallmark"  # matches the currently deployed page
+
+BLOCK_FILES = (
+    "card.css",
+    "milestone.css",
+    "career-break.css",
+    "parent-strip.css",
+)
+
+
+def load_css(style: str) -> str:
+    """Assemble the full stylesheet: shared base -> shared block types ->
+    chosen theme overrides -> universal print rules."""
+    styles_dir = os.path.join(ROOT, "styles")
+    blocks_dir = os.path.join(styles_dir, "blocks")
+    ordered_blocks = [os.path.join(blocks_dir, b) for b in BLOCK_FILES
+                      if os.path.isfile(os.path.join(blocks_dir, b))]
+    if os.path.isdir(blocks_dir):
+        for fname in sorted(os.listdir(blocks_dir)):
+            if fname.endswith(".css") and fname not in BLOCK_FILES:
+                ordered_blocks.append(os.path.join(blocks_dir, fname))
+    layers = [
+        os.path.join(styles_dir, "base.css"),
+        *ordered_blocks,
+        os.path.join(styles_dir, f"{style}.css"),
+        os.path.join(styles_dir, "print.css"),
+    ]
+    parts = []
+    for path in layers:
+        with open(path, encoding="utf-8") as f:
+            parts.append(f.read().rstrip("\n"))
+    return "\n\n".join(parts) + "\n"
 
 
 def pick_style():
@@ -351,8 +382,7 @@ def main():
     }
     style = pick_style()
     typefaces = next(tf for s, _desc, tf in STYLES.values() if s == style)
-    with open(os.path.join(ROOT, "styles", f"{style}.css"), encoding="utf-8") as f:
-        css = f.read()
+    css = load_css(style)
     # Viewer JS lives in app.js — spliced in like the CSS above; it carries
     # __DATA__ for the JSON. rstrip: the template adds the final newline.
     with open(os.path.join(ROOT, "app.js"), encoding="utf-8") as f:

@@ -105,6 +105,14 @@ everything via its real OpenType gear: small caps for labels, tabular figures
 for dates, true italic for roles, bold for titles; its four woff2 files live
 in `fonts/`.
 
+`build.py` assembles the stylesheet in four layers so block mechanics and
+printing are maintained in one place across every theme:
+
+1. `styles/base.css` — default tokens (`:root`), page shell, masthead, sticky controls/chips, year folios, colophon, lightbox, and mobile shell layout
+2. `styles/blocks/*.css` — shared block-type layouts (`card.css`, `milestone.css`, `career-break.css`, `parent-strip.css`; any additional `.css` files in `styles/blocks/` are included automatically)
+3. `styles/<style>.css` — theme fonts, palette tokens, and typographic/visual overrides (`hallmark.css`, `libron.css`, `original.css`)
+4. `styles/print.css` — universal `@page` and `@media print` rules shared by all themes (paired with `beforeprint`/`afterprint` hooks in `app.js`)
+
 ## Contact block
 
 `content/contact/contact.yaml` is the one place for your contact info — the

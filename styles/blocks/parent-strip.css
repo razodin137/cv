@@ -1,0 +1,27 @@
+  /* Block: Parent Links & Collapsible Entries Strip (.events-strip)
+   * Shared structure for parent/organization cross-links ("under …" on
+   * milestones and the collapsible "Entries (n)" strip on parent cards). */
+
+  .plink { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent-line);
+    text-underline-offset: 3px; font-style: normal; cursor: pointer; }
+  .plink:hover { text-decoration-color: var(--accent); }
+  .events-strip { border-top: 1px solid var(--rule); margin-top: var(--space-sm);
+    padding-top: var(--space-2xs); }
+  .es-head { display: flex; align-items: center; gap: var(--space-xs); width: 100%;
+    padding: var(--space-2xs) 0; background: none; border: 0; cursor: pointer;
+    font: inherit; text-align: left; color: var(--ink); }
+  .es-label { font-family: var(--font-agate); font-size: var(--text-xs); font-weight: 600;
+    text-transform: uppercase; letter-spacing: .05em; color: var(--muted); flex: none; }
+  .es-head:hover .es-label { color: var(--accent); }
+  .es-head:active .es-label { color: var(--accent); }
+  .es-head:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .es-rule { height: 1px; background: var(--rule); flex: 1 1 auto; }
+  .es-tw { flex: none; color: var(--muted); display: inline-flex; }
+  .es-head .es-tw svg { width: 11px; height: 11px; }
+  .es-head[aria-expanded="true"] .es-tw { transform: rotate(45deg); }
+  .es-lines { display: none; padding-top: var(--space-2xs); }
+  .events-strip.open .es-lines { display: block; }
+  .es-lines .ms-row { padding: var(--space-2xs) 0; cursor: default; }
+  .events-strip .es-lines .ms-row:hover .ms-title { color: var(--ink); }
+  .es-jump { flex: none; color: var(--muted); font-family: var(--font-agate); font-size: var(--text-xs); }
+  .es-jump:hover, .plink:hover + .es-jump { color: var(--accent); }

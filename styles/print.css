@@ -1,0 +1,66 @@
+  /* Universal Print Stylesheet — loaded last for every theme.
+   * Formats any theme into a clean A4 print document: hides interactive UI
+   * chrome and photo strips (paired with app.js beforeprint/afterprint hooks),
+   * spells out external URLs, resets dark headers/card shadows, and expands
+   * milestone accomplishments inline. Theme authors never need to write
+   * @media print rules. */
+
+  @page { size: A4; margin: 9mm 13mm; }
+  @media print {
+    .controls, #lightbox, .colophon, .thumbs, .cimgs, .phero, .ms-pips,
+    .cb-frame, .cb-strip, .events-strip, .badges, .cbadges,
+    .ms-tw, .ms-tail, .ms-rule, .ms-repeat, .year-repeat-only, .year .n { display: none !important; }
+    body { background: #fff; color: #181614; font-size: 9pt; line-height: 1.32; }
+    header, .masthead { background: #fff !important; color: #181614 !important; padding: 0 !important; }
+    .mast-in { max-width: none; padding: 0 0 5pt; }
+    .pfp { width: 42px; height: 42px; margin: 0 auto 3pt; border-color: var(--rule); outline: 0; }
+    .mast-line { font-size: 7.8pt; margin-bottom: 1pt; color: var(--muted, #555); }
+    .masthead h1, #mast-line[hidden] + h1 { font-size: 17pt; line-height: 1.05; color: #181614; }
+    .tagline:not(:empty) { font-size: 9.2pt; margin-top: 1pt; color: var(--ink-2, #333); }
+    .links { margin-top: 2.5pt; font-size: 7.6pt; line-height: 1.4; color: var(--ink-2, #333); }
+    .links a { color: var(--ink, #181614); border-bottom: 0; }
+    .links span { color: var(--ink-2, #333); }
+    .links a[href^="http"]::after, .meta .elink[href^="http"]::after {
+      content: " (" attr(href) ")"; font-size: .88em; overflow-wrap: anywhere; }
+    .sub { margin-top: 1.5pt; font-size: 7.4pt; color: var(--muted, #555); }
+    .mast-rule { border-top-width: 1px; border-bottom-width: 1px; height: 2.5px; }
+    main { max-width: none; padding: 2pt 0 0; }
+    .year { font-size: 10.5pt; font-weight: 700; margin: 6pt 0 1.5pt; break-after: avoid; }
+    .year::after { border-top-width: 1px; }
+    .card { padding: 2.5pt 0 3.5pt; margin: 0; box-shadow: none; break-inside: avoid; }
+    .card.featured { padding: 2.5pt 5pt 3.5pt; margin-block: 1pt;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .card-top { gap: 6pt; align-items: flex-start; }
+    .card img.logo { width: 24px; height: 24px; padding: 1.5px; margin-top: 1pt; }
+    .card h2 { font-size: 9.5pt; font-weight: 700; line-height: 1.22; display: inline; }
+    .card .role { font-size: 8.8pt; display: inline; margin: 0 0 0 4pt; }
+    .card .role::before { content: "· "; font-style: normal; }
+    .meta { margin-top: 0.5pt; font-size: 7.4pt; gap: 1pt 6pt; line-height: 1.28; }
+    .meta svg { display: none; }
+    ul.acc { margin: 1.5pt 0 0; padding-left: 11pt; }
+    ul.acc li { font-size: 8.5pt; line-height: 1.3; margin-bottom: 0.5pt; }
+    .skills { margin-top: 1.5pt; gap: 2pt; }
+    .skill { font-size: 6.8pt; padding: 0.5pt 3pt; }
+    .card.cb { position: static; height: auto !important; overflow: visible; }
+    .card.cb .cb-body { display: block !important; }
+    .ms { padding: 1.5pt 0 2pt; margin: 0; break-inside: avoid; }
+    .ms-row { display: flex !important; padding: 0; gap: 5pt; align-items: baseline; }
+    .ms-dot { width: 6px; height: 6px; margin-left: 1pt; align-self: center;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .ms-label { flex: 1 1 auto; flex-wrap: wrap; gap: 0 4pt; overflow: visible; }
+    .ms-title { font-size: 9.2pt; font-weight: 700; white-space: normal; overflow: visible; }
+    .ms-sub { font-size: 8.6pt; white-space: normal; overflow: visible; }
+    .plink { color: var(--ink-2, #333); text-decoration: none; }
+    .ms-date { margin-left: auto; font-size: 7.6pt; }
+    .ms-date:has(+ .ms-span) { display: none; }
+    .ms-span { display: inline !important; margin-left: auto; font-size: 7.6pt; }
+    .ms-row .feat-star svg { width: 10px; height: 10px; }
+    .ms-detail { display: block !important; animation: none !important; padding: 0 0 0 11pt; }
+    .ms-circle { width: 100%; aspect-ratio: auto; border: 0 !important; outline: 0 !important;
+      box-shadow: none !important; border-radius: 0; background: none !important;
+      padding: 0; display: block; text-align: left; overflow: visible; }
+    .ms-circle > :not(.cacc) { display: none !important; }
+    .ms-circle p.cacc { margin: 1pt 0 0; font-size: 8.4pt; line-height: 1.3; color: var(--ink-2, #333); }
+    .ms-circle ul.cacc { margin: 1pt 0 0; padding-left: 11pt; }
+    .ms-circle ul.cacc li { font-size: 8.4pt; line-height: 1.3; margin-bottom: 0.5pt; color: var(--ink-2, #333); }
+  }
